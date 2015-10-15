@@ -1,0 +1,83 @@
+<?php
+namespace App\Model\Table;
+
+use App\Model\Entity\Work;
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Works Model
+ *
+ * @property \Cake\ORM\Association\BelongsTo $Members
+ */
+class WorksTable extends Table
+{
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->table('works');
+        $this->displayField('id');
+        $this->primaryKey('id');
+
+        $this->belongsTo('Members', [
+            'foreignKey' => 'member_id',
+            'joinType' => 'INNER'
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('id', 'create');
+
+        $validator
+            ->add('date', 'valid', ['rule' => 'date'])
+            ->requirePresence('date', 'create')
+            ->notEmpty('date');
+
+        $validator
+            ->requirePresence('description', 'create')
+            ->notEmpty('description');
+
+        $validator
+            ->add('hours', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('hours', 'create')
+            ->notEmpty('hours');
+
+        $validator
+            ->add('type', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('type');
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['member_id'], 'Members'));
+        return $rules;
+    }
+}
