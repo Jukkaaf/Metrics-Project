@@ -50,8 +50,8 @@ class MembersFixture extends TestFixture
             'user_id' => 1,
             'project_id' => 1,
             'project_role' => 1,
-            'starting_date' => '2015-10-15',
-            'ending_date' => '2015-10-15'
+            'starting_date' => '2015-10-19',
+            'ending_date' => '2015-10-19'
         ],
     ];
 }

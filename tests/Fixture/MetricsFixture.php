@@ -19,17 +19,17 @@ class MetricsFixture extends TestFixture
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'project_id' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'metric_type' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'metrictype_id' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'date' => ['type' => 'date', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'metric_value' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
+        'value' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
         '_indexes' => [
             'project_key' => ['type' => 'index', 'columns' => ['project_id'], 'length' => []],
-            'metric_key' => ['type' => 'index', 'columns' => ['metric_type'], 'length' => []],
+            'metrictype_key' => ['type' => 'index', 'columns' => ['metrictype_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
             'metrics_ibfk_1' => ['type' => 'foreign', 'columns' => ['project_id'], 'references' => ['projects', 'id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
-            'metrics_ibfk_2' => ['type' => 'foreign', 'columns' => ['metric_type'], 'references' => ['metric_types', 'mtype'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
+            'metrics_ibfk_2' => ['type' => 'foreign', 'columns' => ['metrictype_id'], 'references' => ['metrictypes', 'id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -47,9 +47,9 @@ class MetricsFixture extends TestFixture
         [
             'id' => 1,
             'project_id' => 1,
-            'metric_type' => 1,
-            'date' => '2015-10-15',
-            'metric_value' => 1
+            'metrictype_id' => 1,
+            'date' => '2015-10-19',
+            'value' => 1
         ],
     ];
 }

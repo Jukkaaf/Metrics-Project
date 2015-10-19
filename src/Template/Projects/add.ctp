@@ -8,8 +8,8 @@
         <li><?= $this->Html->link(__('New Metric'), ['controller' => 'Metrics', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Requirements'), ['controller' => 'Requirements', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Requirement'), ['controller' => 'Requirements', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Weekly Reports'), ['controller' => 'WeeklyReports', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Weekly Report'), ['controller' => 'WeeklyReports', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Weeklyreports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Weeklyreport'), ['controller' => 'Weeklyreports', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="projects form large-9 medium-8 columns content">
@@ -24,6 +24,7 @@
             echo $this->Form->input('status');
             echo $this->Form->input('description');
             echo $this->Form->input('is_public');
+            echo $this->Form->input('importance');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

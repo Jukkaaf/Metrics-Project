@@ -21,7 +21,7 @@ class ProjectsTableTest extends TestCase
         'app.members',
         'app.metrics',
         'app.requirements',
-        'app.weekly_reports'
+        'app.weeklyreports'
     ];
 
     /**

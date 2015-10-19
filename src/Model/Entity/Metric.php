@@ -9,9 +9,10 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $project_id
  * @property \App\Model\Entity\Project $project
- * @property int $metric_type
+ * @property int $metrictype_id
+ * @property \App\Model\Entity\Metrictype $metrictype
  * @property \Cake\I18n\Time $date
- * @property float $metric_value
+ * @property float $value
  */
 class Metric extends Entity
 {

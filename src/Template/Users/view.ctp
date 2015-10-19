@@ -13,8 +13,8 @@
     <h3><?= h($user->id) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th><?= __('Account') ?></th>
-            <td><?= h($user->account) ?></td>
+            <th><?= __('Email') ?></th>
+            <td><?= h($user->email) ?></td>
         </tr>
         <tr>
             <th><?= __('Password') ?></th>
@@ -27,10 +27,6 @@
         <tr>
             <th><?= __('Last Name') ?></th>
             <td><?= h($user->last_name) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Email') ?></th>
-            <td><?= h($user->email) ?></td>
         </tr>
         <tr>
             <th><?= __('Phone') ?></th>

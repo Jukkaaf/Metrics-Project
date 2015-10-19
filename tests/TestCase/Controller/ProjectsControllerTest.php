@@ -20,7 +20,7 @@ class ProjectsControllerTest extends IntegrationTestCase
         'app.members',
         'app.metrics',
         'app.requirements',
-        'app.weekly_reports'
+        'app.weeklyreports'
     ];
 
     /**

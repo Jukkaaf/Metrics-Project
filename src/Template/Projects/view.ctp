@@ -11,8 +11,8 @@
         <li><?= $this->Html->link(__('New Metric'), ['controller' => 'Metrics', 'action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Requirements'), ['controller' => 'Requirements', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Requirement'), ['controller' => 'Requirements', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Weekly Reports'), ['controller' => 'WeeklyReports', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Weekly Report'), ['controller' => 'WeeklyReports', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('List Weeklyreports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('New Weeklyreport'), ['controller' => 'Weeklyreports', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="projects view large-9 medium-8 columns content">
@@ -33,6 +33,10 @@
         <tr>
             <th><?= __('Id') ?></th>
             <td><?= $this->Number->format($project->id) ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Importance') ?></th>
+            <td><?= $this->Number->format($project->importance) ?></td>
         </tr>
         <tr>
             <th><?= __('Created On') ?></th>
@@ -92,18 +96,18 @@
             <tr>
                 <th><?= __('Id') ?></th>
                 <th><?= __('Project Id') ?></th>
-                <th><?= __('Metric Type') ?></th>
+                <th><?= __('Metrictype Id') ?></th>
                 <th><?= __('Date') ?></th>
-                <th><?= __('Metric Value') ?></th>
+                <th><?= __('Value') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($project->metrics as $metrics): ?>
             <tr>
                 <td><?= h($metrics->id) ?></td>
                 <td><?= h($metrics->project_id) ?></td>
-                <td><?= h($metrics->metric_type) ?></td>
+                <td><?= h($metrics->metrictype_id) ?></td>
                 <td><?= h($metrics->date) ?></td>
-                <td><?= h($metrics->metric_value) ?></td>
+                <td><?= h($metrics->value) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Metrics', 'action' => 'view', $metrics->id]) ?>
 
@@ -123,7 +127,7 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= __('Id') ?></th>
-                <th><?= __('Change Id') ?></th>
+                <th><?= __('Changenum') ?></th>
                 <th><?= __('Project Id') ?></th>
                 <th><?= __('Name') ?></th>
                 <th><?= __('Description') ?></th>
@@ -135,7 +139,7 @@
             <?php foreach ($project->requirements as $requirements): ?>
             <tr>
                 <td><?= h($requirements->id) ?></td>
-                <td><?= h($requirements->change_id) ?></td>
+                <td><?= h($requirements->changenum) ?></td>
                 <td><?= h($requirements->project_id) ?></td>
                 <td><?= h($requirements->name) ?></td>
                 <td><?= h($requirements->description) ?></td>
@@ -156,8 +160,8 @@
     <?php endif; ?>
     </div>
     <div class="related">
-        <h4><?= __('Related Weekly Reports') ?></h4>
-        <?php if (!empty($project->weekly_reports)): ?>
+        <h4><?= __('Related Weeklyreports') ?></h4>
+        <?php if (!empty($project->weeklyreports)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= __('Id') ?></th>
@@ -170,22 +174,22 @@
                 <th><?= __('Additional') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($project->weekly_reports as $weeklyReports): ?>
+            <?php foreach ($project->weeklyreports as $weeklyreports): ?>
             <tr>
-                <td><?= h($weeklyReports->id) ?></td>
-                <td><?= h($weeklyReports->project_id) ?></td>
-                <td><?= h($weeklyReports->title) ?></td>
-                <td><?= h($weeklyReports->date) ?></td>
-                <td><?= h($weeklyReports->reqlink) ?></td>
-                <td><?= h($weeklyReports->problems) ?></td>
-                <td><?= h($weeklyReports->meetings) ?></td>
-                <td><?= h($weeklyReports->additional) ?></td>
+                <td><?= h($weeklyreports->id) ?></td>
+                <td><?= h($weeklyreports->project_id) ?></td>
+                <td><?= h($weeklyreports->title) ?></td>
+                <td><?= h($weeklyreports->date) ?></td>
+                <td><?= h($weeklyreports->reqlink) ?></td>
+                <td><?= h($weeklyreports->problems) ?></td>
+                <td><?= h($weeklyreports->meetings) ?></td>
+                <td><?= h($weeklyreports->additional) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'WeeklyReports', 'action' => 'view', $weeklyReports->id]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Weeklyreports', 'action' => 'view', $weeklyreports->id]) ?>
 
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'WeeklyReports', 'action' => 'edit', $weeklyReports->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Weeklyreports', 'action' => 'edit', $weeklyreports->id]) ?>
 
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'WeeklyReports', 'action' => 'delete', $weeklyReports->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyReports->id)]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Weeklyreports', 'action' => 'delete', $weeklyreports->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyreports->id)]) ?>
 
                 </td>
             </tr>

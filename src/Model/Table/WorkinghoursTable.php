@@ -1,18 +1,18 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\Work;
+use App\Model\Entity\Workinghour;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Works Model
+ * Workinghours Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Members
  */
-class WorksTable extends Table
+class WorkinghoursTable extends Table
 {
 
     /**
@@ -25,7 +25,7 @@ class WorksTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('works');
+        $this->table('workinghours');
         $this->displayField('id');
         $this->primaryKey('id');
 
@@ -57,13 +57,13 @@ class WorksTable extends Table
             ->notEmpty('description');
 
         $validator
-            ->add('hours', 'valid', ['rule' => 'numeric'])
-            ->requirePresence('hours', 'create')
-            ->notEmpty('hours');
+            ->add('duration', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('duration', 'create')
+            ->notEmpty('duration');
 
         $validator
-            ->add('type', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('type');
+            ->add('worktype', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('worktype');
 
         return $validator;
     }

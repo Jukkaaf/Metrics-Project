@@ -20,9 +20,10 @@ class MembersControllerTest extends IntegrationTestCase
         'app.users',
         'app.projects',
         'app.metrics',
+        'app.metrictypes',
         'app.requirements',
-        'app.weekly_reports',
-        'app.works'
+        'app.weeklyreports',
+        'app.workinghours'
     ];
 
     /**

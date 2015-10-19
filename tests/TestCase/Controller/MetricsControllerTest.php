@@ -19,10 +19,9 @@ class MetricsControllerTest extends IntegrationTestCase
         'app.metrics',
         'app.projects',
         'app.members',
-        'app.users',
-        'app.works',
         'app.requirements',
-        'app.weekly_reports'
+        'app.weeklyreports',
+        'app.metrictypes'
     ];
 
     /**

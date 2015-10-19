@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  * Metrics Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Projects
+ * @property \Cake\ORM\Association\BelongsTo $Metrictypes
  */
 class MetricsTable extends Table
 {
@@ -33,6 +34,10 @@ class MetricsTable extends Table
             'foreignKey' => 'project_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Metrictypes', [
+            'foreignKey' => 'metrictype_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -48,19 +53,14 @@ class MetricsTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->add('metric_type', 'valid', ['rule' => 'numeric'])
-            ->requirePresence('metric_type', 'create')
-            ->notEmpty('metric_type');
-
-        $validator
             ->add('date', 'valid', ['rule' => 'date'])
             ->requirePresence('date', 'create')
             ->notEmpty('date');
 
         $validator
-            ->add('metric_value', 'valid', ['rule' => 'numeric'])
-            ->requirePresence('metric_value', 'create')
-            ->notEmpty('metric_value');
+            ->add('value', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('value', 'create')
+            ->notEmpty('value');
 
         return $validator;
     }
@@ -75,6 +75,7 @@ class MetricsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['project_id'], 'Projects'));
+        $rules->add($rules->existsIn(['metrictype_id'], 'Metrictypes'));
         return $rules;
     }
 }

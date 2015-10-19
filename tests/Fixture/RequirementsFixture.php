@@ -29,7 +29,7 @@ class RequirementsFixture extends TestFixture
             'project_key' => ['type' => 'index', 'columns' => ['project_id'], 'length' => []],
         ],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+            'primary' => ['type' => 'primary', 'columns' => ['id', 'changenum'], 'length' => []],
             'requirements_ibfk_1' => ['type' => 'foreign', 'columns' => ['project_id'], 'references' => ['projects', 'id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
@@ -53,7 +53,7 @@ class RequirementsFixture extends TestFixture
             'description' => 'Lorem ipsum dolor sit amet',
             'status' => 1,
             'version' => 1,
-            'date' => '2015-10-15'
+            'date' => '2015-10-19'
         ],
     ];
 }

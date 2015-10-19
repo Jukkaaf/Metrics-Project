@@ -13,7 +13,7 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\HasMany $Members
  * @property \Cake\ORM\Association\HasMany $Metrics
  * @property \Cake\ORM\Association\HasMany $Requirements
- * @property \Cake\ORM\Association\HasMany $WeeklyReports
+ * @property \Cake\ORM\Association\HasMany $Weeklyreports
  */
 class ProjectsTable extends Table
 {
@@ -41,7 +41,7 @@ class ProjectsTable extends Table
         $this->hasMany('Requirements', [
             'foreignKey' => 'project_id'
         ]);
-        $this->hasMany('WeeklyReports', [
+        $this->hasMany('Weeklyreports', [
             'foreignKey' => 'project_id'
         ]);
     }
@@ -86,6 +86,10 @@ class ProjectsTable extends Table
             ->add('is_public', 'valid', ['rule' => 'boolean'])
             ->requirePresence('is_public', 'create')
             ->notEmpty('is_public');
+
+        $validator
+            ->add('importance', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('importance');
 
         return $validator;
     }

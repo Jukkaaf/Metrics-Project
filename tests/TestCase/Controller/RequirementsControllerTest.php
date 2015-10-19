@@ -20,9 +20,10 @@ class RequirementsControllerTest extends IntegrationTestCase
         'app.projects',
         'app.members',
         'app.users',
-        'app.works',
+        'app.workinghours',
         'app.metrics',
-        'app.weekly_reports'
+        'app.metrictypes',
+        'app.weeklyreports'
     ];
 
     /**

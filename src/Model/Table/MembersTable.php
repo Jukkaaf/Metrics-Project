@@ -12,7 +12,7 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $Users
  * @property \Cake\ORM\Association\BelongsTo $Projects
- * @property \Cake\ORM\Association\HasMany $Works
+ * @property \Cake\ORM\Association\HasMany $Workinghours
  */
 class MembersTable extends Table
 {
@@ -39,7 +39,7 @@ class MembersTable extends Table
             'foreignKey' => 'project_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('Works', [
+        $this->hasMany('Workinghours', [
             'foreignKey' => 'member_id'
         ]);
     }

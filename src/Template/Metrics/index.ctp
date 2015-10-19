@@ -4,6 +4,8 @@
         <li><?= $this->Html->link(__('New Metric'), ['action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Metrictype'), ['controller' => 'Metrictypes', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="metrics index large-9 medium-8 columns content">
@@ -13,9 +15,9 @@
             <tr>
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('project_id') ?></th>
-                <th><?= $this->Paginator->sort('metric_type') ?></th>
+                <th><?= $this->Paginator->sort('metrictype_id') ?></th>
                 <th><?= $this->Paginator->sort('date') ?></th>
-                <th><?= $this->Paginator->sort('metric_value') ?></th>
+                <th><?= $this->Paginator->sort('value') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -24,9 +26,9 @@
             <tr>
                 <td><?= $this->Number->format($metric->id) ?></td>
                 <td><?= $metric->has('project') ? $this->Html->link($metric->project->id, ['controller' => 'Projects', 'action' => 'view', $metric->project->id]) : '' ?></td>
-                <td><?= $this->Number->format($metric->metric_type) ?></td>
+                <td><?= $metric->has('metrictype') ? $this->Html->link($metric->metrictype->id, ['controller' => 'Metrictypes', 'action' => 'view', $metric->metrictype->id]) : '' ?></td>
                 <td><?= h($metric->date) ?></td>
-                <td><?= $this->Number->format($metric->metric_value) ?></td>
+                <td><?= $this->Number->format($metric->value) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $metric->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $metric->id]) ?>

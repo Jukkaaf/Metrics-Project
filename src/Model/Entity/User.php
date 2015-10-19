@@ -7,11 +7,10 @@ use Cake\ORM\Entity;
  * User Entity.
  *
  * @property int $id
- * @property string $account
+ * @property string $email
  * @property string $password
  * @property string $first_name
  * @property string $last_name
- * @property string $email
  * @property string $phone
  * @property int $role
  * @property \App\Model\Entity\Member[] $members

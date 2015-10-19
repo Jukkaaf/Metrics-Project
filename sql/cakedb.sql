@@ -11,7 +11,7 @@ CREATE TABLE users (
 
 CREATE TABLE metrictypes (
   id int(10) NOT NULL auto_increment PRIMARY KEY,
-  description varchar(200) NOT NULL,
+  description varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE projects (
@@ -23,7 +23,7 @@ CREATE TABLE projects (
   status varchar(30),
   description varchar(100),
   is_public tinyint(1) NOT NULL,
-  importance tinyint(1),
+  importance tinyint(2),
   UNIQUE KEY (project_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

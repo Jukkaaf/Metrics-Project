@@ -4,17 +4,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Work Entity.
+ * Workinghour Entity.
  *
  * @property int $id
  * @property int $member_id
  * @property \App\Model\Entity\Member $member
  * @property \Cake\I18n\Time $date
  * @property string $description
- * @property float $hours
- * @property int $type
+ * @property float $duration
+ * @property int $worktype
  */
-class Work extends Entity
+class Workinghour extends Entity
 {
 
     /**

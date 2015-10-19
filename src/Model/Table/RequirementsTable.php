@@ -27,7 +27,7 @@ class RequirementsTable extends Table
 
         $this->table('requirements');
         $this->displayField('name');
-        $this->primaryKey('id');
+        $this->primaryKey(['id', 'changenum']);
 
         $this->belongsTo('Projects', [
             'foreignKey' => 'project_id',
@@ -49,8 +49,7 @@ class RequirementsTable extends Table
 
         $validator
             ->add('changenum', 'valid', ['rule' => 'numeric'])
-            ->requirePresence('changenum', 'create')
-            ->notEmpty('changenum');
+            ->allowEmpty('changenum', 'create');
 
         $validator
             ->allowEmpty('name');

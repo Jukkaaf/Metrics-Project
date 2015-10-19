@@ -1,14 +1,14 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\WorksTable;
+use App\Model\Table\WorkinghoursTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\WorksTable Test Case
+ * App\Model\Table\WorkinghoursTable Test Case
  */
-class WorksTableTest extends TestCase
+class WorkinghoursTableTest extends TestCase
 {
 
     /**
@@ -17,14 +17,14 @@ class WorksTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.works',
+        'app.workinghours',
         'app.members',
         'app.users',
         'app.projects',
         'app.metrics',
+        'app.metrictypes',
         'app.requirements',
-        'app.changes',
-        'app.weekly_reports'
+        'app.weeklyreports'
     ];
 
     /**
@@ -35,8 +35,8 @@ class WorksTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Works') ? [] : ['className' => 'App\Model\Table\WorksTable'];
-        $this->Works = TableRegistry::get('Works', $config);
+        $config = TableRegistry::exists('Workinghours') ? [] : ['className' => 'App\Model\Table\WorkinghoursTable'];
+        $this->Workinghours = TableRegistry::get('Workinghours', $config);
     }
 
     /**
@@ -46,7 +46,7 @@ class WorksTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Works);
+        unset($this->Workinghours);
 
         parent::tearDown();
     }

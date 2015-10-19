@@ -19,7 +19,7 @@ class MetricsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Projects']
+            'contain' => ['Projects', 'Metrictypes']
         ];
         $this->set('metrics', $this->paginate($this->Metrics));
         $this->set('_serialize', ['metrics']);
@@ -35,7 +35,7 @@ class MetricsController extends AppController
     public function view($id = null)
     {
         $metric = $this->Metrics->get($id, [
-            'contain' => ['Projects']
+            'contain' => ['Projects', 'Metrictypes']
         ]);
         $this->set('metric', $metric);
         $this->set('_serialize', ['metric']);
@@ -59,7 +59,8 @@ class MetricsController extends AppController
             }
         }
         $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
-        $this->set(compact('metric', 'projects'));
+        $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
+        $this->set(compact('metric', 'projects', 'metrictypes'));
         $this->set('_serialize', ['metric']);
     }
 
@@ -85,7 +86,8 @@ class MetricsController extends AppController
             }
         }
         $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
-        $this->set(compact('metric', 'projects'));
+        $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
+        $this->set(compact('metric', 'projects', 'metrictypes'));
         $this->set('_serialize', ['metric']);
     }
 

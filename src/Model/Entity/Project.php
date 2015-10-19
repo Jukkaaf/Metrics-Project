@@ -14,10 +14,11 @@ use Cake\ORM\Entity;
  * @property string $status
  * @property string $description
  * @property bool $is_public
+ * @property int $importance
  * @property \App\Model\Entity\Member[] $members
  * @property \App\Model\Entity\Metric[] $metrics
  * @property \App\Model\Entity\Requirement[] $requirements
- * @property \App\Model\Entity\WeeklyReport[] $weekly_reports
+ * @property \App\Model\Entity\Weeklyreport[] $weeklyreports
  */
 class Project extends Entity
 {

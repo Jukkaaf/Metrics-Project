@@ -11,7 +11,6 @@
     <fieldset>
         <legend><?= __('Add Requirement') ?></legend>
         <?php
-            echo $this->Form->input('changenum');
             echo $this->Form->input('project_id', ['options' => $projects]);
             echo $this->Form->input('name');
             echo $this->Form->input('description');

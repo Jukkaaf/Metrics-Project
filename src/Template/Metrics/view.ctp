@@ -7,6 +7,8 @@
         <li><?= $this->Html->link(__('New Metric'), ['action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('List Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('New Metrictype'), ['controller' => 'Metrictypes', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="metrics view large-9 medium-8 columns content">
@@ -17,16 +19,16 @@
             <td><?= $metric->has('project') ? $this->Html->link($metric->project->id, ['controller' => 'Projects', 'action' => 'view', $metric->project->id]) : '' ?></td>
         </tr>
         <tr>
+            <th><?= __('Metrictype') ?></th>
+            <td><?= $metric->has('metrictype') ? $this->Html->link($metric->metrictype->id, ['controller' => 'Metrictypes', 'action' => 'view', $metric->metrictype->id]) : '' ?></td>
+        </tr>
+        <tr>
             <th><?= __('Id') ?></th>
             <td><?= $this->Number->format($metric->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('Metric Type') ?></th>
-            <td><?= $this->Number->format($metric->metric_type) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Metric Value') ?></th>
-            <td><?= $this->Number->format($metric->metric_value) ?></td>
+            <th><?= __('Value') ?></th>
+            <td><?= $this->Number->format($metric->value) ?></td>
         </tr>
         <tr>
             <th><?= __('Date') ?></th>

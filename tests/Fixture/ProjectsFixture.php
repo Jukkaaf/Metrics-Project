@@ -25,6 +25,7 @@ class ProjectsFixture extends TestFixture
         'status' => ['type' => 'string', 'length' => 30, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
         'description' => ['type' => 'string', 'length' => 100, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
         'is_public' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        'importance' => ['type' => 'integer', 'length' => 2, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
             'project_name' => ['type' => 'unique', 'columns' => ['project_name'], 'length' => []],
@@ -45,12 +46,13 @@ class ProjectsFixture extends TestFixture
         [
             'id' => 1,
             'project_name' => 'Lorem ipsum dolor sit amet',
-            'created_on' => '2015-10-15',
-            'updated_on' => '2015-10-15',
-            'finished_date' => '2015-10-15',
+            'created_on' => '2015-10-19',
+            'updated_on' => '2015-10-19',
+            'finished_date' => '2015-10-19',
             'status' => 'Lorem ipsum dolor sit amet',
             'description' => 'Lorem ipsum dolor sit amet',
-            'is_public' => 1
+            'is_public' => 1,
+            'importance' => 1
         ],
     ];
 }

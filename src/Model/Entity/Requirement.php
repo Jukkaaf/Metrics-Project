@@ -31,5 +31,6 @@ class Requirement extends Entity
     protected $_accessible = [
         '*' => true,
         'id' => false,
+        'changenum' => false,
     ];
 }

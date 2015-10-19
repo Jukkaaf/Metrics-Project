@@ -14,7 +14,7 @@ use Cake\ORM\Entity;
  * @property int $project_role
  * @property \Cake\I18n\Time $starting_date
  * @property \Cake\I18n\Time $ending_date
- * @property \App\Model\Entity\Work[] $works
+ * @property \App\Model\Entity\Workinghour[] $workinghours
  */
 class Member extends Entity
 {

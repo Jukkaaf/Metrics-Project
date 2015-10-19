@@ -9,8 +9,8 @@
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Works'), ['controller' => 'Works', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Work'), ['controller' => 'Works', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('List Workinghours'), ['controller' => 'Workinghours', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('New Workinghour'), ['controller' => 'Workinghours', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="members view large-9 medium-8 columns content">
@@ -42,32 +42,32 @@
         </tr>
     </table>
     <div class="related">
-        <h4><?= __('Related Works') ?></h4>
-        <?php if (!empty($member->works)): ?>
+        <h4><?= __('Related Workinghours') ?></h4>
+        <?php if (!empty($member->workinghours)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= __('Id') ?></th>
                 <th><?= __('Member Id') ?></th>
                 <th><?= __('Date') ?></th>
                 <th><?= __('Description') ?></th>
-                <th><?= __('Hours') ?></th>
-                <th><?= __('Type') ?></th>
+                <th><?= __('Duration') ?></th>
+                <th><?= __('Worktype') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($member->works as $works): ?>
+            <?php foreach ($member->workinghours as $workinghours): ?>
             <tr>
-                <td><?= h($works->id) ?></td>
-                <td><?= h($works->member_id) ?></td>
-                <td><?= h($works->date) ?></td>
-                <td><?= h($works->description) ?></td>
-                <td><?= h($works->hours) ?></td>
-                <td><?= h($works->type) ?></td>
+                <td><?= h($workinghours->id) ?></td>
+                <td><?= h($workinghours->member_id) ?></td>
+                <td><?= h($workinghours->date) ?></td>
+                <td><?= h($workinghours->description) ?></td>
+                <td><?= h($workinghours->duration) ?></td>
+                <td><?= h($workinghours->worktype) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Works', 'action' => 'view', $works->id]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Workinghours', 'action' => 'view', $workinghours->id]) ?>
 
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Works', 'action' => 'edit', $works->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Workinghours', 'action' => 'edit', $workinghours->id]) ?>
 
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Works', 'action' => 'delete', $works->id], ['confirm' => __('Are you sure you want to delete # {0}?', $works->id)]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Workinghours', 'action' => 'delete', $workinghours->id], ['confirm' => __('Are you sure you want to delete # {0}?', $workinghours->id)]) ?>
 
                 </td>
             </tr>
