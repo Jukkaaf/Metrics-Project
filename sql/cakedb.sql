@@ -36,7 +36,7 @@ CREATE TABLE metrics (
   date date NOT NULL,
   metric_value float NOT NULL,
   FOREIGN KEY project_key (project_id) REFERENCES projects (id),
-  FOREIGN KEY metric_key (metric_type) REFERENCES metric_types (type)
+  FOREIGN KEY metric_key (metric_type) REFERENCES metric_types (mtype)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE members (
