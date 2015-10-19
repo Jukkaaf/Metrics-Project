@@ -61,7 +61,7 @@ CREATE TABLE works (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE weekly_reports (
-  id int(10) NOT NULL PRIMARY KEY,
+  id int(10) NOT NULL auto_increment PRIMARY KEY,
   project_id int(10) NOT NULL,
   title varchar(50) NOT NULL,
   date date NOT NULL,
