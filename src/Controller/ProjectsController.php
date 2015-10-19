@@ -13,7 +13,6 @@ class ProjectsController extends AppController
 
     /**
      * Index method
-     *
      * @return void
      */
     public function index()
