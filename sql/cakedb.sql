@@ -2,8 +2,8 @@ CREATE TABLE users (
   id int(10) NOT NULL auto_increment PRIMARY KEY,
   email varchar(40) NOT NULL,
   password varchar(20) NOT NULL,
-  first_name varchar(20),
-  last_name varchar(20),
+  first_name varchar(20) NOT NULL,
+  last_name varchar(20) NOT NULL,
   phone varchar(15),
   role int(2) NOT NULL,
   UNIQUE KEY (email)
@@ -64,9 +64,9 @@ CREATE TABLE weeklyreports (
   title varchar(50) NOT NULL,
   date date NOT NULL,
   reqlink varchar(100),
-  problems varchar(200),
-  meetings varchar(200) NOT NULL,
-  additional varchar(200),
+  problems varchar(400),
+  meetings varchar(400) NOT NULL,
+  additional varchar(400),
   FOREIGN KEY project_key (project_id) REFERENCES projects (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

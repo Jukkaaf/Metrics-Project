@@ -48,7 +48,7 @@ class MetricsFixture extends TestFixture
             'id' => 1,
             'project_id' => 1,
             'metrictype_id' => 1,
-            'date' => '2015-10-19',
+            'date' => '2015-10-22',
             'value' => 1
         ],
     ];

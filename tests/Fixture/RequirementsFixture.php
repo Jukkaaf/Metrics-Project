@@ -53,7 +53,7 @@ class RequirementsFixture extends TestFixture
             'description' => 'Lorem ipsum dolor sit amet',
             'status' => 1,
             'version' => 1,
-            'date' => '2015-10-19'
+            'date' => '2015-10-22'
         ],
     ];
 }

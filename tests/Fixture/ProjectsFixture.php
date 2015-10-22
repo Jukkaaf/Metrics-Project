@@ -46,9 +46,9 @@ class ProjectsFixture extends TestFixture
         [
             'id' => 1,
             'project_name' => 'Lorem ipsum dolor sit amet',
-            'created_on' => '2015-10-19',
-            'updated_on' => '2015-10-19',
-            'finished_date' => '2015-10-19',
+            'created_on' => '2015-10-22',
+            'updated_on' => '2015-10-22',
+            'finished_date' => '2015-10-22',
             'status' => 'Lorem ipsum dolor sit amet',
             'description' => 'Lorem ipsum dolor sit amet',
             'is_public' => 1,

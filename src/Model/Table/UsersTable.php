@@ -57,10 +57,12 @@ class UsersTable extends Table
             ->notEmpty('password');
 
         $validator
-            ->allowEmpty('first_name');
+            ->requirePresence('first_name', 'create')
+            ->notEmpty('first_name');
 
         $validator
-            ->allowEmpty('last_name');
+            ->requirePresence('last_name', 'create')
+            ->notEmpty('last_name');
 
         $validator
             ->allowEmpty('phone');

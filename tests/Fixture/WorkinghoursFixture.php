@@ -46,7 +46,7 @@ class WorkinghoursFixture extends TestFixture
         [
             'id' => 1,
             'member_id' => 1,
-            'date' => '2015-10-19',
+            'date' => '2015-10-22',
             'description' => 'Lorem ipsum dolor sit amet',
             'duration' => 1,
             'worktype' => 1
