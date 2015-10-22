@@ -65,6 +65,10 @@ class UsersController extends AppController
     {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
+            
+            // when adding a new user, make the role always "0", as in normal user
+            $this->request->data['role'] = 0;
+            
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
