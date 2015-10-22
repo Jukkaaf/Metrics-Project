@@ -1,7 +1,7 @@
 CREATE TABLE users (
   id int(10) NOT NULL auto_increment PRIMARY KEY,
   email varchar(40) NOT NULL,
-  password varchar(20) NOT NULL,
+  password varchar(255) NOT NULL,
   first_name varchar(20) NOT NULL,
   last_name varchar(20) NOT NULL,
   phone varchar(15),
