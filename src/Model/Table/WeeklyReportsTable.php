@@ -34,7 +34,23 @@ class WeeklyreportsTable extends Table
             'joinType' => 'INNER'
         ]);
     }
+    
+    // parsing trough the txt files contents to get the information out 
+    public function saveUploadedReport($file_content){
+        print_r($file_content);
 
+        
+        // return an array with
+        // project_id, int
+        // title, string
+        // date, Array ( [year] => 2015 [month] => 10 [day] => 24 ) 
+        // reqlink, string
+        // problems, string
+        // meetings, string
+        // additional, string
+    }
+    
+    
     /**
      * Default validation rules.
      *

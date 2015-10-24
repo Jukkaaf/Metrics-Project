@@ -10,7 +10,21 @@ use App\Controller\AppController;
  */
 class WeeklyreportsController extends AppController
 {
-
+    
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Upload');
+    }
+    
+    // uploading new weeklyreports as txt files
+    public function upload(){
+        if ( !empty( $this->request->data ) ) {
+            $file_content = $this->Upload->send($this->request->data['uploadfile']);
+            $this->Weeklyreports->saveUploadedReport($file_content);
+        }
+    }
+    
     /**
      * Index method
      *
@@ -50,17 +64,18 @@ class WeeklyreportsController extends AppController
     {
         $weeklyreport = $this->Weeklyreports->newEntity();
         if ($this->request->is('post')) {
+            //print_r($this->request->data['date']);
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
             if ($this->Weeklyreports->save($weeklyreport)) {
                 $this->Flash->success(__('The weeklyreport has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
             }
         }
         $projects = $this->Weeklyreports->Projects->find('list', ['limit' => 200]);
         $this->set(compact('weeklyreport', 'projects'));
-        $this->set('_serialize', ['weeklyreport']);
+        $this->set('_serialize', ['weeklyreport']);    
     }
 
     /**
