@@ -4,10 +4,10 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * MetricTypesFixture
+ * MetrictypesFixture
  *
  */
-class MetricTypesFixture extends TestFixture
+class MetrictypesFixture extends TestFixture
 {
 
     /**
@@ -17,10 +17,10 @@ class MetricTypesFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'mtype' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
+        'id' => ['type' => 'integer', 'length' => 10, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'description' => ['type' => 'string', 'length' => 200, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['mtype'], 'length' => []],
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -36,7 +36,7 @@ class MetricTypesFixture extends TestFixture
      */
     public $records = [
         [
-            'mtype' => 1,
+            'id' => 1,
             'description' => 'Lorem ipsum dolor sit amet'
         ],
     ];

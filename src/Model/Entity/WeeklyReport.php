@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * WeeklyReport Entity.
+ * Weeklyreport Entity.
  *
  * @property int $id
  * @property int $project_id
@@ -16,7 +16,7 @@ use Cake\ORM\Entity;
  * @property string $meetings
  * @property string $additional
  */
-class WeeklyReport extends Entity
+class Weeklyreport extends Entity
 {
 
     /**

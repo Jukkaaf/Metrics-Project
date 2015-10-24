@@ -1,18 +1,18 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\WeeklyReport;
+use App\Model\Entity\Weeklyreport;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * WeeklyReports Model
+ * Weeklyreports Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Projects
  */
-class WeeklyReportsTable extends Table
+class WeeklyreportsTable extends Table
 {
 
     /**
@@ -25,7 +25,7 @@ class WeeklyReportsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('weekly_reports');
+        $this->table('weeklyreports');
         $this->displayField('title');
         $this->primaryKey('id');
 

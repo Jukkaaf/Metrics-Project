@@ -4,12 +4,12 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * MetricType Entity.
+ * Metrictype Entity.
  *
- * @property int $mtype
+ * @property int $id
  * @property string $description
  */
-class MetricType extends Entity
+class Metrictype extends Entity
 {
 
     /**

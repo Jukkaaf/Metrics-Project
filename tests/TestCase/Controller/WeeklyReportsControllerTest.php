@@ -1,13 +1,13 @@
 <?php
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\WeeklyReportsController;
+use App\Controller\WeeklyreportsController;
 use Cake\TestSuite\IntegrationTestCase;
 
 /**
- * App\Controller\WeeklyReportsController Test Case
+ * App\Controller\WeeklyreportsController Test Case
  */
-class WeeklyReportsControllerTest extends IntegrationTestCase
+class WeeklyreportsControllerTest extends IntegrationTestCase
 {
 
     /**
@@ -16,14 +16,14 @@ class WeeklyReportsControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.weekly_reports',
+        'app.weeklyreports',
         'app.projects',
         'app.members',
         'app.users',
-        'app.works',
+        'app.workinghours',
         'app.metrics',
-        'app.requirements',
-        'app.changes'
+        'app.metrictypes',
+        'app.requirements'
     ];
 
     /**

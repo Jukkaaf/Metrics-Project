@@ -1,14 +1,14 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\MetricTypesTable;
+use App\Model\Table\MetrictypesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\MetricTypesTable Test Case
+ * App\Model\Table\MetrictypesTable Test Case
  */
-class MetricTypesTableTest extends TestCase
+class MetrictypesTableTest extends TestCase
 {
 
     /**
@@ -17,7 +17,7 @@ class MetricTypesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.metric_types'
+        'app.metrictypes'
     ];
 
     /**
@@ -28,8 +28,8 @@ class MetricTypesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('MetricTypes') ? [] : ['className' => 'App\Model\Table\MetricTypesTable'];
-        $this->MetricTypes = TableRegistry::get('MetricTypes', $config);
+        $config = TableRegistry::exists('Metrictypes') ? [] : ['className' => 'App\Model\Table\MetrictypesTable'];
+        $this->Metrictypes = TableRegistry::get('Metrictypes', $config);
     }
 
     /**
@@ -39,27 +39,17 @@ class MetricTypesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->MetricTypes);
+        unset($this->Metrictypes);
 
         parent::tearDown();
     }
 
     /**
-     * Test initialize method
+     * Test initial setup
      *
      * @return void
      */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test validationDefault method
-     *
-     * @return void
-     */
-    public function testValidationDefault()
+    public function testInitialization()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

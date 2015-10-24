@@ -1,14 +1,14 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\WeeklyReportsTable;
+use App\Model\Table\WeeklyreportsTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\WeeklyReportsTable Test Case
+ * App\Model\Table\WeeklyreportsTable Test Case
  */
-class WeeklyReportsTableTest extends TestCase
+class WeeklyreportsTableTest extends TestCase
 {
 
     /**
@@ -17,14 +17,14 @@ class WeeklyReportsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.weekly_reports',
+        'app.weeklyreports',
         'app.projects',
         'app.members',
         'app.users',
-        'app.works',
+        'app.workinghours',
         'app.metrics',
-        'app.requirements',
-        'app.changes'
+        'app.metrictypes',
+        'app.requirements'
     ];
 
     /**
@@ -35,8 +35,8 @@ class WeeklyReportsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('WeeklyReports') ? [] : ['className' => 'App\Model\Table\WeeklyReportsTable'];
-        $this->WeeklyReports = TableRegistry::get('WeeklyReports', $config);
+        $config = TableRegistry::exists('Weeklyreports') ? [] : ['className' => 'App\Model\Table\WeeklyreportsTable'];
+        $this->Weeklyreports = TableRegistry::get('Weeklyreports', $config);
     }
 
     /**
@@ -46,37 +46,17 @@ class WeeklyReportsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->WeeklyReports);
+        unset($this->Weeklyreports);
 
         parent::tearDown();
     }
 
     /**
-     * Test initialize method
+     * Test initial setup
      *
      * @return void
      */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test validationDefault method
-     *
-     * @return void
-     */
-    public function testValidationDefault()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
+    public function testInitialization()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

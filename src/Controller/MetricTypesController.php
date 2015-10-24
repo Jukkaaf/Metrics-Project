@@ -4,11 +4,11 @@ namespace App\Controller;
 use App\Controller\AppController;
 
 /**
- * MetricTypes Controller
+ * Metrictypes Controller
  *
- * @property \App\Model\Table\MetricTypesTable $MetricTypes
+ * @property \App\Model\Table\MetrictypesTable $Metrictypes
  */
-class MetricTypesController extends AppController
+class MetrictypesController extends AppController
 {
 
     /**
@@ -18,24 +18,24 @@ class MetricTypesController extends AppController
      */
     public function index()
     {
-        $this->set('metricTypes', $this->paginate($this->MetricTypes));
-        $this->set('_serialize', ['metricTypes']);
+        $this->set('metrictypes', $this->paginate($this->Metrictypes));
+        $this->set('_serialize', ['metrictypes']);
     }
 
     /**
      * View method
      *
-     * @param string|null $id Metric Type id.
+     * @param string|null $id Metrictype id.
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function view($id = null)
     {
-        $metricType = $this->MetricTypes->get($id, [
+        $metrictype = $this->Metrictypes->get($id, [
             'contain' => []
         ]);
-        $this->set('metricType', $metricType);
-        $this->set('_serialize', ['metricType']);
+        $this->set('metrictype', $metrictype);
+        $this->set('_serialize', ['metrictype']);
     }
 
     /**
@@ -45,60 +45,60 @@ class MetricTypesController extends AppController
      */
     public function add()
     {
-        $metricType = $this->MetricTypes->newEntity();
+        $metrictype = $this->Metrictypes->newEntity();
         if ($this->request->is('post')) {
-            $metricType = $this->MetricTypes->patchEntity($metricType, $this->request->data);
-            if ($this->MetricTypes->save($metricType)) {
-                $this->Flash->success(__('The metric type has been saved.'));
+            $metrictype = $this->Metrictypes->patchEntity($metrictype, $this->request->data);
+            if ($this->Metrictypes->save($metrictype)) {
+                $this->Flash->success(__('The metrictype has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The metric type could not be saved. Please, try again.'));
+                $this->Flash->error(__('The metrictype could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('metricType'));
-        $this->set('_serialize', ['metricType']);
+        $this->set(compact('metrictype'));
+        $this->set('_serialize', ['metrictype']);
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Metric Type id.
+     * @param string|null $id Metrictype id.
      * @return void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $metricType = $this->MetricTypes->get($id, [
+        $metrictype = $this->Metrictypes->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $metricType = $this->MetricTypes->patchEntity($metricType, $this->request->data);
-            if ($this->MetricTypes->save($metricType)) {
-                $this->Flash->success(__('The metric type has been saved.'));
+            $metrictype = $this->Metrictypes->patchEntity($metrictype, $this->request->data);
+            if ($this->Metrictypes->save($metrictype)) {
+                $this->Flash->success(__('The metrictype has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The metric type could not be saved. Please, try again.'));
+                $this->Flash->error(__('The metrictype could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('metricType'));
-        $this->set('_serialize', ['metricType']);
+        $this->set(compact('metrictype'));
+        $this->set('_serialize', ['metrictype']);
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Metric Type id.
+     * @param string|null $id Metrictype id.
      * @return void Redirects to index.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $metricType = $this->MetricTypes->get($id);
-        if ($this->MetricTypes->delete($metricType)) {
-            $this->Flash->success(__('The metric type has been deleted.'));
+        $metrictype = $this->Metrictypes->get($id);
+        if ($this->Metrictypes->delete($metrictype)) {
+            $this->Flash->success(__('The metrictype has been deleted.'));
         } else {
-            $this->Flash->error(__('The metric type could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The metrictype could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
     }

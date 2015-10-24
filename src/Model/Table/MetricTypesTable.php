@@ -1,17 +1,18 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\MetricType;
+use App\Model\Entity\Metrictype;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * MetricTypes Model
+ * Metrictypes Model
  *
+ * @property \Cake\ORM\Association\HasMany $Metrics
  */
-class MetricTypesTable extends Table
+class MetrictypesTable extends Table
 {
 
     /**
@@ -24,10 +25,13 @@ class MetricTypesTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('metric_types');
+        $this->table('metrictypes');
         $this->displayField('mtype');
         $this->primaryKey('mtype');
 
+        $this->hasMany('Metrics', [
+            'foreignKey' => 'metrictype_id'
+        ]);
     }
 
     /**
@@ -39,8 +43,8 @@ class MetricTypesTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->add('mtype', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('mtype', 'create');
+            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('id', 'create');
 
         $validator
             ->requirePresence('description', 'create')
