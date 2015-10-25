@@ -17,7 +17,14 @@ class MetrictypesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.metrictypes'
+        'app.metrictypes',
+        'app.metrics',
+        'app.projects',
+        'app.members',
+        'app.users',
+        'app.workinghours',
+        'app.requirements',
+        'app.weeklyreports'
     ];
 
     /**
@@ -45,11 +52,21 @@ class MetrictypesTableTest extends TestCase
     }
 
     /**
-     * Test initial setup
+     * Test initialize method
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialize()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test validationDefault method
+     *
+     * @return void
+     */
+    public function testValidationDefault()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

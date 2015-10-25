@@ -16,7 +16,14 @@ class MetrictypesControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.metrictypes'
+        'app.metrictypes',
+        'app.metrics',
+        'app.projects',
+        'app.members',
+        'app.users',
+        'app.workinghours',
+        'app.requirements',
+        'app.weeklyreports'
     ];
 
     /**
