@@ -201,3 +201,9 @@ DispatcherFactory::add('ControllerFactory');
  */
 Type::build('date')->useLocaleParser();
 Type::build('datetime')->useLocaleParser();
+
+// change timeout time to 30 minutes
+Configure::write('Session', [
+    'defaults' => 'php',
+    'timeout' => 30
+]);

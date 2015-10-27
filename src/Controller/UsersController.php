@@ -10,7 +10,7 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
-
+    private static $PASS_MIN_LENGTH = 8;
     /**
      * Index method
      *
@@ -70,11 +70,16 @@ class UsersController extends AppController
             $this->request->data['role'] = 0;
             
             $user = $this->Users->patchEntity($user, $this->request->data);
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            if(strlen($this->request->data['password']) >= self::$PASS_MIN_LENGTH){    
+                if ($this->Users->save($user)){
+                    $this->Flash->success(__('The user has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                }
+            }
+            else{
+                $this->Flash->error(__('The password is not long enough. Minimun is ' .self::$PASS_MIN_LENGTH));
             }
         }
         $this->set(compact('user'));
@@ -95,11 +100,16 @@ class UsersController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            if(strlen($this->request->data['password']) >= self::$PASS_MIN_LENGTH){
+                if ($this->Users->save($user)) {
+                    $this->Flash->success(__('The user has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                }
+            }
+            else{
+                $this->Flash->error(__('The password is not long enough. Minimun is ' .self::$PASS_MIN_LENGTH));
             }
         }
         $this->set(compact('user'));

@@ -7,6 +7,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use Cake\ORM\TableRegistry;
 /**
  * Weeklyreports Model
  *
@@ -39,6 +40,17 @@ class WeeklyreportsTable extends Table
     public function saveUploadedReport($file_content){
         print_r($file_content);
 
+        
+        /*
+        $Projects = TableRegistry::get('Projects');
+        $query = $Projects
+                ->find()
+                ->select(['id'])
+                ->where(['project_name' => "name from report"])
+                ->toArray();
+        
+        print_r($query[0]->id);
+        */
         
         // return an array with
         // project_id, int
