@@ -7,6 +7,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use Cake\Filesystem\File;
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 /**
  * Weeklyreports Model
@@ -38,9 +40,18 @@ class WeeklyreportsTable extends Table
     
     // parsing trough the txt files contents to get the information out 
     public function saveUploadedReport($file_content){
-        print_r($file_content);
+        #print_r($file_content);
 
-        
+        // after the file has been validated
+        // save it in to the server
+        $time = Time::now();
+        $filename = 'test'. $time->year . $time->month . $time->day . '.txt'; // test will be changed to project name
+        $path = ROOT . DS . 'reports' . DS . 'test' . DS . $filename; // change test to current projects name
+        print_r($path);
+        $file = new File($path, true, 0644);
+        $file->open('w', false);
+        $file->write($file_content, 'w', false);
+        $file->close();
         /*
         $Projects = TableRegistry::get('Projects');
         $query = $Projects
