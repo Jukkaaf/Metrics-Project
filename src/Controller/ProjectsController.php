@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\Filesystem\Folder;
 /**
  * Projects Controller
  *
@@ -48,11 +48,22 @@ class ProjectsController extends AppController
         $project = $this->Projects->newEntity();
         if ($this->request->is('post')) {
             $project = $this->Projects->patchEntity($project, $this->request->data);
-            if ($this->Projects->save($project)) {
+            
+            // create a folder for the project
+            $path = ROOT . DS . 'reports' . DS . $this->request->data['project_name'];
+            $dir = new Folder($path, true, 0755);
+
+            if(!is_null($dir->path)){
+                if ($this->Projects->save($project)) {
                 $this->Flash->success(__('The project has been saved.'));
                 return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The project could not be saved. Please, try again.'));
+                } 
+                else {
+                    $this->Flash->error(__('The project could not be saved. Please, try again.'));
+                }
+            }
+            else{
+                $this->Flash->error(__('Could not create a folder for the project. Please change the name'));
             }
         }
         $this->set(compact('project'));
