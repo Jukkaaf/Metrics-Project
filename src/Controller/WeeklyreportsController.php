@@ -10,18 +10,28 @@ use App\Controller\AppController;
  */
 class WeeklyreportsController extends AppController
 {
-    
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('Upload');
+        $this->loadComponent('Upload');     
     }
     
     // uploading new weeklyreports as txt files
     public function upload(){
         if ( !empty( $this->request->data ) ) {
+            $report = [];
             $file_content = $this->Upload->send($this->request->data['uploadfile']);
-            $this->Weeklyreports->saveUploadedReport($file_content);
+            if($file_content != null){
+                // read the file in to a key value array
+                $report = $this->Weeklyreports->parseReport($file_content);
+                // save the report in the session
+                // the file contents are also stored in the report variable
+                $this->request->session()->write('report', $report);
+                
+                return $this->redirect(
+                    ['controller' => 'Weeklyreports', 'action' => 'add']
+                );
+            }
         }
     }
     
@@ -68,6 +78,15 @@ class WeeklyreportsController extends AppController
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
             if ($this->Weeklyreports->save($weeklyreport)) {
                 $this->Flash->success(__('The weeklyreport has been saved.'));
+                
+                // check if the report was made by uploading a report file
+                // if so, we should have a variable stored in the session with the contents of the file
+                if($this->request->session()->check('report')){
+                    $report = $this->request->session()->read('report');
+                    $this->Weeklyreports->saveUploadedReport($report["file_content"]);
+                    $this->request->session()->delete('report');
+                }
+                
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));

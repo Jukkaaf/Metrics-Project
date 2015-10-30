@@ -40,39 +40,68 @@ class WeeklyreportsTable extends Table
     
     // parsing trough the txt files contents to get the information out 
     public function saveUploadedReport($file_content){
-        #print_r($file_content);
-
-        // after the file has been validated
+        $project_name = "test"; // change to session project
+        
         // save it in to the server
         $time = Time::now();
-        $filename = 'test'. $time->year . $time->month . $time->day . '.txt'; // test will be changed to project name
-        $path = ROOT . DS . 'reports' . DS . 'test' . DS . $filename; // change test to current projects name
-        print_r($path);
+        $filename = $project_name . $time->year . $time->month . $time->day . $time->hour . $time->minute . $time->second .'.txt';
+        $path = ROOT . DS . 'reports' . DS . $project_name . DS . $filename;
+        #print_r($path);
         $file = new File($path, true, 0644);
         $file->open('w', false);
         $file->write($file_content, 'w', false);
         $file->close();
-        /*
-        $Projects = TableRegistry::get('Projects');
-        $query = $Projects
-                ->find()
-                ->select(['id'])
-                ->where(['project_name' => "name from report"])
-                ->toArray();
-        
-        print_r($query[0]->id);
-        */
-        
-        // return an array with
-        // project_id, int
-        // title, string
-        // date, Array ( [year] => 2015 [month] => 10 [day] => 24 ) 
-        // reqlink, string
-        // problems, string
-        // meetings, string
-        // additional, string
     }
-    
+    public function parseReport($file_content){
+        $report = [];
+        $fields_tosave = ["#title", "#time", "#reglink", "#problems", "#meetings", "#additional"];
+        $fields_toignore = ["#project", "#Project managers", "#phase", "#req", "#commits",
+                            "#passed_test_cases / total_test_cases", "#hours"];
+        $temptext = "";
+        $saverow = False;
+        $key = "";
+        
+        $rows = explode("\n", $file_content);
+        $row_count = count($rows);
+        
+        for($count = 0; $count < $row_count; $count++){
+            $buffer = str_replace(array("\r", "\n"), '', $rows[$count]);
+            
+            if(in_array($buffer, $fields_tosave)){
+                if(!empty($temptext)){
+                    $report[$key] = $temptext;
+                    $temptext = "";
+                }             
+                $saverow = True;
+                $key = $buffer;
+            }
+            else if(in_array($buffer, $fields_toignore)){
+                if(!empty($temptext)){
+                    $report[$key] = $temptext;
+                    $temptext = "";
+                    $key = "";
+                }              
+                $saverow = False;
+            }           
+            else if($saverow && !empty($buffer)){
+                $temptext = $temptext . $buffer;
+            }
+        }
+        if(!empty($temptext)){
+            $report[$key] = $temptext;
+        }
+        
+        // turn date in to the right format
+        $date = explode(".", $report['#time']);
+        
+        $actual_date['year'] = $date[2];
+        $actual_date['month'] = $date[1];
+        $actual_date['day'] = $date[0];
+        
+        $report['actual_date'] = $actual_date;
+        $report["file_content"] = $file_content;
+        return $report;
+    }
     
     /**
      * Default validation rules.

@@ -16,19 +16,19 @@ class UploadComponent extends Component{
             $temp = explode('.', $filename);
             // check that the file is a .txt
             if(strcmp($temp[1], "txt") == 0){                
-                //print_r($temp[0]);
                 // check that the file was uploaded with no errors, and that it was indeed uploaded
                 if ($data[0]['error'] == UPLOAD_ERR_OK && is_uploaded_file($data[0]['tmp_name'])){
                     return file_get_contents($data[0]['tmp_name']);
                 }
             }
             else{
-                throw new InternalErrorException("Wrong file type {$this->temp[1]}", 1);
+                print_r("The file has to be .txt");
             }
         }
         else{
-            throw new InternalErrorException("Maximum file ammount is {$this->max_file_ammount}", 1);
+            print_r('Max file ammount is ' . $this->max_file_ammount);
         }
+        return null;
     }
 }
 
