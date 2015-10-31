@@ -82,12 +82,11 @@ class WeeklyreportsController extends AppController
                 // check if the report was made by uploading a report file
                 // if so, we should have a variable stored in the session with the contents of the file
                 if($this->request->session()->check('report')){
-                    $report = $this->request->session()->read('report');
-                    $this->Weeklyreports->saveUploadedReport($report["file_content"]);
-                    $this->request->session()->delete('report');
+                    $this->addUploaded();
                 }
-                
-                return $this->redirect(['action' => 'index']);
+                else{
+                    return $this->redirect(['action' => 'index']);
+                }             
             } else {
                 $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
             }
@@ -96,7 +95,24 @@ class WeeklyreportsController extends AppController
         $this->set(compact('weeklyreport', 'projects'));
         $this->set('_serialize', ['weeklyreport']);    
     }
+    
+    private function addUploaded(){
+        $report = $this->request->session()->read('report');
+        // save the report on the server harddrive
+        $this->Weeklyreports->saveUploadedReport($report["file_content"]);
 
+        // if the report included workinghours
+        // we will move onwards to adding them
+        if(array_key_exists('actual_hours', $this->request->session()->read('report'))){
+            return $this->redirect(
+                ['controller' => 'Workinghours', 'action' => 'add']
+            );
+        }
+        else{
+            $this->request->session()->delete('report');
+        }
+    } 
+    
     /**
      * Edit method
      *

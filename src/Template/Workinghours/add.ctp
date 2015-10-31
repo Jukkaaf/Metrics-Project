@@ -11,10 +11,12 @@
     <fieldset>
         <legend><?= __('Add Workinghour') ?></legend>
         <?php
-            echo $this->Form->input('member_id', ['options' => $members]);
-            echo $this->Form->input('date');
+            $report = $this->request->session()->read('report');
+
+            echo $this->Form->input('member_id', ['options' => $members]); // change the id to the current members id
+            echo $this->Form->input('date', array('value' => $report['actual_date']));
             echo $this->Form->input('description');
-            echo $this->Form->input('duration');
+            echo $this->Form->input('duration', array('value' => $report['actual_hours'][$report['actual_hours_index']]['hours']));
             echo $this->Form->input('worktype');
         ?>
     </fieldset>

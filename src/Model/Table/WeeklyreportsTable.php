@@ -54,9 +54,9 @@ class WeeklyreportsTable extends Table
     }
     public function parseReport($file_content){
         $report = [];
-        $fields_tosave = ["#title", "#time", "#reglink", "#problems", "#meetings", "#additional"];
+        $fields_tosave = ["#title", "#time", "#reglink", "#problems", "#hours", "#meetings", "#additional"];
         $fields_toignore = ["#project", "#Project managers", "#phase", "#req", "#commits",
-                            "#passed_test_cases / total_test_cases", "#hours"];
+                            "#passed_test_cases / total_test_cases"];
         $temptext = "";
         $saverow = False;
         $key = "";
@@ -64,6 +64,7 @@ class WeeklyreportsTable extends Table
         $rows = explode("\n", $file_content);
         $row_count = count($rows);
         
+        // read all the important info based on fields_tosave and fields_toignore
         for($count = 0; $count < $row_count; $count++){
             $buffer = str_replace(array("\r", "\n"), '', $rows[$count]);
             
@@ -84,7 +85,12 @@ class WeeklyreportsTable extends Table
                 $saverow = False;
             }           
             else if($saverow && !empty($buffer)){
-                $temptext = $temptext . $buffer;
+                if(!empty($temptext)){
+                    $temptext = $temptext . " " . $buffer;
+                }
+                else{
+                    $temptext = $temptext . $buffer;
+                }              
             }
         }
         if(!empty($temptext)){
@@ -92,13 +98,37 @@ class WeeklyreportsTable extends Table
         }
         
         // turn date in to the right format
-        $date = explode(".", $report['#time']);
+        if(array_key_exists('#time', $report)){
+            $date = explode(".", $report['#time']);
         
-        $actual_date['year'] = $date[2];
-        $actual_date['month'] = $date[1];
-        $actual_date['day'] = $date[0];
+            $actual_date['year'] = $date[2];
+            $actual_date['month'] = $date[1];
+            $actual_date['day'] = $date[0];
+
+            $report['actual_date'] = $actual_date;
+        }
+        // turn the hours in to a usable format
+        if(array_key_exists('#hours', $report)){
+            $hours = explode(" ", $report['#hours']);
+            $hour_count = count($hours);
+            $actual_hours = [];
+            $count = 0;
+            while($count < $hour_count - 2){
+                $temp_hours = [];
+                
+                $temp_hours['firstname'] = $hours[$count];
+                $temp_hours['lastname'] = $hours[$count + 1];
+                $temp_hours['hours'] = $hours[$count + 2];
+                
+                $actual_hours[] = $temp_hours;
+                
+                $count += 5;
+            }
+            $report['actual_hours_index'] = 0;
+            $report['actual_hours'] = $actual_hours;
+        }
         
-        $report['actual_date'] = $actual_date;
+        // add the file content to the array
         $report["file_content"] = $file_content;
         return $report;
     }

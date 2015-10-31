@@ -53,7 +53,14 @@ class WorkinghoursController extends AppController
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);
             if ($this->Workinghours->save($workinghour)) {
                 $this->Flash->success(__('The workinghour has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                
+                // lets check if the working hours were added by uploading a report
+                if($this->request->session()->check('report')){
+                    $this->addUploaded();
+                }
+                else{
+                    return $this->redirect(['action' => 'index']);
+                }  
             } else {
                 $this->Flash->error(__('The workinghour could not be saved. Please, try again.'));
             }
@@ -62,7 +69,25 @@ class WorkinghoursController extends AppController
         $this->set(compact('workinghour', 'members'));
         $this->set('_serialize', ['workinghour']);
     }
-
+    
+    private function addUploaded(){
+        $report = $this->request->session()->read('report');
+        $hours_count = count($report['actual_hours']);
+        // if there are still working hours to add
+        if($report['actual_hours_index'] < $hours_count - 1){
+            // count the index in the session and reload the page with a new members info
+            $report['actual_hours_index'] = $report['actual_hours_index'] + 1;
+            $this->request->session()->write('report', $report);
+            return $this->redirect(
+                ['controller' => 'Workinghours', 'action' => 'add']
+            );
+        }
+        else{
+            $this->request->session()->delete('report');
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+    
     /**
      * Edit method
      *
