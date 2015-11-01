@@ -1,12 +1,8 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
+        <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Edit Weeklyreport'), ['action' => 'edit', $weeklyreport->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Weeklyreport'), ['action' => 'delete', $weeklyreport->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyreport->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Weeklyreports'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Weeklyreport'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="weeklyreports view large-9 medium-8 columns content">

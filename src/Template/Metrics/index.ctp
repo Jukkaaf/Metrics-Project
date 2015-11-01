@@ -1,11 +1,15 @@
+<?php
+if($this->request->session()->check('selected_project')){
+    $selected_project = $this->request->session()->read('selected_project');
+    $id = $selected_project['id'];
+}
+?>
+
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
+        <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li> 
         <li><?= $this->Html->link(__('New Metric'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Metrictype'), ['controller' => 'Metrictypes', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="metrics index large-9 medium-8 columns content">

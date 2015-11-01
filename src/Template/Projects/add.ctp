@@ -1,15 +1,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Projects'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Members'), ['controller' => 'Members', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Member'), ['controller' => 'Members', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Metrics'), ['controller' => 'Metrics', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Metric'), ['controller' => 'Metrics', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Requirements'), ['controller' => 'Requirements', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Requirement'), ['controller' => 'Requirements', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Weeklyreports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Weeklyreport'), ['controller' => 'Weeklyreports', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Index'), ['action' => 'index']) ?> </li>
     </ul>
 </nav>
 <div class="projects form large-9 medium-8 columns content">

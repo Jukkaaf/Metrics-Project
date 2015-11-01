@@ -1,16 +1,12 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Metrictype'), ['action' => 'edit', $metrictype->mtype]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Metrictype'), ['action' => 'delete', $metrictype->mtype], ['confirm' => __('Are you sure you want to delete # {0}?', $metrictype->mtype)]) ?> </li>
-        <li><?= $this->Html->link(__('List Metrictypes'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Metrictype'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Metrics'), ['controller' => 'Metrics', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Metric'), ['controller' => 'Metrics', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('Edit Metrictype'), ['action' => 'edit', $metrictype->id]) ?> </li>
     </ul>
 </nav>
 <div class="metrictypes view large-9 medium-8 columns content">
-    <h3><?= h($metrictype->mtype) ?></h3>
+    <h3><?= h($metrictype->id) ?></h3>
     <table class="vertical-table">
         <tr>
             <th><?= __('Description') ?></th>

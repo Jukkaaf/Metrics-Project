@@ -1,11 +1,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Metrics'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Projects'), ['controller' => 'Projects', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Project'), ['controller' => 'Projects', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Metrictype'), ['controller' => 'Metrictypes', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?> </li>
     </ul>
 </nav>
 <div class="metrics form large-9 medium-8 columns content">
