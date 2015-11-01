@@ -21,7 +21,7 @@ class ProjectsController extends AppController
         $this->set('projects', $this->paginate($this->Projects));
         $this->set('_serialize', ['projects']);
     }
-
+      
     /**
      * View method
      *
@@ -36,6 +36,8 @@ class ProjectsController extends AppController
         ]);
         $this->set('project', $project);
         $this->set('_serialize', ['project']);
+        
+        $this->request->session()->write('selected_project', $project);
     }
 
     /**
@@ -55,8 +57,8 @@ class ProjectsController extends AppController
 
             if(!is_null($dir->path)){
                 if ($this->Projects->save($project)) {
-                $this->Flash->success(__('The project has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                    $this->Flash->success(__('The project has been saved.'));
+                    return $this->redirect(['action' => 'index']);
                 } 
                 else {
                     $this->Flash->error(__('The project could not be saved. Please, try again.'));
