@@ -51,6 +51,13 @@ class RequirementsController extends AppController
         $requirement = $this->Requirements->newEntity();
         if ($this->request->is('post')) {
             $requirement = $this->Requirements->patchEntity($requirement, $this->request->data);
+            
+            // add the session project_id to the report
+            if($this->request->session()->check('selected_project')){
+                $selected_project = $this->request->session()->read('selected_project');
+                $requirement['project_id'] = $selected_project['id'];
+            }
+            
             if ($this->Requirements->save($requirement)) {
                 $this->Flash->success(__('The requirement has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -77,6 +84,13 @@ class RequirementsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $requirement = $this->Requirements->patchEntity($requirement, $this->request->data);
+            
+            // add the session project_id to the report
+            if($this->request->session()->check('selected_project')){
+                $selected_project = $this->request->session()->read('selected_project');
+                $requirement['project_id'] = $selected_project['id'];
+            }
+            
             if ($this->Requirements->save($requirement)) {
                 $this->Flash->success(__('The requirement has been saved.'));
                 return $this->redirect(['action' => 'index']);

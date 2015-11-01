@@ -10,7 +10,6 @@
         <legend><?= __('Add Member') ?></legend>
         <?php
             echo $this->Form->input('user_id', ['options' => $users]);
-            echo $this->Form->input('project_id', ['options' => $projects]);
             echo $this->Form->input('project_role');
             echo $this->Form->input('starting_date', ['empty' => true, 'default' => '']);
             echo $this->Form->input('ending_date', ['empty' => true, 'default' => '']);

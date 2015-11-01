@@ -15,7 +15,6 @@
     <fieldset>
         <legend><?= __('Edit Weeklyreport') ?></legend>
         <?php
-            echo $this->Form->input('project_id', ['options' => $projects]);
             echo $this->Form->input('title');
             echo $this->Form->input('date');
             echo $this->Form->input('reqlink');

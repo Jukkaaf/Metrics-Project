@@ -74,8 +74,14 @@ class WeeklyreportsController extends AppController
     {
         $weeklyreport = $this->Weeklyreports->newEntity();
         if ($this->request->is('post')) {
-            //print_r($this->request->data['date']);
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
+            
+            // add the session project_id to the report
+            if($this->request->session()->check('selected_project')){
+                $selected_project = $this->request->session()->read('selected_project');
+                $weeklyreport['project_id'] = $selected_project['id'];
+            }
+            
             if ($this->Weeklyreports->save($weeklyreport)) {
                 $this->Flash->success(__('The weeklyreport has been saved.'));
                 
@@ -127,6 +133,13 @@ class WeeklyreportsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
+            
+            // add the session project_id to the report
+            if($this->request->session()->check('selected_project')){
+                $selected_project = $this->request->session()->read('selected_project');
+                $weeklyreport['project_id'] = $selected_project['id'];
+            }
+            
             if ($this->Weeklyreports->save($weeklyreport)) {
                 $this->Flash->success(__('The weeklyreport has been saved.'));
                 return $this->redirect(['action' => 'index']);

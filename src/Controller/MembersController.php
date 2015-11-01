@@ -51,6 +51,13 @@ class MembersController extends AppController
         $member = $this->Members->newEntity();
         if ($this->request->is('post')) {
             $member = $this->Members->patchEntity($member, $this->request->data);
+            
+            // add the session project_id to the report
+            if($this->request->session()->check('selected_project')){
+                $selected_project = $this->request->session()->read('selected_project');
+                $member['project_id'] = $selected_project['id'];
+            }
+            
             if ($this->Members->save($member)) {
                 $this->Flash->success(__('The member has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -78,6 +85,13 @@ class MembersController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $member = $this->Members->patchEntity($member, $this->request->data);
+            
+            // add the session project_id to the report
+            if($this->request->session()->check('selected_project')){
+                $selected_project = $this->request->session()->read('selected_project');
+                $member['project_id'] = $selected_project['id'];
+            }
+            
             if ($this->Members->save($member)) {
                 $this->Flash->success(__('The member has been saved.'));
                 return $this->redirect(['action' => 'index']);

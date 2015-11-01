@@ -51,6 +51,13 @@ class MetricsController extends AppController
         $metric = $this->Metrics->newEntity();
         if ($this->request->is('post')) {
             $metric = $this->Metrics->patchEntity($metric, $this->request->data);
+            
+            // add the session project_id to the metric
+            if($this->request->session()->check('selected_project')){
+                $selected_project = $this->request->session()->read('selected_project');
+                $metric['project_id'] = $selected_project['id'];
+            }
+            
             if ($this->Metrics->save($metric)) {
                 $this->Flash->success(__('The metric has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -78,6 +85,13 @@ class MetricsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $metric = $this->Metrics->patchEntity($metric, $this->request->data);
+            
+            // add the session project_id to the metric
+            if($this->request->session()->check('selected_project')){
+                $selected_project = $this->request->session()->read('selected_project');
+                $metric['project_id'] = $selected_project['id'];
+            }
+            
             if ($this->Metrics->save($metric)) {
                 $this->Flash->success(__('The metric has been saved.'));
                 return $this->redirect(['action' => 'index']);

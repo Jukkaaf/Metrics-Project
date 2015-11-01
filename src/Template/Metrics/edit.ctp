@@ -15,7 +15,6 @@
     <fieldset>
         <legend><?= __('Edit Metric') ?></legend>
         <?php
-            echo $this->Form->input('project_id', ['options' => $projects]);
             echo $this->Form->input('metrictype_id', ['options' => $metrictypes]);
             echo $this->Form->input('date');
             echo $this->Form->input('value');
