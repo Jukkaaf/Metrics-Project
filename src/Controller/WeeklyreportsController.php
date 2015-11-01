@@ -105,7 +105,12 @@ class WeeklyreportsController extends AppController
     private function addUploaded(){
         $report = $this->request->session()->read('report');
         // save the report on the server harddrive
-        $this->Weeklyreports->saveUploadedReport($report["file_content"]);
+        $project_name = "temp";
+        if($this->request->session()->check('selected_project')){
+            $selected_project = $this->request->session()->read('selected_project');
+            $project_name = $selected_project['project_name'];
+        }
+        $this->Weeklyreports->saveUploadedReport($report["file_content"], $project_name);
 
         // if the report included workinghours
         // we will move onwards to adding them

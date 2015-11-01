@@ -39,9 +39,7 @@ class WeeklyreportsTable extends Table
     }
     
     // parsing trough the txt files contents to get the information out 
-    public function saveUploadedReport($file_content){
-        $project_name = "test"; // change to session project
-        
+    public function saveUploadedReport($file_content, $project_name){
         // save it in to the server
         $time = Time::now();
         $filename = $project_name . $time->year . $time->month . $time->day . $time->hour . $time->minute . $time->second .'.txt';
