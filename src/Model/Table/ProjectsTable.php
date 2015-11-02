@@ -38,9 +38,6 @@ class ProjectsTable extends Table
         $this->hasMany('Metrics', [
             'foreignKey' => 'project_id'
         ]);
-        $this->hasMany('Requirements', [
-            'foreignKey' => 'project_id'
-        ]);
         $this->hasMany('Weeklyreports', [
             'foreignKey' => 'project_id'
         ]);
@@ -86,10 +83,6 @@ class ProjectsTable extends Table
             ->add('is_public', 'valid', ['rule' => 'boolean'])
             ->requirePresence('is_public', 'create')
             ->notEmpty('is_public');
-
-        $validator
-            ->add('importance', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('importance');
 
         return $validator;
     }

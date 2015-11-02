@@ -16,11 +16,13 @@
         <legend><?= __('Edit Weeklyreport') ?></legend>
         <?php
             echo $this->Form->input('title');
-            echo $this->Form->input('date');
-            echo $this->Form->input('reqlink');
+            echo $this->Form->input('week');
+            echo $this->Form->input('reglink');
             echo $this->Form->input('problems');
             echo $this->Form->input('meetings');
             echo $this->Form->input('additional');
+            echo $this->Form->input('created_on');
+            echo $this->Form->input('updated_on');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

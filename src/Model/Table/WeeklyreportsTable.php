@@ -148,12 +148,12 @@ class WeeklyreportsTable extends Table
             ->notEmpty('title');
 
         $validator
-            ->add('date', 'valid', ['rule' => 'date'])
-            ->requirePresence('date', 'create')
-            ->notEmpty('date');
+            ->add('week', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('week', 'create')
+            ->notEmpty('week');
 
         $validator
-            ->allowEmpty('reqlink');
+            ->allowEmpty('reglink');
 
         $validator
             ->allowEmpty('problems');
@@ -164,7 +164,16 @@ class WeeklyreportsTable extends Table
 
         $validator
             ->allowEmpty('additional');
+        
+        $validator
+            ->add('created_on', 'valid', ['rule' => 'date'])
+            ->requirePresence('created_on', 'create')
+            ->notEmpty('created_on');
 
+        $validator
+            ->add('updated_on', 'valid', ['rule' => 'date'])
+            ->allowEmpty('updated_on');
+        
         return $validator;
     }
 

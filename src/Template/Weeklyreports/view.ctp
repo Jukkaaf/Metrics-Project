@@ -17,8 +17,8 @@
             <td><?= h($weeklyreport->title) ?></td>
         </tr>
         <tr>
-            <th><?= __('Reqlink') ?></th>
-            <td><?= h($weeklyreport->reqlink) ?></td>
+            <th><?= __('Reglink') ?></th>
+            <td><?= h($weeklyreport->reglink) ?></td>
         </tr>
         <tr>
             <th><?= __('Problems') ?></th>
@@ -37,8 +37,15 @@
             <td><?= $this->Number->format($weeklyreport->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('Date') ?></th>
-            <td><?= h($weeklyreport->date) ?></tr>
+            <th><?= __('Week') ?></th>
+            <td><?= h($weeklyreport->week) ?></tr>
         </tr>
+        <tr>
+            <th><?= __('Created_on') ?></th>
+            <td><?= h($weeklyreport->created_on) ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Updated_on') ?></th>
+        <td><?= h($weeklyreport->updated_on) ?></td>
     </table>
 </div>

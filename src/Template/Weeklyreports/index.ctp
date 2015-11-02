@@ -10,7 +10,7 @@ if($this->request->session()->check('selected_project')){
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li>
         <li><?= $this->Html->link(__('New Weeklyreport'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('Upload Weeklyreport'), ['action' => 'upload']) ?></li>
+        <!--<li><?= $this->Html->link(__('Upload Weeklyreport'), ['action' => 'upload']) ?></li>-->
     </ul>
 </nav>
 <div class="weeklyreports index large-9 medium-8 columns content">
@@ -21,10 +21,12 @@ if($this->request->session()->check('selected_project')){
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('project_id') ?></th>
                 <th><?= $this->Paginator->sort('title') ?></th>
-                <th><?= $this->Paginator->sort('date') ?></th>
-                <th><?= $this->Paginator->sort('reqlink') ?></th>
+                <th><?= $this->Paginator->sort('week') ?></th>
+                <th><?= $this->Paginator->sort('reglink') ?></th>
                 <th><?= $this->Paginator->sort('problems') ?></th>
                 <th><?= $this->Paginator->sort('meetings') ?></th>
+                <th><?= $this->Paginator->sort('created_on') ?></th>
+                <th><?= $this->Paginator->sort('updated_on') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -34,10 +36,12 @@ if($this->request->session()->check('selected_project')){
                 <td><?= $this->Number->format($weeklyreport->id) ?></td>
                 <td><?= $weeklyreport->has('project') ? $this->Html->link($weeklyreport->project->id, ['controller' => 'Projects', 'action' => 'view', $weeklyreport->project->id]) : '' ?></td>
                 <td><?= h($weeklyreport->title) ?></td>
-                <td><?= h($weeklyreport->date) ?></td>
+                <td><?= h($weeklyreport->week) ?></td>
                 <td><?= h($weeklyreport->reqlink) ?></td>
                 <td><?= h($weeklyreport->problems) ?></td>
                 <td><?= h($weeklyreport->meetings) ?></td>
+                <td><?= h($weeklyreport->created_on) ?></td>
+                <td><?= h($weeklyreport->updated_on) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $weeklyreport->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $weeklyreport->id]) ?>

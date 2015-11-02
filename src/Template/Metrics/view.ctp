@@ -17,6 +17,10 @@
             <td><?= $metric->has('metrictype') ? $this->Html->link($metric->metrictype->id, ['controller' => 'Metrictypes', 'action' => 'view', $metric->metrictype->id]) : '' ?></td>
         </tr>
         <tr>
+            <th><?= __('Weeklyreport') ?></th>
+            <td><?= $metric->has('weeklyreport') ? $this->Html->link($metric->weeklyreport->id, ['controller' => 'Meeklyreports', 'action' => 'view', $metric->weeklyreport->id]) : '' ?></td>
+        </tr>
+        <tr>
             <th><?= __('Id') ?></th>
             <td><?= $this->Number->format($metric->id) ?></td>
         </tr>

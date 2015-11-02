@@ -20,6 +20,7 @@ if($this->request->session()->check('selected_project')){
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('project_id') ?></th>
                 <th><?= $this->Paginator->sort('metrictype_id') ?></th>
+                <th><?= $this->Paginator->sort('weeklyreport_id') ?></th>
                 <th><?= $this->Paginator->sort('date') ?></th>
                 <th><?= $this->Paginator->sort('value') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
@@ -29,8 +30,9 @@ if($this->request->session()->check('selected_project')){
             <?php foreach ($metrics as $metric): ?>
             <tr>
                 <td><?= $this->Number->format($metric->id) ?></td>
-                <td><?= $metric->has('project') ? $this->Html->link($metric->project->id, ['controller' => 'Projects', 'action' => 'view', $metric->project->id]) : '' ?></td>
-                <td><?= $metric->has('metrictype') ? $this->Html->link($metric->metrictype->id, ['controller' => 'Metrictypes', 'action' => 'view', $metric->metrictype->id]) : '' ?></td>
+                <td><?= $metric->has('project') ? $this->Html->link($metric->project->project_name, ['controller' => 'Projects', 'action' => 'view', $metric->project->id]) : '' ?></td>
+                <td><?= $metric->has('metrictype') ? $this->Html->link($metric->metrictype->description, ['controller' => 'Metrictypes', 'action' => 'view', $metric->metrictype->id]) : '' ?></td>
+                <td><?= $metric->has('weeklyreport') ? $this->Html->link($metric->weeklyreport->title, ['controller' => 'Weeklyreports', 'action' => 'view', $metric->weeklyreport->id]) : '' ?></td>
                 <td><?= h($metric->date) ?></td>
                 <td><?= $this->Number->format($metric->value) ?></td>
                 <td class="actions">

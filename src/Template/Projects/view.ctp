@@ -32,10 +32,6 @@
             <td><?= $this->Number->format($project->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('Importance') ?></th>
-            <td><?= $this->Number->format($project->importance) ?></td>
-        </tr>
-        <tr>
             <th><?= __('Created On') ?></th>
             <td><?= h($project->created_on) ?></tr>
         </tr>

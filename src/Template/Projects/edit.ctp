@@ -22,7 +22,6 @@
             echo $this->Form->input('status');
             echo $this->Form->input('description');
             echo $this->Form->input('is_public');
-            echo $this->Form->input('importance');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

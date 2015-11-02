@@ -10,6 +10,7 @@ use Cake\ORM\Entity;
  * @property int $project_id
  * @property \App\Model\Entity\Project $project
  * @property int $metrictype_id
+ * @property int $weeklyreport_id
  * @property \App\Model\Entity\Metrictype $metrictype
  * @property \Cake\I18n\Time $date
  * @property float $value

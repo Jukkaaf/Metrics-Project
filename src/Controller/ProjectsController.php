@@ -32,7 +32,7 @@ class ProjectsController extends AppController
     public function view($id = null)
     {
         $project = $this->Projects->get($id, [
-            'contain' => ['Members', 'Metrics', 'Requirements', 'Weeklyreports']
+            'contain' => ['Members', 'Metrics', 'Weeklyreports']
         ]);
         $this->set('project', $project);
         $this->set('_serialize', ['project']);

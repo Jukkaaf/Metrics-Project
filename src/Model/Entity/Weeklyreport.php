@@ -10,11 +10,13 @@ use Cake\ORM\Entity;
  * @property int $project_id
  * @property \App\Model\Entity\Project $project
  * @property string $title
- * @property \Cake\I18n\Time $date
- * @property string $reqlink
+ * @property int week
+ * @property string $reglink
  * @property string $problems
  * @property string $meetings
  * @property string $additional
+ * @property \Cake\I18n\Time $created_on
+ * @property \Cake\I18n\Time $updated_on
  */
 class Weeklyreport extends Entity
 {

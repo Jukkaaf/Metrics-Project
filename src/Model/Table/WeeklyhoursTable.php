@@ -1,19 +1,19 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\Metric;
+use App\Model\Entity\Weeklyhour;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Metrics Model
+ * Weeklyhours Model
  *
- * @property \Cake\ORM\Association\BelongsTo $Projects
- * @property \Cake\ORM\Association\BelongsTo $Metrictypes
+ * @property \Cake\ORM\Association\BelongsTo $Weeklyreports
+ * @property \Cake\ORM\Association\BelongsTo $Members
  */
-class MetricsTable extends Table
+class WeeklyhoursTable extends Table
 {
 
     /**
@@ -26,20 +26,16 @@ class MetricsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('metrics');
+        $this->table('weeklyhours');
         $this->displayField('id');
         $this->primaryKey('id');
 
-        $this->belongsTo('Projects', [
-            'foreignKey' => 'project_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->belongsTo('Metrictypes', [
-            'foreignKey' => 'metrictype_id',
-            'joinType' => 'INNER'
-        ]);
         $this->belongsTo('Weeklyreports', [
             'foreignKey' => 'weeklyreport_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Members', [
+            'foreignKey' => 'member_id',
             'joinType' => 'INNER'
         ]);
     }
@@ -57,14 +53,9 @@ class MetricsTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->add('date', 'valid', ['rule' => 'date'])
-            ->requirePresence('date', 'create')
-            ->notEmpty('date');
-
-        $validator
-            ->add('value', 'valid', ['rule' => 'numeric'])
-            ->requirePresence('value', 'create')
-            ->notEmpty('value');
+            ->add('duration', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('duration', 'create')
+            ->notEmpty('duration');
 
         return $validator;
     }
@@ -78,9 +69,8 @@ class MetricsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['project_id'], 'Projects'));
-        $rules->add($rules->existsIn(['metrictype_id'], 'Metrictypes'));
         $rules->add($rules->existsIn(['weeklyreport_id'], 'Weeklyreports'));
+        $rules->add($rules->existsIn(['member_id'], 'Members'));
         return $rules;
     }
 }

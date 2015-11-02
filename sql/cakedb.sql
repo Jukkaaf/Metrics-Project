@@ -31,7 +31,7 @@ CREATE TABLE weeklyreports (
   project_id int(10) NOT NULL,
   title varchar(50) NOT NULL,
   week int(2) NOT NULL,
-  reqlink varchar(100),
+  reglink varchar(100),
   problems varchar(400),
   meetings varchar(400) NOT NULL,
   additional varchar(400),

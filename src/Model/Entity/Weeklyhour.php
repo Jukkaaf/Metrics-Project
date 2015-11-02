@@ -4,19 +4,16 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Requirement Entity.
+ * Weeklyhour Entity.
  *
  * @property int $id
- * @property int $changenum
- * @property int $project_id
- * @property \App\Model\Entity\Project $project
- * @property string $name
- * @property string $description
- * @property int $status
- * @property int $version
- * @property \Cake\I18n\Time $date
+ * @property int $weeklyreport_id
+ * @property \App\Model\Entity\Weeklyreport $weeklyreport
+ * @property int $member_id
+ * @property \App\Model\Entity\Member $member
+ * @property float $duration
  */
-class Requirement extends Entity
+class Weeklyhour extends Entity
 {
 
     /**
@@ -31,6 +28,5 @@ class Requirement extends Entity
     protected $_accessible = [
         '*' => true,
         'id' => false,
-        'changenum' => false,
     ];
 }
