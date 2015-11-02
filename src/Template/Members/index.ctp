@@ -30,8 +30,8 @@ if($this->request->session()->check('selected_project')){
             <?php foreach ($members as $member): ?>
             <tr>
                 <td><?= $this->Number->format($member->id) ?></td>
-                <td><?= $member->has('user') ? $this->Html->link($member->user->id, ['controller' => 'Users', 'action' => 'view', $member->user->id]) : '' ?></td>
-                <td><?= $member->has('project') ? $this->Html->link($member->project->id, ['controller' => 'Projects', 'action' => 'view', $member->project->id]) : '' ?></td>
+                <td><?= $member->has('user') ? $this->Html->link($member->user->email, ['controller' => 'Users', 'action' => 'view', $member->user->id]) : '' ?></td>
+                <td><?= $member->has('project') ? $this->Html->link($member->project->project_name, ['controller' => 'Projects', 'action' => 'view', $member->project->id]) : '' ?></td>
                 <td><?= $this->Number->format($member->project_role) ?></td>
                 <td><?= h($member->starting_date) ?></td>
                 <td><?= h($member->ending_date) ?></td>

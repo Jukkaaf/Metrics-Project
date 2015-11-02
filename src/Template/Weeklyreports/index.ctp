@@ -34,7 +34,7 @@ if($this->request->session()->check('selected_project')){
             <?php foreach ($weeklyreports as $weeklyreport): ?>
             <tr>
                 <td><?= $this->Number->format($weeklyreport->id) ?></td>
-                <td><?= $weeklyreport->has('project') ? $this->Html->link($weeklyreport->project->id, ['controller' => 'Projects', 'action' => 'view', $weeklyreport->project->id]) : '' ?></td>
+                <td><?= $weeklyreport->has('project') ? $this->Html->link($weeklyreport->project->project_name, ['controller' => 'Projects', 'action' => 'view', $weeklyreport->project->id]) : '' ?></td>
                 <td><?= h($weeklyreport->title) ?></td>
                 <td><?= h($weeklyreport->week) ?></td>
                 <td><?= h($weeklyreport->reqlink) ?></td>
