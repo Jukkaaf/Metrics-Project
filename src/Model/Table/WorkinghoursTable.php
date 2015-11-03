@@ -33,6 +33,10 @@ class WorkinghoursTable extends Table
             'foreignKey' => 'member_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Weeklyreports', [
+            'foreignKey' => 'weeklyreport_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

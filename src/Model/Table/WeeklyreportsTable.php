@@ -36,6 +36,12 @@ class WeeklyreportsTable extends Table
             'foreignKey' => 'project_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasMany('Metrics', [
+            'foreignKey' => 'project_id'
+        ]);
+        $this->hasMany('Workinghours', [
+            'foreignKey' => 'member_id'
+        ]);
     }
     
     // parsing trough the txt files contents to get the information out 
