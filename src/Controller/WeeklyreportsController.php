@@ -83,16 +83,14 @@ class WeeklyreportsController extends AppController
             }
             
             if ($this->Weeklyreports->save($weeklyreport)) {
-                $this->Flash->success(__('The weeklyreport has been saved.'));
+                $this->Flash->success(__('The first part saved'));
                 
-                // check if the report was made by uploading a report file
-                // if so, we should have a variable stored in the session with the contents of the file
-                if($this->request->session()->check('report')){
-                    $this->addUploaded();
-                }
-                else{
-                    return $this->redirect(['action' => 'index']);
-                }             
+                // save the current weeklyreport in the session so it can be used on the next page on the form
+                $this->request->session()->write('current_weeklyreport', $weeklyreport);
+                
+                return $this->redirect(
+                    ['controller' => 'Metrics', 'action' => 'addmultiple']
+                );            
             } else {
                 $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
             }

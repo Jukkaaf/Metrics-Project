@@ -31,6 +31,6 @@
             echo $this->Form->input('updated_on');
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Next Page')) ?>
     <?= $this->Form->end() ?>
 </div>

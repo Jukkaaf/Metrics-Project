@@ -65,7 +65,41 @@ class MetricsTable extends Table
             ->add('value', 'valid', ['rule' => 'numeric'])
             ->requirePresence('value', 'create')
             ->notEmpty('value');
-
+        
+        
+        $validator
+            ->add('phase', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('phase', 'create')
+            ->notEmpty('phase');
+        $validator
+            ->add('reqNew', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('reqNew', 'create')
+            ->notEmpty('reqNew');
+        $validator
+            ->add('reqInProgress', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('reqInProgress', 'create')
+            ->notEmpty('reqInProgress');
+        $validator
+            ->add('reqClosed', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('reqClosed', 'create')
+            ->notEmpty('reqClosed');
+        $validator
+            ->add('reqRejected', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('reqRejected', 'create')
+            ->notEmpty('reqRejected');
+        $validator
+            ->add('commits', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('commits', 'create')
+            ->notEmpty('commits');
+        $validator
+            ->add('passedTestCases', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('passedTestCases', 'create')
+            ->notEmpty('passedTestCases');
+        $validator
+            ->add('totalTestCases', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('totalTestCases', 'create')
+            ->notEmpty('totalTestCases');
+        
         return $validator;
     }
 

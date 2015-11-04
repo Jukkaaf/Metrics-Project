@@ -72,6 +72,55 @@ class MetricsController extends AppController
         $this->set('_serialize', ['metric']);
     }
 
+    
+    public function addmultiple(){        
+        $metric = $this->Metrics->newEntity();
+        
+        if ($this->request->is('post')) {
+            $formdata = $this->Metrics->patchEntity($metric, $this->request->data);
+            
+            $keys = ["phase", "reqNew", "reqInProgress", "reqClosed", "reqRejected", "commits", "passedTestCases", "totalTestCases"];
+            // the project in this session
+            $selected_project = $this->request->session()->read('selected_project');
+            $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
+            
+            // rolling counter for the metrictype
+            // $keys array must be in same order as the metrictypes are in the database
+            $metrictype = 1;
+            $saveSuccess = True;
+            
+            // go trough the data from the form and read the data with keys from $keys array
+            foreach($keys as $key){
+                if($saveSuccess){
+                    $metric = $this->Metrics->newEntity();
+                    
+                    $metric['project_id'] = $selected_project['id'];                      
+                    $metric['metrictype_id'] = $metrictype;
+                    $metrictype += 1;
+                    $metric['weeklyreport_id'] = $current_weeklyreport['id'];
+                    $metric['date'] = $current_weeklyreport['created_on'];
+                    $metric['value'] = $formdata[$key];
+
+                    if (!$this->Metrics->save($metric)){
+                        $saveSuccess = False;
+                    }
+                    
+                }  
+            }
+            if($saveSuccess){
+                $this->Flash->success(__('The metrics were saved.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            else{
+                $this->Flash->error(__('The metrics could not be saved. Please, try again.'));
+            }
+        }
+        $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
+        $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
+        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200]);
+        $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports'));
+        $this->set('_serialize', ['metric']);
+    }
     /**
      * Edit method
      *
