@@ -30,7 +30,7 @@
         </tr>
         <tr>
             <th><?= __('Date') ?></th>
-            <td><?= h($workinghour->date) ?></tr>
+            <td><?= h($workinghour->date->format('Y-m-d')) ?></tr>
         </tr>
     </table>
 </div>

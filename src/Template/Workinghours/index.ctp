@@ -31,7 +31,7 @@ if($this->request->session()->check('selected_project')){
             <tr>
                 <td><?= $this->Number->format($workinghour->id) ?></td>
                 <td><?= $workinghour->has('member') ? $this->Html->link($workinghour->member->id, ['controller' => 'Members', 'action' => 'view', $workinghour->member->id]) : '' ?></td>
-                <td><?= h($workinghour->date) ?></td>
+                <td><?= h($workinghour->date->format('Y-m-d')) ?></td>
                 <td><?= h($workinghour->description) ?></td>
                 <td><?= $this->Number->format($workinghour->duration) ?></td>
                 <td><?= $this->Number->format($workinghour->worktype) ?></td>

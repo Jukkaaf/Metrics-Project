@@ -40,8 +40,8 @@ if($this->request->session()->check('selected_project')){
                 <td><?= h($weeklyreport->reqlink) ?></td>
                 <td><?= h($weeklyreport->problems) ?></td>
                 <td><?= h($weeklyreport->meetings) ?></td>
-                <td><?= h($weeklyreport->created_on) ?></td>
-                <td><?= h($weeklyreport->updated_on) ?></td>
+                <td><?= h($weeklyreport->created_on->format('Y-m-d')) ?></td>
+                <td><?= h($weeklyreport->updated_on->format('Y-m-d')) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $weeklyreport->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $weeklyreport->id]) ?>

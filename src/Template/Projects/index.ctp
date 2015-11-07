@@ -25,7 +25,7 @@
             <tr>
                 <td><?= $this->Number->format($project->id) ?></td>
                 <td><?= h($project->project_name) ?></td>
-                <td><?= h($project->created_on) ?></td>
+                <td><?= h($project->created_on->format('Y-m-d')) ?></td>
                 <td><?= h($project->updated_on) ?></td>
                 <td><?= h($project->finished_date) ?></td>
                 <td><?= h($project->status) ?></td>
