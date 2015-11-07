@@ -28,7 +28,9 @@ class UsersController extends AppController
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
+                return $this->redirect(
+                    ['controller' => 'Projects', 'action' => 'index']
+                );
             }
             $this->Flash->error('Your username or password is incorrect.');
         }

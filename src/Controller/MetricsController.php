@@ -18,12 +18,23 @@ class MetricsController extends AppController
      */
     public function index()
     {
+        $selected_project = $this->request->session()->read('selected_project');
+        $project_id = $selected_project['id'];
+        
+        // possibly temp test code for restricting what metrics the user can see
         $this->paginate = [
-            'contain' => ['Projects', 'Metrictypes', 'Weeklyreports']
+            'contain' => ['Projects', 'Metrictypes', 'Weeklyreports'],
+            'conditions' => array('Metrics.project_id' => $project_id)
         ];
         $this->set('metrics', $this->paginate($this->Metrics));
         $this->set('_serialize', ['metrics']);
+        
+        /*
+        $query = $this->Metrics->find()->select(['id', 'value', 'date', 'metrictype_id'])->where(['project_id' => $project_id]);
+        $this->set('metrics', $this->paginate($query));
+        */
     }
+    
 
     /**
      * View method
@@ -34,6 +45,18 @@ class MetricsController extends AppController
      */
     public function view($id = null)
     {
+        // possibly temporary code for restricting user access to information on different projects
+        // get the currently selected projects id
+        $selected_project = $this->request->session()->read('selected_project');
+        $project_id = $selected_project['id'];
+        
+        // do a query for the given metric id and get the project id of the metric 
+        $query = $this->Metrics->find()->select(['project_id'])->where(['id' => $id])->toArray();
+        // check if the metric is from the current project or not
+        if($query[0]->project_id != $project_id){
+            return $this->redirect(['action' => 'index']);
+        }
+        
         $metric = $this->Metrics->get($id, [
             'contain' => ['Projects', 'Metrictypes', 'Weeklyreports']
         ]);
@@ -130,17 +153,28 @@ class MetricsController extends AppController
      */
     public function edit($id = null)
     {
+        
+        // possibly temporary code for restricting user access to information on different projects
+        // get the currently selected projects id
+        $selected_project = $this->request->session()->read('selected_project');
+        $project_id = $selected_project['id'];
+        
+        // do a query for the given metric id and get the project id of the metric 
+        $query = $this->Metrics->find()->select(['project_id'])->where(['id' => $id])->toArray();
+        // check if the metric is from the current project or not
+        if($query[0]->project_id != $project_id){
+            return $this->redirect(['action' => 'index']);
+        }
+        
+        
         $metric = $this->Metrics->get($id, [
             'contain' => []
         ]);
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $metric = $this->Metrics->patchEntity($metric, $this->request->data);
             
-            // add the session project_id to the metric
-            if($this->request->session()->check('selected_project')){
-                $selected_project = $this->request->session()->read('selected_project');
-                $metric['project_id'] = $selected_project['id'];
-            }
+            $metric['project_id'] = $project_id;
             
             if ($this->Metrics->save($metric)) {
                 $this->Flash->success(__('The metric has been saved.'));

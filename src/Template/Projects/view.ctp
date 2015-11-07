@@ -115,44 +115,6 @@
     <?php endif; ?>
     </div>
     <div class="related">
-        <h4><?= __('Related Requirements') ?></h4>
-        <?php if (!empty($project->requirements)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th><?= __('Id') ?></th>
-                <th><?= __('Changenum') ?></th>
-                <th><?= __('Project Id') ?></th>
-                <th><?= __('Name') ?></th>
-                <th><?= __('Description') ?></th>
-                <th><?= __('Status') ?></th>
-                <th><?= __('Version') ?></th>
-                <th><?= __('Date') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($project->requirements as $requirements): ?>
-            <tr>
-                <td><?= h($requirements->id) ?></td>
-                <td><?= h($requirements->changenum) ?></td>
-                <td><?= h($requirements->project_id) ?></td>
-                <td><?= h($requirements->name) ?></td>
-                <td><?= h($requirements->description) ?></td>
-                <td><?= h($requirements->status) ?></td>
-                <td><?= h($requirements->version) ?></td>
-                <td><?= h($requirements->date) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Requirements', 'action' => 'view', $requirements->id]) ?>
-
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Requirements', 'action' => 'edit', $requirements->id]) ?>
-
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Requirements', 'action' => 'delete', $requirements->id], ['confirm' => __('Are you sure you want to delete # {0}?', $requirements->id)]) ?>
-
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
-    </div>
-    <div class="related">
         <h4><?= __('Related Weeklyreports') ?></h4>
         <?php if (!empty($project->weeklyreports)): ?>
         <table cellpadding="0" cellspacing="0">

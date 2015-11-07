@@ -31,9 +31,7 @@
                 <td><?= h($project->status) ?></td>
                 <td><?= h($project->description) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $project->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $project->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $project->id], ['confirm' => __('Are you sure you want to delete # {0}?', $project->id)]) ?>
+                    <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
