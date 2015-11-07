@@ -132,7 +132,9 @@ class MetricsController extends AppController
             }
             if($saveSuccess){
                 $this->Flash->success(__('The metrics were saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(
+                    ['controller' => 'Weeklyhours', 'action' => 'addmultiple']
+                );   
             }
             else{
                 $this->Flash->error(__('The metrics could not be saved. Please, try again.'));

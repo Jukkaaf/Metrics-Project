@@ -63,7 +63,33 @@ class WeeklyhoursController extends AppController
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }
-
+    
+    
+    public function addmultiple()
+    {
+        $weeklyhour = $this->Weeklyhours->newEntity();
+        
+        if ($this->request->is('post')) {
+            $weeklyhour = $this->Weeklyhours->patchEntity($weeklyhour, $this->request->data);
+            $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
+            
+            $weeklyhour['weeklyreport_id'] = $current_weeklyreport['id'];
+            
+            if ($this->Weeklyhours->save($weeklyhour)) {
+                $this->Flash->success(__('The weeklyhour has been saved.'));
+                $this->request->session()->delete('current_weeklyreport');
+                return $this->redirect(
+                    ['controller' => 'Weeklyreports', 'action' => 'index']
+                );  
+            } else {
+                $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
+            }
+        }
+        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200]);
+        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200]);
+        $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
+        $this->set('_serialize', ['weeklyhour']);
+    }
     /**
      * Edit method
      *

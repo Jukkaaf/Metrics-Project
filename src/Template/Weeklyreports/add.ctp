@@ -7,7 +7,7 @@
 <div class="weeklyreports form large-9 medium-8 columns content">
     <?= $this->Form->create($weeklyreport) ?>
     <fieldset>
-        <legend><?= __('Add Weeklyreport') ?></legend>
+        <legend><?= __('Add Weeklyreport, Page 1/3') ?></legend>
         <?php
             /*
             $report = $this->request->session()->read('report');
