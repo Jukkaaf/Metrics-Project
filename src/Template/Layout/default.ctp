@@ -29,6 +29,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('cake.css') ?>
 
+    <?= $this->Html->script(array(
+        '//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js',
+        '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js'
+    )) ?>
+    
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>

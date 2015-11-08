@@ -67,22 +67,39 @@ class WeeklyhoursController extends AppController
     
     public function addmultiple()
     {
+        // here just because of weeklyhours.ctp, look in to removing
         $weeklyhour = $this->Weeklyhours->newEntity();
         
         if ($this->request->is('post')) {
-            $weeklyhour = $this->Weeklyhours->patchEntity($weeklyhour, $this->request->data);
+            // because this form has multiple weeklyhours we cannot just put the data in to an entity
+            // here we just take all the data from the form
+            $formdata = $this->request->data;
+            // keys from the form, for going trough the key value pairs
+            $keys = array_keys($formdata);
             $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
+            $weeklyhours = array();
             
-            $weeklyhour['weeklyreport_id'] = $current_weeklyreport['id'];
-            
-            if ($this->Weeklyhours->save($weeklyhour)) {
-                $this->Flash->success(__('The weeklyhour has been saved.'));
+            // in this for loop we format the data correctly and insert the weeklyreport_id
+            for($count = 0; $count < count($formdata); $count++){
+                $temp = $formdata[$keys[$count]];
+                $temp['weeklyreport_id'] = $current_weeklyreport['id']; 
+                $weeklyhours[] = $temp;
+            }
+            // newEntities makes all the objects in the array to their own entities
+            $entities = $this->Weeklyhours->newEntities($weeklyhours);       
+            $saving_ok = True;
+            // saving all the entities one by one
+            foreach($entities as $ent){
+                if (!$this->Weeklyhours->save($ent)) {
+                    $this->Flash->error(__('The weeklyhours could not be saved. Please, try again.'));
+                    $saving_ok = False;
+                } 
+            }
+
+            if($saving_ok){
+                $this->Flash->success(__('The weeklyhours have been saved. Weeklyreport complete.'));
                 $this->request->session()->delete('current_weeklyreport');
-                return $this->redirect(
-                    ['controller' => 'Weeklyreports', 'action' => 'index']
-                );  
-            } else {
-                $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
+                return $this->redirect(['controller' => 'Weeklyreports', 'action' => 'index']);  
             }
         }
         $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200]);

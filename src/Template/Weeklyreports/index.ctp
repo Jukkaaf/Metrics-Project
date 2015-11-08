@@ -37,7 +37,7 @@ if($this->request->session()->check('selected_project')){
                 <td><?= $weeklyreport->has('project') ? $this->Html->link($weeklyreport->project->project_name, ['controller' => 'Projects', 'action' => 'view', $weeklyreport->project->id]) : '' ?></td>
                 <td><?= h($weeklyreport->title) ?></td>
                 <td><?= h($weeklyreport->week) ?></td>
-                <td><?= h($weeklyreport->reqlink) ?></td>
+                <td><?= h($weeklyreport->reglink) ?></td>
                 <td><?= h($weeklyreport->problems) ?></td>
                 <td><?= h($weeklyreport->meetings) ?></td>
                 <td><?= h($weeklyreport->created_on->format('Y-m-d')) ?></td>

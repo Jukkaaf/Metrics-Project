@@ -26,7 +26,7 @@ class MetrictypesTable extends Table
         parent::initialize($config);
 
         $this->table('metrictypes');
-        $this->displayField('id');
+        $this->displayField('description');
         $this->primaryKey('id');
 
         $this->hasMany('Metrics', [
