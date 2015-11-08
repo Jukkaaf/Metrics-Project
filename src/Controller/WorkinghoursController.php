@@ -18,9 +18,7 @@ class WorkinghoursController extends AppController
      */
     public function index()
     {
-        $selected_project = $this->request->session()->read('selected_project');
-        $project_id = $selected_project['id'];
-        
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Members'],
             'conditions' => array('Members.project_id' => $project_id)
@@ -69,7 +67,8 @@ class WorkinghoursController extends AppController
                 $this->Flash->error(__('The workinghour could not be saved. Please, try again.'));
             }
         }
-        $members = $this->Workinghours->Members->find('list', ['limit' => 200]);
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
         $this->set(compact('workinghour', 'members'));
         $this->set('_serialize', ['workinghour']);
     }
@@ -113,7 +112,8 @@ class WorkinghoursController extends AppController
                 $this->Flash->error(__('The workinghour could not be saved. Please, try again.'));
             }
         }
-        $members = $this->Workinghours->Members->find('list', ['limit' => 200]);
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
         $this->set(compact('workinghour', 'members'));
         $this->set('_serialize', ['workinghour']);
     }

@@ -18,9 +18,7 @@ class WeeklyhoursController extends AppController
      */
     public function index()
     {
-        $selected_project = $this->request->session()->read('selected_project');
-        $project_id = $selected_project['id'];
-        
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Weeklyreports', 'Members'],
             'conditions' => array('Members.project_id' => $project_id)
@@ -62,8 +60,9 @@ class WeeklyhoursController extends AppController
                 $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
             }
         }
-        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200]);
-        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200]);
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
+        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }
@@ -106,8 +105,9 @@ class WeeklyhoursController extends AppController
                 return $this->redirect(['controller' => 'Weeklyreports', 'action' => 'index']);  
             }
         }
-        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200]);
-        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200]);
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
+        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }
@@ -132,8 +132,9 @@ class WeeklyhoursController extends AppController
                 $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
             }
         }
-        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200]);
-        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200]);
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
+        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }

@@ -18,9 +18,7 @@ class MembersController extends AppController
      */
     public function index()
     {
-        $selected_project = $this->request->session()->read('selected_project');
-        $project_id = $selected_project['id'];
-        
+        $project_id = $this->request->session()->read('selected_project')['id'];   
         $this->paginate = [
             'contain' => ['Users', 'Projects'],
             'conditions' => array('Members.project_id' => $project_id)
@@ -52,25 +50,21 @@ class MembersController extends AppController
      */
     public function add()
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $member = $this->Members->newEntity();
         if ($this->request->is('post')) {
             $member = $this->Members->patchEntity($member, $this->request->data);
             
-            // add the session project_id to the report
-            if($this->request->session()->check('selected_project')){
-                $selected_project = $this->request->session()->read('selected_project');
-                $member['project_id'] = $selected_project['id'];
-            }
-            
+            $member['project_id'] = $project_id;
+
             if ($this->Members->save($member)) {
                 $this->Flash->success(__('The member has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The member could not be saved. Please, try again.'));
             }
-        }
+        }          
         $users = $this->Members->Users->find('list', ['limit' => 200]);
-        $projects = $this->Members->Projects->find('list', ['limit' => 200]);
         $this->set(compact('member', 'users', 'projects'));
         $this->set('_serialize', ['member']);
     }
@@ -84,18 +78,15 @@ class MembersController extends AppController
      */
     public function edit($id = null)
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $member = $this->Members->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $member = $this->Members->patchEntity($member, $this->request->data);
             
-            // add the session project_id to the report
-            if($this->request->session()->check('selected_project')){
-                $selected_project = $this->request->session()->read('selected_project');
-                $member['project_id'] = $selected_project['id'];
-            }
-            
+            $member['project_id'] = $project_id;
+
             if ($this->Members->save($member)) {
                 $this->Flash->success(__('The member has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -104,7 +95,6 @@ class MembersController extends AppController
             }
         }
         $users = $this->Members->Users->find('list', ['limit' => 200]);
-        $projects = $this->Members->Projects->find('list', ['limit' => 200]);
         $this->set(compact('member', 'users', 'projects'));
         $this->set('_serialize', ['member']);
     }

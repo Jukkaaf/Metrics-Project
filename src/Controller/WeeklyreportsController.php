@@ -42,9 +42,7 @@ class WeeklyreportsController extends AppController
      */
     public function index()
     {
-        $selected_project = $this->request->session()->read('selected_project');
-        $project_id = $selected_project['id'];
-        
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Projects'],
             'conditions' => array('Weeklyreports.project_id' => $project_id)
@@ -76,15 +74,12 @@ class WeeklyreportsController extends AppController
      */
     public function add()
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreport = $this->Weeklyreports->newEntity();
         if ($this->request->is('post')) {
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
             
-            // add the session project_id to the report
-            if($this->request->session()->check('selected_project')){
-                $selected_project = $this->request->session()->read('selected_project');
-                $weeklyreport['project_id'] = $selected_project['id'];
-            }
+            $weeklyreport['project_id'] = $project_id;
             
             if ($this->Weeklyreports->save($weeklyreport)) {
                 $this->Flash->success(__('The first part saved'));
@@ -99,7 +94,6 @@ class WeeklyreportsController extends AppController
                 $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
             }
         }
-        $projects = $this->Weeklyreports->Projects->find('list', ['limit' => 200]);
         $this->set(compact('weeklyreport', 'projects'));
         $this->set('_serialize', ['weeklyreport']);    
     }
@@ -135,17 +129,14 @@ class WeeklyreportsController extends AppController
      */
     public function edit($id = null)
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreport = $this->Weeklyreports->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
             
-            // add the session project_id to the report
-            if($this->request->session()->check('selected_project')){
-                $selected_project = $this->request->session()->read('selected_project');
-                $weeklyreport['project_id'] = $selected_project['id'];
-            }
+            $weeklyreport['project_id'] = $project_id;
             
             if ($this->Weeklyreports->save($weeklyreport)) {
                 $this->Flash->success(__('The weeklyreport has been saved.'));
@@ -154,7 +145,6 @@ class WeeklyreportsController extends AppController
                 $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
             }
         }
-        $projects = $this->Weeklyreports->Projects->find('list', ['limit' => 200]);
         $this->set(compact('weeklyreport', 'projects'));
         $this->set('_serialize', ['weeklyreport']);
     }

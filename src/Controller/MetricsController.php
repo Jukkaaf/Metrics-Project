@@ -18,10 +18,7 @@ class MetricsController extends AppController
      */
     public function index()
     {
-        $selected_project = $this->request->session()->read('selected_project');
-        $project_id = $selected_project['id'];
-        
-        // possibly temp test code for restricting what metrics the user can see
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Projects', 'Metrictypes', 'Weeklyreports'],
             'conditions' => array('Metrics.project_id' => $project_id)
@@ -45,10 +42,7 @@ class MetricsController extends AppController
      */
     public function view($id = null)
     {
-        // possibly temporary code for restricting user access to information on different projects
-        // get the currently selected projects id
-        $selected_project = $this->request->session()->read('selected_project');
-        $project_id = $selected_project['id'];
+        $project_id = $this->request->session()->read('selected_project')['id'];
         
         // do a query for the given metric id and get the project id of the metric 
         $query = $this->Metrics->find()->select(['project_id'])->where(['id' => $id])->toArray();
@@ -71,16 +65,13 @@ class MetricsController extends AppController
      */
     public function add()
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $metric = $this->Metrics->newEntity();
         if ($this->request->is('post')) {
             $metric = $this->Metrics->patchEntity($metric, $this->request->data);
             
-            // add the session project_id to the metric
-            if($this->request->session()->check('selected_project')){
-                $selected_project = $this->request->session()->read('selected_project');
-                $metric['project_id'] = $selected_project['id'];
-            }
-            
+            $metric['project_id'] = $project_id;
+
             if ($this->Metrics->save($metric)) {
                 $this->Flash->success(__('The metric has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -88,15 +79,15 @@ class MetricsController extends AppController
                 $this->Flash->error(__('The metric could not be saved. Please, try again.'));
             }
         }
-        $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
         $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
-        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200]);
+        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports'));
         $this->set('_serialize', ['metric']);
     }
 
-    
+    // probably bad/outdated code, update to be similar to the addmultiple in weeklyhours
     public function addmultiple(){        
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $metric = $this->Metrics->newEntity();
         
         if ($this->request->is('post')) {
@@ -142,7 +133,7 @@ class MetricsController extends AppController
         }
         $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
         $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
-        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200]);
+        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports'));
         $this->set('_serialize', ['metric']);
     }
@@ -156,10 +147,7 @@ class MetricsController extends AppController
     public function edit($id = null)
     {
         
-        // possibly temporary code for restricting user access to information on different projects
-        // get the currently selected projects id
-        $selected_project = $this->request->session()->read('selected_project');
-        $project_id = $selected_project['id'];
+        $project_id = $this->request->session()->read('selected_project')['id'];
         
         // do a query for the given metric id and get the project id of the metric 
         $query = $this->Metrics->find()->select(['project_id'])->where(['id' => $id])->toArray();
@@ -185,9 +173,8 @@ class MetricsController extends AppController
                 $this->Flash->error(__('The metric could not be saved. Please, try again.'));
             }
         }
-        $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
         $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
-        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200]);
+        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports'));
         $this->set('_serialize', ['metric']);
     }

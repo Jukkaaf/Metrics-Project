@@ -13,7 +13,7 @@
             echo $this->Form->input('reqInProgress', array('label' => 'Requirement in progress', 'type' => 'number', 'required' => true));
             echo $this->Form->input('reqClosed', array('label' => 'Requirement closed', 'type' => 'number', 'required' => true));
             echo $this->Form->input('reqRejected', array('label' => 'Requirement rejected', 'type' => 'number', 'required' => true));
-            echo $this->Form->input('commits', array('label' => 'Commits', 'type' => 'number'));
+            echo $this->Form->input('commits', array('label' => 'Commits', 'type' => 'number', 'required' => true));
             echo $this->Form->input('passedTestCases', array('label' => 'Passed test cases', 'type' => 'number', 'required' => true));
             echo $this->Form->input('totalTestCases', array('label' => 'Total test cases', 'type' => 'number', 'required' => true));
         ?>
