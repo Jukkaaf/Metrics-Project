@@ -18,8 +18,12 @@ class WeeklyhoursController extends AppController
      */
     public function index()
     {
+        $selected_project = $this->request->session()->read('selected_project');
+        $project_id = $selected_project['id'];
+        
         $this->paginate = [
-            'contain' => ['Weeklyreports', 'Members']
+            'contain' => ['Weeklyreports', 'Members'],
+            'conditions' => array('Members.project_id' => $project_id)
         ];
         $this->set('weeklyhours', $this->paginate($this->Weeklyhours));
         $this->set('_serialize', ['weeklyhours']);

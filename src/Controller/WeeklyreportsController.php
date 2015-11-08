@@ -42,8 +42,12 @@ class WeeklyreportsController extends AppController
      */
     public function index()
     {
+        $selected_project = $this->request->session()->read('selected_project');
+        $project_id = $selected_project['id'];
+        
         $this->paginate = [
-            'contain' => ['Projects']
+            'contain' => ['Projects'],
+            'conditions' => array('Weeklyreports.project_id' => $project_id)
         ];
         $this->set('weeklyreports', $this->paginate($this->Weeklyreports));
         $this->set('_serialize', ['weeklyreports']);

@@ -18,8 +18,12 @@ class WorkinghoursController extends AppController
      */
     public function index()
     {
+        $selected_project = $this->request->session()->read('selected_project');
+        $project_id = $selected_project['id'];
+        
         $this->paginate = [
-            'contain' => ['Members']
+            'contain' => ['Members'],
+            'conditions' => array('Members.project_id' => $project_id)
         ];
         $this->set('workinghours', $this->paginate($this->Workinghours));
         $this->set('_serialize', ['workinghours']);

@@ -18,8 +18,12 @@ class MembersController extends AppController
      */
     public function index()
     {
+        $selected_project = $this->request->session()->read('selected_project');
+        $project_id = $selected_project['id'];
+        
         $this->paginate = [
-            'contain' => ['Users', 'Projects']
+            'contain' => ['Users', 'Projects'],
+            'conditions' => array('Members.project_id' => $project_id)
         ];
         $this->set('members', $this->paginate($this->Members));
         $this->set('_serialize', ['members']);
