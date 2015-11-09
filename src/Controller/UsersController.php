@@ -71,18 +71,13 @@ class UsersController extends AppController
             // when adding a new user, make the role always "user", as in normal user
             $this->request->data['role'] = "user";
             
-            $user = $this->Users->patchEntity($user, $this->request->data);
-            if(strlen($this->request->data['password']) >= self::$PASS_MIN_LENGTH){    
-                if ($this->Users->save($user)){
-                    $this->Flash->success(__('The user has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                } else {
-                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
-                }
-            }
-            else{
-                $this->Flash->error(__('The password is not long enough. Minimun is ' .self::$PASS_MIN_LENGTH));
-            }
+            $user = $this->Users->patchEntity($user, $this->request->data);   
+            if ($this->Users->save($user)){
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }   
         }
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
@@ -137,8 +132,18 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     
+    // this allows anyone to go and create users without logging in
     public function beforeFilter(\Cake\Event\Event $event)
     {
         $this->Auth->allow(['add']);
+    }
+    
+    public function isAuthorized($user)
+    {
+        // All registered users can logout page
+        if ($this->request->action === 'logout') {
+            return true;
+        }
+        return parent::isAuthorized($user);
     }
 }

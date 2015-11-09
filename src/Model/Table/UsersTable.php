@@ -54,8 +54,13 @@ class UsersTable extends Table
 
         $validator
             ->requirePresence('password', 'create')
-            ->notEmpty('password');
-
+            ->notEmpty('password')
+            ->add('password', [
+                    'length' => [
+                        'rule' => ['minLength', 8],
+                        'message' => 'The password has to be 8 characters long'
+                    ]
+                ]);
         $validator
             ->requirePresence('first_name', 'create')
             ->notEmpty('first_name');

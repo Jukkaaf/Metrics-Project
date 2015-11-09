@@ -42,15 +42,6 @@ class MetricsController extends AppController
      */
     public function view($id = null)
     {
-        $project_id = $this->request->session()->read('selected_project')['id'];
-        
-        // do a query for the given metric id and get the project id of the metric 
-        $query = $this->Metrics->find()->select(['project_id'])->where(['id' => $id])->toArray();
-        // check if the metric is from the current project or not
-        if($query[0]->project_id != $project_id){
-            return $this->redirect(['action' => 'index']);
-        }
-        
         $metric = $this->Metrics->get($id, [
             'contain' => ['Projects', 'Metrictypes', 'Weeklyreports']
         ]);
@@ -145,18 +136,7 @@ class MetricsController extends AppController
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
-    {
-        
-        $project_id = $this->request->session()->read('selected_project')['id'];
-        
-        // do a query for the given metric id and get the project id of the metric 
-        $query = $this->Metrics->find()->select(['project_id'])->where(['id' => $id])->toArray();
-        // check if the metric is from the current project or not
-        if($query[0]->project_id != $project_id){
-            return $this->redirect(['action' => 'index']);
-        }
-        
-        
+    {    
         $metric = $this->Metrics->get($id, [
             'contain' => []
         ]);
@@ -173,6 +153,7 @@ class MetricsController extends AppController
                 $this->Flash->error(__('The metric could not be saved. Please, try again.'));
             }
         }
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
         $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports'));

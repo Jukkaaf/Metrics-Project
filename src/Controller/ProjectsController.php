@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Filesystem\Folder;
+
 /**
  * Projects Controller
  *
@@ -114,5 +115,23 @@ class ProjectsController extends AppController
             $this->Flash->error(__('The project could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+    public function isAuthorized($user)
+    {      
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+
+        // All registered users can add go to the index page
+        if ($this->request->action === 'index' || $this->request->action === 'view') {
+            return true;
+        }
+        
+        //return parent::isAuthorized($user);
+        
+        // Default deny
+        return false;
     }
 }
