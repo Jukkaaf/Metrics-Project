@@ -57,10 +57,13 @@ class MembersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->add('project_role', 'valid', ['rule' => 'numeric'])
             ->requirePresence('project_role', 'create')
-            ->notEmpty('project_role');
-
+            ->notEmpty('project_role')
+            ->add('project_role', 'inList', [
+                'rule' => ['inList', ['developer', 'manager', 'supervisor']],
+                'message' => 'Please enter a valid project role'
+                ]);
+        
         $validator
             ->add('starting_date', 'valid', ['rule' => 'date'])
             ->allowEmpty('starting_date');

@@ -68,8 +68,8 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             
-            // when adding a new user, make the role always "0", as in normal user
-            $this->request->data['role'] = 0;
+            // when adding a new user, make the role always "user", as in normal user
+            $this->request->data['role'] = "user";
             
             $user = $this->Users->patchEntity($user, $this->request->data);
             if(strlen($this->request->data['password']) >= self::$PASS_MIN_LENGTH){    

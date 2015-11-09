@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <th><?= __('Project Role') ?></th>
-            <td><?= $this->Number->format($member->project_role) ?></td>
+            <td><?= h($member->project_role) ?></td>
         </tr>
         <tr>
             <th><?= __('Starting Date') ?></th>

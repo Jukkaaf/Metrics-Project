@@ -5,7 +5,7 @@ CREATE TABLE users (
   first_name varchar(20) NOT NULL,
   last_name varchar(20) NOT NULL,
   phone varchar(15),
-  role int(2) NOT NULL,
+  role varchar(20) NOT NULL,
   UNIQUE KEY (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -56,7 +56,7 @@ CREATE TABLE members (
   id int(10) NOT NULL auto_increment PRIMARY KEY,
   user_id int(10) NOT NULL,
   project_id int(10) NOT NULL,
-  project_role int(2) NOT NULL,
+  project_role varchar(20) NOT NULL,
   starting_date date,
   ending_date date,
   FOREIGN KEY user_key (user_id) REFERENCES users (id),

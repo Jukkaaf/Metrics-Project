@@ -68,10 +68,12 @@ class UsersTable extends Table
             ->allowEmpty('phone');
 
         $validator
-            ->add('role', 'valid', ['rule' => 'numeric'])
             ->requirePresence('role', 'create')
-            ->notEmpty('role');
-
+            ->notEmpty('role')
+            ->add('role', 'inList', [
+                'rule' => ['inList', ['user', 'admin', 'inactive']],
+                'message' => 'Please enter a valid role'
+                ]);
         return $validator;
     }
 
