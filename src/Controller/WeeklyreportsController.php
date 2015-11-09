@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\I18n\Time;
 /**
  * Weeklyreports Controller
  *
@@ -80,6 +80,7 @@ class WeeklyreportsController extends AppController
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
             
             $weeklyreport['project_id'] = $project_id;
+            $weeklyreport['created_on'] = Time::now();
             
             if ($this->Weeklyreports->save($weeklyreport)) {
                 $this->Flash->success(__('The first part saved'));
@@ -137,6 +138,7 @@ class WeeklyreportsController extends AppController
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
             
             $weeklyreport['project_id'] = $project_id;
+            $weeklyreport['updated_on'] = Time::now();
             
             if ($this->Weeklyreports->save($weeklyreport)) {
                 $this->Flash->success(__('The weeklyreport has been saved.'));

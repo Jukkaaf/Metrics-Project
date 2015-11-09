@@ -21,8 +21,6 @@
             echo $this->Form->input('problems');
             echo $this->Form->input('meetings');
             echo $this->Form->input('additional');
-            echo $this->Form->input('created_on');
-            echo $this->Form->input('updated_on');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
