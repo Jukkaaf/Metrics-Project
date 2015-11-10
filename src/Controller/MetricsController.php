@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\ORM\TableRegistry;
 /**
  * Metrics Controller
  *
@@ -177,5 +177,18 @@ class MetricsController extends AppController
             $this->Flash->error(__('The metric could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+    public function isAuthorized($user)
+    {   
+        // Check that the parameter in the request(the id in the url)
+        // belongs to the project that is currently selected.
+        // This is done so that users cant jump between projects by altering the url
+        if($this->request->pass != null){
+            
+        }
+        
+        
+        return parent::isAuthorized($user);
     }
 }

@@ -102,4 +102,16 @@ class MetrictypesController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+    
+        public function isAuthorized($user)
+    {      
+        // Only admins can view add edit or delete 
+        // But it is not advised since the code depends on the metric types
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+
+        // Default deny
+        return false;
+    }
 }

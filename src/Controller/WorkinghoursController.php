@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\ORM\TableRegistry;
 /**
  * Workinghours Controller
  *
@@ -52,17 +52,10 @@ class WorkinghoursController extends AppController
     {
         $workinghour = $this->Workinghours->newEntity();
         if ($this->request->is('post')) {
-            $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);
+            $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
             if ($this->Workinghours->save($workinghour)) {
                 $this->Flash->success(__('The workinghour has been saved.'));
-                
-                // lets check if the working hours were added by uploading a report
-                if($this->request->session()->check('report')){
-                    $this->addUploaded();
-                }
-                else{
-                    return $this->redirect(['action' => 'index']);
-                }  
+                return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The workinghour could not be saved. Please, try again.'));
             }
@@ -135,5 +128,22 @@ class WorkinghoursController extends AppController
             $this->Flash->error(__('The workinghour could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+    public function isAuthorized($user)
+    {   
+        $project_role = $this->request->session()->read('selected_project_role');
+        //special rule for workinghours controller.
+        // all members can add edit and delete workinghours
+        if ($this->request->action === 'add' || $this->request->action === 'edit'
+            || $this->request->action === 'delete') 
+        {
+            if($project_role != "notmember"){
+                return True;
+            }
+            return False;
+        }
+        // if not trying to add edit delete
+        return parent::isAuthorized($user);
     }
 }

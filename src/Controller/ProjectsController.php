@@ -3,7 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Filesystem\Folder;
-
+use Cake\ORM\TableRegistry;
 /**
  * Projects Controller
  *
@@ -39,6 +39,41 @@ class ProjectsController extends AppController
         $this->set('_serialize', ['project']);
         
         $this->request->session()->write('selected_project', $project);
+        
+        $project_role = "";
+        // check if the user is an admin
+        if($this->Auth->user('role') != "admin"){
+            // what kind of member is the user
+            $members = TableRegistry::get('Members');    
+
+            $query = $members
+                ->find()
+                ->select(['project_role'])
+                ->where(['user_id =' => $this->Auth->user('id'), 'project_id =' => $project['id']])
+                ->toArray();
+            
+            foreach($query as $temp){
+                if($temp->project_role == "supervisor"){
+                    $project_role = $temp->project_role;
+                }
+                elseif($temp->project_role == "manager" && $project_role != "supervisor"){
+                    $project_role = $temp->project_role;
+                }
+                elseif($project_role != "supervisor" && $project_role != "manager"){
+                    $project_role = $temp->project_role;
+                }
+            }
+        }
+        else{
+            $project_role = "admin";
+        }
+        
+        if($project_role == ""){
+            $project_role = "notmember";
+        }
+        
+        
+        $this->request->session()->write('selected_project_role', $project_role);
     }
 
     /**
@@ -129,6 +164,40 @@ class ProjectsController extends AppController
             return true;
         }
         
+        // Inactive can only do what users who are not members can
+        if (isset($user['role']) && $user['role'] === 'inactive') {
+            return False;
+        }
+        
+        $project_role = $this->request->session()->read('selected_project_role');
+        
+        // supervisors can add new projects
+        // This has its own query because if the user is a member of multiple projects
+        // his current role might not be his highest one 
+        if ($this->request->action === 'add') 
+        {
+            $members = TableRegistry::get('Members');
+            
+            $query = $members
+                ->find()
+                ->select(['project_role'])
+                ->where(['user_id =' => $user['id']])
+                ->toArray();
+
+            foreach($query as $temp){
+                if($temp->project_role == "supervisor"){
+                    return True;
+                }
+            }
+        }
+
+        // supervisors can edit their own projects
+        if ($this->request->action === 'edit') 
+        {
+            if($project_role == "supervisor"){
+                return True;
+            }
+        }
         //return parent::isAuthorized($user);
         
         // Default deny

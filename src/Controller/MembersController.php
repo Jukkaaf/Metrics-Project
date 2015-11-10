@@ -25,6 +25,8 @@ class MembersController extends AppController
         ];
         $this->set('members', $this->paginate($this->Members));
         $this->set('_serialize', ['members']);
+        
+        //print_r($this->request->session()->read('selected_project_role'));
     }
 
     /**
@@ -116,5 +118,34 @@ class MembersController extends AppController
             $this->Flash->error(__('The member could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    
+    
+    public function isAuthorized($user)
+    {   
+        //print_r($this->request->pass[0]);
+
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        
+        $project_role = $this->request->session()->read('selected_project_role');
+        
+        //special rule for members controller.
+        //only supervisors admins can add edit and delete members
+        if ($this->request->action === 'add' || $this->request->action === 'edit'
+            || $this->request->action === 'delete') 
+        {
+            if($project_role == "supervisor"){
+                return True;
+            }
+
+            // This return false is important, because if we didnt have it a manager could also
+            // add edit and delete members. This is because after this if block we call the parent
+            return False;
+        }
+        // if not trying to add edit delete
+        return parent::isAuthorized($user);
     }
 }

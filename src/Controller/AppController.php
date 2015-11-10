@@ -62,28 +62,24 @@ class AppController extends Controller
     }
     
     public function isAuthorized($user)
-    {
+    {   
         // Admin can access every action
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }
+        // Inactive can only do what users who are not members can
+        if (isset($user['role']) && $user['role'] === 'inactive') {
+            return False;
+        }
+        
+        // get the current sessions selected projects role for the user
+        // This come from the database with a query in projectscontroller/index
+        $project_role = $this->request->session()->read('selected_project_role');     
         
         // if the user wants to go to a controller index he has to be a member of the current project
         if ($this->request->action === 'index' || $this->request->action === 'view') {
-            $members = TableRegistry::get('Members');
-            
-            $query = $members
-                ->find()
-                ->select(['project_id'])
-                ->where(['user_id =' => $user['id']])
-                ->toArray();
-            
-            $project_id = $this->request->session()->read('selected_project')['id'];
-
-            foreach($query as $temp){
-                if($temp->project_id == $project_id){
-                    return True;
-                }
+            if($project_role != "notmember"){
+                return True;
             }
         }
         
@@ -93,20 +89,8 @@ class AppController extends Controller
             || $this->request->action === 'delete' || $this->request->action === 'upload'
             || $this->request->action === 'addmultiple') 
         {
-            $members = TableRegistry::get('Members');
-            
-            $query = $members
-                ->find()
-                ->select(['project_id', 'project_role'])
-                ->where(['user_id =' => $user['id']])
-                ->toArray();
-            
-            $project_id = $this->request->session()->read('selected_project')['id'];
-
-            foreach($query as $temp){
-                if($temp->project_id == $project_id && ($temp->project_role == "manager" || $temp->project_role == "supervisor")){
-                    return True;
-                }
+            if($project_role == "supervisor" || $project_role == "manager"){
+                return True;
             }
         }
         

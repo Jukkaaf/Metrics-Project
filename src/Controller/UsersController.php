@@ -38,6 +38,10 @@ class UsersController extends AppController
     
     public function logout()
     {
+        // remove all session data
+        $this->request->session()->delete('selected_project');
+        $this->request->session()->delete('selected_project_role');
+        
         $this->Flash->success('You are now logged out.');
         return $this->redirect($this->Auth->logout());
     }

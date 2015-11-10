@@ -14,6 +14,9 @@
  */
 
 $cakeDescription = 'CakePHP: the rapid development php framework';
+
+//debug prints
+print_r($this->request->session()->read('selected_project_role'));
 ?>
 <!DOCTYPE html>
 <html>
