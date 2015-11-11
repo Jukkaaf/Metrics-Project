@@ -169,4 +169,28 @@ class WeeklyreportsController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+    
+    public function isAuthorized($user)
+    {   
+        // Check that the parameter in the request(the id in the url)
+        // belongs to the project that is currently selected.
+        // This is done so that users cant jump between projects by altering the url
+        if($this->request->pass != null){
+            $query = $this->Weeklyreports
+                ->find()
+                ->select(['project_id'])
+                ->where(['id =' => $this->request->pass[0]])
+                ->toArray();
+            
+            $project_id = $this->request->session()->read('selected_project')['id'];
+            
+            // does the project_id of the the object the parameter points to
+            if($query[0]->project_id != $project_id){
+                return False;
+            }
+        }
+        
+        
+        return parent::isAuthorized($user);
+    }
 }
