@@ -44,6 +44,23 @@ class WeeklyreportsTable extends Table
         ]);
     }
     
+    public function checkUnique($report){
+        // check if the project_id week pari already exists
+        $weeklyreports = TableRegistry::get('Weeklyreports');
+        $query = $weeklyreports
+                ->find()
+                ->select(['project_id', 'week'])
+                ->where(['project_id =' => $report['project_id']], ['week =' => $report['week']])
+                ->where(['week =' => $report['week']]);
+                
+        foreach($query as $temp){
+            if($temp['project_id'] == $report['project_id']){
+                return False;
+            }
+        }
+        return True;
+    }
+    
     // parsing trough the txt files contents to get the information out 
     public function saveUploadedReport($file_content, $project_name){
         // save it in to the server

@@ -85,17 +85,22 @@ class WeeklyreportsController extends AppController
             $weeklyreport['project_id'] = $project_id;
             $weeklyreport['created_on'] = Time::now();
             
-            if ($this->Weeklyreports->save($weeklyreport)) {
-                $this->Flash->success(__('The first part saved'));
-                
-                // save the current weeklyreport in the session so it can be used on the next page on the form
-                $this->request->session()->write('current_weeklyreport', $weeklyreport);
-                
-                return $this->redirect(
-                    ['controller' => 'Metrics', 'action' => 'addmultiple']
-                );            
-            } else {
-                $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
+            if($this->Weeklyreports->checkUnique($weeklyreport)){
+                if ($this->Weeklyreports->save($weeklyreport)) {
+                    $this->Flash->success(__('The first part saved'));
+
+                    // save the current weeklyreport in the session so it can be used on the next page on the form
+                    $this->request->session()->write('current_weeklyreport', $weeklyreport);
+
+                    return $this->redirect(
+                        ['controller' => 'Metrics', 'action' => 'addmultiple']
+                    );            
+                } else {
+                    $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
+                }
+            }
+            else {
+                $this->Flash->error(__('This week already has a weeklyreport'));
             }
         }
         $this->set(compact('weeklyreport', 'projects'));
@@ -143,11 +148,17 @@ class WeeklyreportsController extends AppController
             $weeklyreport['project_id'] = $project_id;
             $weeklyreport['updated_on'] = Time::now();
             
-            if ($this->Weeklyreports->save($weeklyreport)) {
-                $this->Flash->success(__('The weeklyreport has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
+            if($this->Weeklyreports->checkUnique($weeklyreport)){
+            
+                if ($this->Weeklyreports->save($weeklyreport)) {
+                    $this->Flash->success(__('The weeklyreport has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
+                }
+            }
+            else {
+                $this->Flash->error(__('This week already has a weeklyreport'));
             }
         }
         $this->set(compact('weeklyreport', 'projects'));
