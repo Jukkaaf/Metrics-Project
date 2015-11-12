@@ -81,28 +81,44 @@ class WeeklyhoursController extends AppController
             $keys = array_keys($formdata);
             $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
             $weeklyhours = array();
-            
+            $tempmembers = array();
+            $noduplicates = True;
+                    
             // in this for loop we format the data correctly and insert the weeklyreport_id
             for($count = 0; $count < count($formdata); $count++){
                 $temp = $formdata[$keys[$count]];
                 $temp['weeklyreport_id'] = $current_weeklyreport['id']; 
                 $weeklyhours[] = $temp;
+                
+                // keep a list of all members to and make sure there is only one of each
+                if(in_array($temp['member_id'], $tempmembers)){
+                    $noduplicates = False;
+                }
+                else{
+                    $tempmembers[] = $temp['member_id'];
+                }
+                
             }
-            // newEntities makes all the objects in the array to their own entities
-            $entities = $this->Weeklyhours->newEntities($weeklyhours);       
-            $saving_ok = True;
-            // saving all the entities one by one
-            foreach($entities as $ent){
-                if (!$this->Weeklyhours->save($ent)) {
-                    $this->Flash->error(__('The weeklyhours could not be saved. Please, try again.'));
-                    $saving_ok = False;
-                } 
-            }
+            if($noduplicates){    
+                // newEntities makes all the objects in the array to their own entities
+                $entities = $this->Weeklyhours->newEntities($weeklyhours);       
+                $saving_ok = True;
+                // saving all the entities one by one
+                foreach($entities as $ent){
+                    if (!$this->Weeklyhours->save($ent)) {
+                        $this->Flash->error(__('The weeklyhours could not be saved. Please, try again.'));
+                        $saving_ok = False;
+                    } 
+                }
 
-            if($saving_ok){
-                $this->Flash->success(__('The weeklyhours have been saved. Weeklyreport complete.'));
-                $this->request->session()->delete('current_weeklyreport');
-                return $this->redirect(['controller' => 'Weeklyreports', 'action' => 'index']);  
+                if($saving_ok){
+                    $this->Flash->success(__('The weeklyhours have been saved. Weeklyreport complete.'));
+                    $this->request->session()->delete('current_weeklyreport');
+                    return $this->redirect(['controller' => 'Weeklyreports', 'action' => 'index']);  
+                }
+            }
+            else{
+                $this->Flash->error(__('The weeklyhours could not be saved. Duplicate members'));
             }
         }
         $project_id = $this->request->session()->read('selected_project')['id'];

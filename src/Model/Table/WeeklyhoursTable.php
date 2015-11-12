@@ -53,7 +53,11 @@ class WeeklyhoursTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->add('duration', 'valid', ['rule' => 'numeric'])
+            ->add('duration', 'valid', [
+                'rule' => 'numeric',
+                // minimum of 0 hours, max of 7 * 24
+                'rule' => ['range', 1, 168]
+                ])
             ->requirePresence('duration', 'create')
             ->notEmpty('duration');
 

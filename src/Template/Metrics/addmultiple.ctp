@@ -8,14 +8,15 @@
     <fieldset>
         <legend><?= __('Add Metrics, Page 2/3') ?></legend>
         <?php            
-            echo $this->Form->input('phase', array('label' => 'Phase', 'type' => 'number', 'required' => true));
-            echo $this->Form->input('reqNew', array('label' => 'Requirement new', 'type' => 'number', 'required' => true));
-            echo $this->Form->input('reqInProgress', array('label' => 'Requirement in progress', 'type' => 'number', 'required' => true));
-            echo $this->Form->input('reqClosed', array('label' => 'Requirement closed', 'type' => 'number', 'required' => true));
-            echo $this->Form->input('reqRejected', array('label' => 'Requirement rejected', 'type' => 'number', 'required' => true));
-            echo $this->Form->input('commits', array('label' => 'Commits', 'type' => 'number', 'required' => true));
-            echo $this->Form->input('passedTestCases', array('label' => 'Passed test cases', 'type' => 'number', 'required' => true));
-            echo $this->Form->input('totalTestCases', array('label' => 'Total test cases', 'type' => 'number', 'required' => true));
+            echo $this->Form->input('phase', array('label' => 'Phase', 'type' => 'number', 'required' => true, 'min' => 0));
+            echo $this->Form->input('totalPhases', array('label' => 'Total Phases', 'type' => 'number', 'required' => true, 'min' => 0));
+            echo $this->Form->input('reqNew', array('label' => 'Requirement new', 'type' => 'number', 'required' => true, 'min' => 0));
+            echo $this->Form->input('reqInProgress', array('label' => 'Requirement in progress', 'type' => 'number', 'required' => true, 'min' => 0));
+            echo $this->Form->input('reqClosed', array('label' => 'Requirement closed', 'type' => 'number', 'required' => true, 'min' => 0));
+            echo $this->Form->input('reqRejected', array('label' => 'Requirement rejected', 'type' => 'number', 'required' => true, 'min' => 0));
+            echo $this->Form->input('commits', array('label' => 'Commits', 'type' => 'number', 'required' => true, 'min' => 0));
+            echo $this->Form->input('passedTestCases', array('label' => 'Passed test cases', 'type' => 'number', 'required' => true, 'min' => 0));
+            echo $this->Form->input('totalTestCases', array('label' => 'Total test cases', 'type' => 'number', 'required' => true, 'min' => 0));
         ?>
     </fieldset>
     <?= $this->Form->button(__('Next Page')) ?>

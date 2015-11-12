@@ -74,6 +74,9 @@ class WeeklyreportsController extends AppController
      */
     public function add()
     {
+        $now = Time::now();
+        $weeknro = $now->weekOfYear;
+        
         $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreport = $this->Weeklyreports->newEntity();
         if ($this->request->is('post')) {

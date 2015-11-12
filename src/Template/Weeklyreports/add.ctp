@@ -9,8 +9,10 @@
     <fieldset>
         <legend><?= __('Add Weeklyreport, Page 1/3') ?></legend>
         <?php
+            use Cake\I18n\Time;
+            $now = Time::now();
             echo $this->Form->input('title');
-            echo $this->Form->input('week');
+            echo $this->Form->input('week', array('value' => $now->weekOfYear));
             echo $this->Form->input('reglink');
             echo $this->Form->input('problems');
             echo $this->Form->input('meetings');

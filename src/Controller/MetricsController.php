@@ -84,7 +84,7 @@ class MetricsController extends AppController
         if ($this->request->is('post')) {
             $formdata = $this->Metrics->patchEntity($metric, $this->request->data);
             
-            $keys = ["phase", "reqNew", "reqInProgress", "reqClosed", "reqRejected", "commits", "passedTestCases", "totalTestCases"];
+            $keys = ["phase", "totalPhases", "reqNew", "reqInProgress", "reqClosed", "reqRejected", "commits", "passedTestCases", "totalTestCases"];
             // the project in this session
             $selected_project = $this->request->session()->read('selected_project');
             $current_weeklyreport = $this->request->session()->read('current_weeklyreport');

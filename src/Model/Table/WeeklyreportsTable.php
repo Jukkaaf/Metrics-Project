@@ -154,7 +154,12 @@ class WeeklyreportsTable extends Table
             ->notEmpty('title');
 
         $validator
-            ->add('week', 'valid', ['rule' => 'numeric'])
+            ->add('week', 'valid', [
+                'rule' => 'numeric',
+                // this is the weeknumber range
+                // maximum weeknumber is 53
+                'rule' => ['range', 1, 53]
+                ])
             ->requirePresence('week', 'create')
             ->notEmpty('week');
 
