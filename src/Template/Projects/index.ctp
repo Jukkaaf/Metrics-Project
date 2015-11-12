@@ -2,6 +2,8 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?> </li>
+        <li><?= $this->Html->link(__('Sign up'), ['controller' => 'Users', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?> </li>
     </ul>    
 </nav>

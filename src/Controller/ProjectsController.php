@@ -39,41 +39,6 @@ class ProjectsController extends AppController
         $this->set('_serialize', ['project']);
         
         $this->request->session()->write('selected_project', $project);
-        
-        $project_role = "";
-        // check if the user is an admin
-        if($this->Auth->user('role') != "admin"){
-            // what kind of member is the user
-            $members = TableRegistry::get('Members');    
-
-            $query = $members
-                ->find()
-                ->select(['project_role'])
-                ->where(['user_id =' => $this->Auth->user('id'), 'project_id =' => $project['id']])
-                ->toArray();
-            
-            foreach($query as $temp){
-                if($temp->project_role == "supervisor"){
-                    $project_role = $temp->project_role;
-                }
-                elseif($temp->project_role == "manager" && $project_role != "supervisor"){
-                    $project_role = $temp->project_role;
-                }
-                elseif($project_role != "supervisor" && $project_role != "manager"){
-                    $project_role = $temp->project_role;
-                }
-            }
-        }
-        else{
-            $project_role = "admin";
-        }
-        
-        if($project_role == ""){
-            $project_role = "notmember";
-        }
-        
-        
-        $this->request->session()->write('selected_project_role', $project_role);
     }
 
     /**
@@ -152,15 +117,16 @@ class ProjectsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     
+    // this allows anyone to go to the frontpage
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
+        $this->Auth->allow(['index']);
+    }
+    
     public function isAuthorized($user)
     {      
         // Admin can access every action
         if (isset($user['role']) && $user['role'] === 'admin') {
-            return true;
-        }
-
-        // All registered users can add go to the index page
-        if ($this->request->action === 'index' || $this->request->action === 'view') {
             return true;
         }
         
@@ -168,6 +134,55 @@ class ProjectsController extends AppController
         if (isset($user['role']) && $user['role'] === 'inactive') {
             return False;
         }
+        
+        if ($this->request->action === 'view') 
+        {   
+            // this is where we figure out what role the user has in the project
+            
+            $project_role = "";
+            // check if the user is an admin
+            if($this->Auth->user('role') != "admin"){
+                // what kind of member is the user
+                $members = TableRegistry::get('Members');    
+
+                $query = $members
+                    ->find()
+                    ->select(['project_role'])
+                    ->where(['user_id =' => $this->Auth->user('id'), 'project_id =' => $this->request->pass[0]])
+                    ->toArray();
+
+                foreach($query as $temp){
+                    if($temp->project_role == "supervisor"){
+                        $project_role = $temp->project_role;
+                    }
+                    elseif($temp->project_role == "manager" && $project_role != "supervisor"){
+                        $project_role = $temp->project_role;
+                    }
+                    elseif($project_role != "supervisor" && $project_role != "manager"){
+                        $project_role = $temp->project_role;
+                    }
+                }
+            }
+            else{
+                $project_role = "admin";
+            }
+
+            if($project_role == ""){
+                $project_role = "notmember";
+            }
+
+
+            $this->request->session()->write('selected_project_role', $project_role);
+            
+            // if the user is not a member of the project return false
+            if($project_role == "notmember"){
+                return False;
+            }
+            else{
+                return True;
+            }
+        }
+
         
         $project_role = $this->request->session()->read('selected_project_role');
         
