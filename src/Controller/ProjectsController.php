@@ -136,6 +136,7 @@ class ProjectsController extends AppController
     {      
         // Admin can access every action
         if (isset($user['role']) && $user['role'] === 'admin') {
+            $this->request->session()->write('selected_project_role', "admin");
             return true;
         }
         
