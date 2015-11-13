@@ -142,14 +142,18 @@ class WeeklyreportsController extends AppController
         $weeklyreport = $this->Weeklyreports->get($id, [
             'contain' => []
         ]);
+        
+        $old_weeknumber = $weeklyreport['week'];
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
             
             $weeklyreport['project_id'] = $project_id;
             $weeklyreport['updated_on'] = Time::now();
             
-            if($this->Weeklyreports->checkUnique($weeklyreport)){
-            
+            // check that this week does not already have a weeklyreport.
+            // but allow updating withouth changing the week number
+            if($this->Weeklyreports->checkUnique($weeklyreport) || $old_weeknumber == $weeklyreport['week']){
                 if ($this->Weeklyreports->save($weeklyreport)) {
                     $this->Flash->success(__('The weeklyreport has been saved.'));
                     return $this->redirect(['action' => 'index']);
