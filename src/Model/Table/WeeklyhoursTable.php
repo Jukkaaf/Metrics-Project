@@ -6,7 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+use Cake\ORM\TableRegistry;
 /**
  * Weeklyhours Model
  *
@@ -39,7 +39,24 @@ class WeeklyhoursTable extends Table
             'joinType' => 'INNER'
         ]);
     }
-
+    
+    public function checkUnique($hour){
+        // check if the project_id week pari already exists
+        $weeklyhours = TableRegistry::get('Weeklyhours');
+        $query = $weeklyhours
+                ->find()
+                ->select(['weeklyreport_id', 'member_id'])
+                ->where(['weeklyreport_id =' => $hour['weeklyreport_id']])
+                ->where(['member_id =' => $hour['member_id']]);
+                
+        foreach($query as $temp){
+            if($temp['weeklyreport_id'] == $hour['weeklyreport_id']){
+                return False;
+            }
+        }
+        return True;
+    }
+    
     /**
      * Default validation rules.
      *

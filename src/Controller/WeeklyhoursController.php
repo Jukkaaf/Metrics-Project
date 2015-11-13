@@ -53,11 +53,16 @@ class WeeklyhoursController extends AppController
         $weeklyhour = $this->Weeklyhours->newEntity();
         if ($this->request->is('post')) {
             $weeklyhour = $this->Weeklyhours->patchEntity($weeklyhour, $this->request->data);
-            if ($this->Weeklyhours->save($weeklyhour)) {
-                $this->Flash->success(__('The weeklyhour has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
+            if($this->Weeklyhours->checkUnique($weeklyhour)){
+                if ($this->Weeklyhours->save($weeklyhour)) {
+                    $this->Flash->success(__('The weeklyhour has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
+                }
+            }
+            else {
+                $this->Flash->error(__('This member already has a weeklyhour for this week'));
             }
         }
         $project_id = $this->request->session()->read('selected_project')['id'];
@@ -141,11 +146,16 @@ class WeeklyhoursController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $weeklyhour = $this->Weeklyhours->patchEntity($weeklyhour, $this->request->data);
-            if ($this->Weeklyhours->save($weeklyhour)) {
-                $this->Flash->success(__('The weeklyhour has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
+            if($this->Weeklyhours->checkUnique($weeklyhour)){
+                if ($this->Weeklyhours->save($weeklyhour)) {
+                    $this->Flash->success(__('The weeklyhour has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
+                }
+            }
+            else {
+                $this->Flash->error(__('This member already has a weeklyhour for this week'));
             }
         }
         $project_id = $this->request->session()->read('selected_project')['id'];

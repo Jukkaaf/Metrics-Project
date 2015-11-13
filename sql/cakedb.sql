@@ -79,6 +79,7 @@ CREATE TABLE weeklyhours (
   weeklyreport_id int(10) NOT NULL,
   member_id int(10) NOT NULL,
   duration float NOT NULL,
+  UNIQUE KEY (weeklyreport_id, member_id),
   FOREIGN KEY weeklyreport_key (weeklyreport_id) REFERENCES weeklyreports (id),
   FOREIGN KEY member_key (member_id) REFERENCES members (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

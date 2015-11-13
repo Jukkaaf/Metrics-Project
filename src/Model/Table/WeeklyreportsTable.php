@@ -50,7 +50,7 @@ class WeeklyreportsTable extends Table
         $query = $weeklyreports
                 ->find()
                 ->select(['project_id', 'week'])
-                ->where(['project_id =' => $report['project_id']], ['week =' => $report['week']])
+                ->where(['project_id =' => $report['project_id']])
                 ->where(['week =' => $report['week']]);
                 
         foreach($query as $temp){
