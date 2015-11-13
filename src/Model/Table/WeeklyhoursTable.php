@@ -94,4 +94,32 @@ class WeeklyhoursTable extends Table
         $rules->add($rules->existsIn(['member_id'], 'Members'));
         return $rules;
     }
+    
+    public function formatData($formdata, $current_weeklyreport){
+        // keys from the form, for going trough the key value pairs
+        $keys = array_keys($formdata);
+        $weeklyhours = array();
+
+        // in this for loop we format the data correctly and insert the weeklyreport_id
+        for($count = 0; $count < count($formdata); $count++){
+            $temp = $formdata[$keys[$count]];
+            $temp['weeklyreport_id'] = $current_weeklyreport['id']; 
+            $weeklyhours[] = $temp;
+        }
+        return $weeklyhours;
+    }
+    
+    public function duplicates($weeklyhours){
+        $tempmembers = array();
+        foreach($weeklyhours as $temp){
+            // keep a list of all members to and make sure there is only one of each
+            if(in_array($temp['member_id'], $tempmembers)){
+                return True;
+            }
+            else{
+                $tempmembers[] = $temp['member_id'];
+            }
+        }
+        return False;
+    }
 }

@@ -70,11 +70,7 @@ class UsersController extends AppController
     public function add()
     {
         $user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
-            
-            // when adding a new user, make the role always "user", as in normal user
-            //$this->request->data['role'] = "user";
-            
+        if ($this->request->is('post')) {           
             $user = $this->Users->patchEntity($user, $this->request->data);   
             if ($this->Users->save($user)){
                 $this->Flash->success(__('The user has been saved.'));
@@ -121,16 +117,11 @@ class UsersController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
-            if(strlen($this->request->data['password']) >= self::$PASS_MIN_LENGTH){
-                if ($this->Users->save($user)) {
-                    $this->Flash->success(__('The user has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                } else {
-                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
-                }
-            }
-            else{
-                $this->Flash->error(__('The password is not long enough. Minimun is ' .self::$PASS_MIN_LENGTH));
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
         $this->set(compact('user'));
@@ -144,16 +135,11 @@ class UsersController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
-            if(strlen($this->request->data['password']) >= self::$PASS_MIN_LENGTH){
-                if ($this->Users->save($user)) {
-                    $this->Flash->success(__('The profile has been updated.'));
-                    return $this->redirect(['controller' => 'Projects', 'action' => 'index']);
-                } else {
-                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
-                }
-            }
-            else{
-                $this->Flash->error(__('The password is not long enough. Minimun is ' .self::$PASS_MIN_LENGTH));
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The profile has been updated.'));
+                return $this->redirect(['controller' => 'Projects', 'action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
         $this->set(compact('user'));

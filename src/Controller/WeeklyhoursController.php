@@ -81,30 +81,12 @@ class WeeklyhoursController extends AppController
         if ($this->request->is('post')) {
             // because this form has multiple weeklyhours we cannot just put the data in to an entity
             // here we just take all the data from the form
-            $formdata = $this->request->data;
-            // keys from the form, for going trough the key value pairs
-            $keys = array_keys($formdata);
             $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
-            $weeklyhours = array();
-            $tempmembers = array();
-            $noduplicates = True;
-                    
-            // in this for loop we format the data correctly and insert the weeklyreport_id
-            for($count = 0; $count < count($formdata); $count++){
-                $temp = $formdata[$keys[$count]];
-                $temp['weeklyreport_id'] = $current_weeklyreport['id']; 
-                $weeklyhours[] = $temp;
-                
-                // keep a list of all members to and make sure there is only one of each
-                if(in_array($temp['member_id'], $tempmembers)){
-                    $noduplicates = False;
-                }
-                else{
-                    $tempmembers[] = $temp['member_id'];
-                }
-                
-            }
-            if($noduplicates){    
+            $formdata = $this->request->data;
+            $weeklyhours = $this->Weeklyhours->formatData($formdata, $current_weeklyreport);
+            $duplicates = $this->Weeklyhours->duplicates($weeklyhours);
+    
+            if(!$duplicates){    
                 // newEntities makes all the objects in the array to their own entities
                 $entities = $this->Weeklyhours->newEntities($weeklyhours);       
                 $saving_ok = True;

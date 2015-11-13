@@ -53,9 +53,11 @@ class ProjectsController extends AppController
             $project = $this->Projects->patchEntity($project, $this->request->data);
             
             // create a folder for the project
-            $path = ROOT . DS . 'reports' . DS . $this->request->data['project_name'];
-            $dir = new Folder($path, true, 0755);
-
+            
+            //disabled since uplading reports is not currently supported
+            //$path = ROOT . DS . 'reports' . DS . $this->request->data['project_name'];
+            //$dir = new Folder($path, true, 0755);
+            /*
             if(!is_null($dir->path)){
                 if ($this->Projects->save($project)) {
                     $this->Flash->success(__('The project has been saved.'));
@@ -67,6 +69,13 @@ class ProjectsController extends AppController
             }
             else{
                 $this->Flash->error(__('Could not create a folder for the project. Please change the name'));
+            }*/
+            if ($this->Projects->save($project)) {
+                $this->Flash->success(__('The project has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } 
+            else {
+                $this->Flash->error(__('The project could not be saved. Please, try again.'));
             }
         }
         $this->set(compact('project'));

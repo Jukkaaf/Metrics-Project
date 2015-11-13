@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\ORM\TableRegistry;
 /**
  * Metrics Controller
  *
@@ -25,11 +24,6 @@ class MetricsController extends AppController
         ];
         $this->set('metrics', $this->paginate($this->Metrics));
         $this->set('_serialize', ['metrics']);
-        
-        /*
-        $query = $this->Metrics->find()->select(['id', 'value', 'date', 'metrictype_id'])->where(['project_id' => $project_id]);
-        $this->set('metrics', $this->paginate($query));
-        */
     }
     
 
