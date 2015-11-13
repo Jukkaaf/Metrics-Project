@@ -62,11 +62,11 @@
                     <td><?= h($weeklyhours->member_id) ?></td>
                     <td><?= h($weeklyhours->duration) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['controller' => 'Meeklyhours', 'action' => 'view', $weeklyhours->id]) ?>
+                        <?= $this->Html->link(__('View'), ['controller' => 'Weeklyhours', 'action' => 'view', $weeklyhours->id]) ?>
 
-                        <?= $this->Html->link(__('Edit'), ['controller' => 'Meeklyhours', 'action' => 'edit', $weeklyhours->id]) ?>
+                        <?= $this->Html->link(__('Edit'), ['controller' => 'Weeklyhours', 'action' => 'edit', $weeklyhours->id]) ?>
 
-                        <?= $this->Form->postLink(__('Delete'), ['controller' => 'Meeklyhours', 'action' => 'delete', $weeklyhours->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyhours->id)]) ?>
+                        <?= $this->Form->postLink(__('Delete'), ['controller' => 'Weeklyhours', 'action' => 'delete', $weeklyhours->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyhours->id)]) ?>
 
                     </td>
                 </tr>

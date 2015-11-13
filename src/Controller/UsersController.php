@@ -73,12 +73,32 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             
             // when adding a new user, make the role always "user", as in normal user
-            $this->request->data['role'] = "user";
+            //$this->request->data['role'] = "user";
             
             $user = $this->Users->patchEntity($user, $this->request->data);   
             if ($this->Users->save($user)){
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }   
+        }
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
+    }
+    
+    public function signup()
+    {
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            
+            // when adding a new user, make the role always "user", as in normal user
+            $this->request->data['role'] = "user";
+            
+            $user = $this->Users->patchEntity($user, $this->request->data);   
+            if ($this->Users->save($user)){
+                $this->Flash->success(__('Your account has been saved.'));
+                return $this->redirect(['controller' => 'Projects', 'action' => 'index']);
             } else {
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }   
@@ -116,7 +136,30 @@ class UsersController extends AppController
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
-
+    
+    public function editprofile()
+    {
+        $user = $this->Users->get($this->Auth->user('id'), [
+            'contain' => []
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if(strlen($this->request->data['password']) >= self::$PASS_MIN_LENGTH){
+                if ($this->Users->save($user)) {
+                    $this->Flash->success(__('The profile has been updated.'));
+                    return $this->redirect(['controller' => 'Projects', 'action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                }
+            }
+            else{
+                $this->Flash->error(__('The password is not long enough. Minimun is ' .self::$PASS_MIN_LENGTH));
+            }
+        }
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
+    }
+    
     /**
      * Delete method
      *
@@ -139,13 +182,24 @@ class UsersController extends AppController
     // this allows anyone to go and create users without logging in
     public function beforeFilter(\Cake\Event\Event $event)
     {
-        $this->Auth->allow(['add']);
+        $this->Auth->allow(['signup']);
     }
     
     public function isAuthorized($user)
     {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        
+        if ($this->request->action === 'add' || $this->request->action === 'edit'
+            || $this->request->action === 'delete' || $this->request->action === 'index') 
+        {
+            return False;
+        }
+        
         // All registered users can logout page
-        if ($this->request->action === 'logout') {
+        if ($this->request->action === 'logout' || $this->request->action === 'editprofile') {
             return true;
         }
         return parent::isAuthorized($user);
