@@ -61,7 +61,7 @@ class WeeklyreportsController extends AppController
     public function view($id = null)
     {
         $weeklyreport = $this->Weeklyreports->get($id, [
-            'contain' => ['Projects']
+            'contain' => ['Projects', 'Metrics', 'Weeklyhours']
         ]);
         $this->set('weeklyreport', $weeklyreport);
         $this->set('_serialize', ['weeklyreport']);

@@ -37,10 +37,13 @@ class WeeklyreportsTable extends Table
             'joinType' => 'INNER'
         ]);
         $this->hasMany('Metrics', [
-            'foreignKey' => 'project_id'
+            'foreignKey' => 'weeklyreport_id'
         ]);
         $this->hasMany('Workinghours', [
             'foreignKey' => 'member_id'
+        ]);
+        $this->hasMany('Weeklyhours', [
+            'foreignKey' => 'weeklyreport_id'
         ]);
     }
     
