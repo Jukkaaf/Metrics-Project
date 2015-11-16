@@ -73,19 +73,17 @@ class ProjectsController extends AppController
                 $this->Flash->error(__('Could not create a folder for the project. Please change the name'));
             }*/
             if ($this->Projects->save($project)) {
-                
-                
-                // since the project was saved, we now have to add the creator as a supervisor member
-                $Members = TableRegistry::get('Members');
-                $Member = $Members->newEntity();
-                $Member['user_id'] = $this->Auth->user('id');
-                $Member['project_id'] = $project['id'];
-                $Member['project_role'] = "supervisor";
-                if ($Members->save($Member)) {
-                    $this->Flash->success(__('The project has been saved.'));
-                }
-                else{
-                    $this->Flash->error(__('The project was saved, but we were not able to add you as a member'));
+                $this->Flash->success(__('The project has been saved.'));
+                if($this->Auth->user('role') != "admin"){
+                    // since the project was saved, we now have to add the creator as a supervisor member
+                    $Members = TableRegistry::get('Members');
+                    $Member = $Members->newEntity();
+                    $Member['user_id'] = $this->Auth->user('id');
+                    $Member['project_id'] = $project['id'];
+                    $Member['project_role'] = "supervisor";
+                    if (!$Members->save($Member)) {
+                        $this->Flash->error(__('The project was saved, but we were not able to add you as a member'));
+                    }
                 }
                 return $this->redirect(['action' => 'index']);
             } 
