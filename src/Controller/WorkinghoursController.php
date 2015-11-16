@@ -53,6 +53,27 @@ class WorkinghoursController extends AppController
         $workinghour = $this->Workinghours->newEntity();
         if ($this->request->is('post')) {
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
+            
+            $workinghour['member_id'] = $this->request->session()->read('selected_project_memberid');;
+            
+            if ($this->Workinghours->save($workinghour)) {
+                $this->Flash->success(__('The workinghour has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The workinghour could not be saved. Please, try again.'));
+            }
+        }
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
+        $this->set(compact('workinghour', 'members'));
+        $this->set('_serialize', ['workinghour']);
+    }
+    
+    public function adddev()
+    {
+        $workinghour = $this->Workinghours->newEntity();
+        if ($this->request->is('post')) {
+            $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
             if ($this->Workinghours->save($workinghour)) {
                 $this->Flash->success(__('The workinghour has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -157,13 +178,41 @@ class WorkinghoursController extends AppController
                 return False;
             }
         }
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        
         $project_role = $this->request->session()->read('selected_project_role');
-        //special rule for workinghours controller.
-        // all members can add edit and delete workinghours
-        if ($this->request->action === 'add' || $this->request->action === 'edit'
-            || $this->request->action === 'delete') 
+        
+        if ($this->request->action === 'add') 
         {
             if($project_role != "notmember"){
+                return True;
+            }
+            return False;
+        }
+        // developers can only edit and delete their own workinghours
+        if ($this->request->action === 'edit' || $this->request->action === 'delete') 
+        {
+            if($project_role == "developer"){
+                $query = $this->Workinghours
+                    ->find()
+                    ->select(['member_id'])
+                    ->where(['id =' => $this->request->pass[0]])
+                    ->toArray();
+                if($query[0]->member_id == $user['id']){
+                    return True;
+                }
+                return False;
+            }
+        }
+
+        //special rule for workinghours controller.
+        // all members can add edit and delete workinghours
+        if ($this->request->action === 'adddev' || $this->request->action === 'edit'
+            || $this->request->action === 'delete') 
+        {
+            if($project_role == "manager" || $project_role == "supervisor"){
                 return True;
             }
             return False;

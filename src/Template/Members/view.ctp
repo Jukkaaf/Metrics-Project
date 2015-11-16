@@ -34,37 +34,57 @@
         </tr>
     </table>
     <div class="related">
+        <h4><?= __('Related Weeklyhours') ?></h4>
+        <?php if (!empty($member->weeklyhours)): ?>
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <th><?= __('Weeklyreport id') ?></th>
+                    <th><?= __('Duration') ?></th>
+                    <th class="actions"><?= __('Actions') ?></th>
+                </tr>
+                <?php foreach ($member->weeklyhours as $weeklyhours): ?>
+                <tr>
+                    <td><?= h($weeklyhours->weeklyreport_id) ?></td>
+                    <td><?= h($weeklyhours->duration) ?></td>
+                    <td class="actions">
+                        <?= $this->Html->link(__('View'), ['controller' => 'Weeklyhours', 'action' => 'view', $weeklyhours->id]) ?>
+
+                        <?= $this->Html->link(__('Edit'), ['controller' => 'Weeklyhours', 'action' => 'edit', $weeklyhours->id]) ?>
+
+                        <?= $this->Form->postLink(__('Delete'), ['controller' => 'Weeklyhours', 'action' => 'delete', $weeklyhours->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyhours->id)]) ?>
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; ?>
         <h4><?= __('Related Workinghours') ?></h4>
         <?php if (!empty($member->workinghours)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th><?= __('Id') ?></th>
-                <th><?= __('Member Id') ?></th>
-                <th><?= __('Date') ?></th>
-                <th><?= __('Description') ?></th>
-                <th><?= __('Duration') ?></th>
-                <th><?= __('Worktype') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($member->workinghours as $workinghours): ?>
-            <tr>
-                <td><?= h($workinghours->id) ?></td>
-                <td><?= h($workinghours->member_id) ?></td>
-                <td><?= h($workinghours->date) ?></td>
-                <td><?= h($workinghours->description) ?></td>
-                <td><?= h($workinghours->duration) ?></td>
-                <td><?= h($workinghours->worktype) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Workinghours', 'action' => 'view', $workinghours->id]) ?>
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <th><?= __('Date') ?></th>
+                    <th><?= __('Description') ?></th>
+                    <th><?= __('Duration') ?></th>
+                    <th><?= __('Worktype') ?></th>
+                    <th class="actions"><?= __('Actions') ?></th>
+                </tr>
+                <?php foreach ($member->workinghours as $workinghours): ?>
+                <tr>
+                    <td><?= h($workinghours->date) ?></td>
+                    <td><?= h($workinghours->description) ?></td>
+                    <td><?= h($workinghours->duration) ?></td>
+                    <td><?= h($workinghours->worktype) ?></td>
+                    <td class="actions">
+                        <?= $this->Html->link(__('View'), ['controller' => 'Workinghours', 'action' => 'view', $workinghours->id]) ?>
 
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Workinghours', 'action' => 'edit', $workinghours->id]) ?>
+                        <?= $this->Html->link(__('Edit'), ['controller' => 'Workinghours', 'action' => 'edit', $workinghours->id]) ?>
 
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Workinghours', 'action' => 'delete', $workinghours->id], ['confirm' => __('Are you sure you want to delete # {0}?', $workinghours->id)]) ?>
+                        <?= $this->Form->postLink(__('Delete'), ['controller' => 'Workinghours', 'action' => 'delete', $workinghours->id], ['confirm' => __('Are you sure you want to delete # {0}?', $workinghours->id)]) ?>
 
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; ?>
     </div>
 </div>

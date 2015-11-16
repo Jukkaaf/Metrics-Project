@@ -38,7 +38,7 @@ class MembersController extends AppController
     public function view($id = null)
     {
         $member = $this->Members->get($id, [
-            'contain' => ['Users', 'Projects', 'Workinghours']
+            'contain' => ['Users', 'Projects', 'Workinghours', 'Weeklyhours']
         ]);
         $this->set('member', $member);
         $this->set('_serialize', ['member']);

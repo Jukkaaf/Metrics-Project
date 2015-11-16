@@ -10,6 +10,7 @@ if($this->request->session()->check('selected_project')){
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li>
         <li><?= $this->Html->link(__('New Workinghour'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('New Workinghour, for someone else'), ['action' => 'adddev']) ?></li>
     </ul>
 </nav>
 <div class="workinghours index large-9 medium-8 columns content">

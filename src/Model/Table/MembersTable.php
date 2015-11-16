@@ -42,6 +42,9 @@ class MembersTable extends Table
         $this->hasMany('Workinghours', [
             'foreignKey' => 'member_id'
         ]);
+        $this->hasMany('Weeklyhours', [
+            'foreignKey' => 'member_id'
+        ]);
     }
 
     /**

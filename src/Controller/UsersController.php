@@ -41,6 +41,7 @@ class UsersController extends AppController
         // remove all session data
         $this->request->session()->delete('selected_project');
         $this->request->session()->delete('selected_project_role');
+        $this->request->session()->delete('selected_project_memberid');
         
         $this->Flash->success('You are now logged out.');
         return $this->redirect($this->Auth->logout());
