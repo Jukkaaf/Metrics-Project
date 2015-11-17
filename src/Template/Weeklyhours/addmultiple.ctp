@@ -4,67 +4,24 @@
     </ul>
 </nav>
 <div class="weeklyhours form large-9 medium-8 columns content">
-    <?= $this->Form->create($weeklyhour) ?>
-    <!--
+    <?= $this->Form->create($weeklyhours) ?>
     <fieldset>
         <legend><?= __('Add Weeklyhours, Page 3/3') ?></legend>
         <?php
-            echo $this->Form->input('member_id', ['options' => $members]);
-            echo $this->Form->input('duration');
+            $current_weeklyhours = $this->request->session()->read('current_weeklyhours');
+            echo "<tr>";
+            for($count = 0; $count < count($memberlist); $count++){
+                print_r($memberlist[$count]['member_name']);
+                echo "<td>";
+                echo $this->Form->input("{$count}.duration", array('value' => $current_weeklyhours[$count]['duration']));
+                echo "</td>";
+            }
+            echo "</tr>";
         ?>
     </fieldset>
-    -->
-    <fieldset>
-        <legend><?php echo __('Weeklyhours');?></legend>
-        <table id="weeklyhours-table">
-            <tbody></tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2"></td>
-                    <td class="actions">
-                        <a href="#" class="add">Add weeklyhours</a>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </fieldset>
-    
-    <script id="weeklyhours-template" type="text/x-underscore-template">
-        <?php echo $this->element('weeklyhours');?>
-    </script>
-
-    <?= $this->Form->button(__('Finish')) ?>
+    <?php 
+        echo $this->Form->button('Submit', ['name' => 'submit', 'value' => 'submit']);
+        echo $this->Form->button('Last Page', ['name' => 'submit', 'value' => 'last']); 
+    ?>
     <?= $this->Form->end() ?>
 </div>
-<script>
-$(document).ready(function() {
-    var
-        weeklyhoursTable = $('#weeklyhours-table'),
-        weeklyhoursBody = weeklyhoursTable.find('tbody'),
-        weeklyhoursTemplate = _.template($('#weeklyhours-template').remove().text()),
-        numberRows = weeklyhoursTable.find('tbody > tr').length;
-
-    weeklyhoursTable
-        .on('click', 'a.add', function(e) {
-            e.preventDefault();
-
-            $(weeklyhoursTemplate({key: numberRows++}))
-                .hide()
-                .appendTo(weeklyhoursBody)
-                .fadeIn('fast');
-        })
-        .on('click', 'a.remove', function(e) {
-                e.preventDefault();
-
-            $(this)
-                .closest('tr')
-                .fadeOut('fast', function() {
-                    $(this).remove();
-                });
-        });
-
-        if (numberRows === 0) {
-            weeklyhoursTable.find('a.add').click();
-        }
-});
-</script>

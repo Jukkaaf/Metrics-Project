@@ -80,23 +80,40 @@ class WeeklyreportsController extends AppController
         $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreport = $this->Weeklyreports->newEntity();
         if ($this->request->is('post')) {
-            $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
+            // read the form data and edit it
+            $report = $this->request->data;  
+            $report['project_id'] = $project_id;
+            $report['created_on'] = Time::now();
+            // validate the data and apply it to the weeklyreport object
+            $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $report);
             
-            $weeklyreport['project_id'] = $project_id;
-            $weeklyreport['created_on'] = Time::now();
-            
-            if($this->Weeklyreports->checkUnique($weeklyreport)){
-                if ($this->Weeklyreports->save($weeklyreport)) {
-                    $this->Flash->success(__('The first part saved'));
-
-                    // save the current weeklyreport in the session so it can be used on the next page on the form
+            // if the object validated correctly and it is unique we can save it in the session
+            // and move on to the next page
+            if($this->Weeklyreports->checkUnique($weeklyreport)){  
+                if(!$weeklyreport->errors()){
                     $this->request->session()->write('current_weeklyreport', $weeklyreport);
-
                     return $this->redirect(
                         ['controller' => 'Metrics', 'action' => 'addmultiple']
-                    );            
-                } else {
-                    $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
+                    ); 
+
+                    /*
+                    if ($this->Weeklyreports->save($weeklyreport)) {
+                        $this->Flash->success(__('The first part saved'));
+
+                        // save the current weeklyreport in the session so it can be used on the next page on the form
+                        $this->request->session()->write('current_weeklyreport', $weeklyreport);
+
+                        return $this->redirect(
+                            ['controller' => 'Metrics', 'action' => 'addmultiple']
+                        );            
+                    } else {
+                        $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
+                    }
+                     * 
+                     */
+                }
+                else {
+                    $this->Flash->error(__('Report failed validation'));
                 }
             }
             else {

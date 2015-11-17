@@ -72,8 +72,79 @@ class WeeklyhoursController extends AppController
         $this->set('_serialize', ['weeklyhour']);
     }
     
-    
     public function addmultiple()
+    {   
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        // create a list of key valuepairs where the key is the members email + role, and value is their member id
+        $memberlist = $this->Weeklyhours->getMembers($project_id);
+        
+        $weeklyhours = $this->Weeklyhours->newEntity();
+        if ($this->request->is('post')) {
+            // the last key in the data is "submit", the value tells what button the user pressed 
+            $formdata = $this->request->data;
+            $entities = array();
+
+            for($count = 0; $count < count($memberlist); $count++){
+                $temp = array();
+                // the id does not exist yet
+                //$temp['weeklyreport_id'] = $current_weeklyreport['id'];
+                $temp['member_id'] = $memberlist[$count]['id'];
+                $temp['duration'] = $formdata[$count]['duration'];
+                
+                $entities[] = $temp;
+            }
+            
+            $weeklyhours = $this->Weeklyhours->newEntities($entities);
+            
+            $dataok = True;
+            foreach($weeklyhours as $temp){
+                if($temp->errors()){
+                    $dataok = False;
+                }
+            }
+            
+            if($dataok){
+                $this->request->session()->write('current_weeklyhours', $weeklyhours);
+                if($this->request->data['submit'] == "submit"){
+                    
+                    // save all the parts of the weeklyreport that are saved in the session
+                    $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
+                    $current_metrics = $this->request->session()->read('current_metrics');
+                    
+                    if($this->Weeklyhours->saveSessionReport($current_weeklyreport, $current_metrics, $weeklyhours)){
+                        $this->Flash->success(__('Weeklyreport saved'));
+                        
+                        $this->request->session()->delete('current_weeklyreport');
+                        $this->request->session()->delete('current_metrics');
+                        $this->request->session()->delete('current_weeklyhours');
+                        
+                        return $this->redirect(
+                            ['controller' => 'Weeklyreports', 'action' => 'index']
+                        );
+                    }
+                    else{
+                        $this->Flash->success(__('Saving weeklyreport failed'));
+                    }
+                    
+                }
+                else{
+                    return $this->redirect(
+                        ['controller' => 'Metrics', 'action' => 'addmultiple']
+                    ); 
+                }
+                  
+            }
+            else{
+                $this->Flash->success(__('Weeklyhours failed validation'));
+            }
+        }
+        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
+        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
+        $this->set(compact('weeklyhours', 'weeklyreports', 'members', 'memberlist'));
+        $this->set('_serialize', ['weeklyhour']);
+    }
+    
+    public function addmultiple_temp()
     {
         // here just because of weeklyhours.ctp, look in to removing
         $weeklyhour = $this->Weeklyhours->newEntity();

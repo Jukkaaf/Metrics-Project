@@ -41,7 +41,7 @@ class WeeklyhoursTable extends Table
     }
     
     public function checkUnique($hour){
-        // check if the project_id week pari already exists
+        // check if the weeklyreport member_id pair already exists
         $weeklyhours = TableRegistry::get('Weeklyhours');
         $query = $weeklyhours
                 ->find()
@@ -73,7 +73,7 @@ class WeeklyhoursTable extends Table
             ->add('duration', 'valid', [
                 'rule' => 'numeric',
                 // minimum of 0 hours, max of 7 * 24
-                'rule' => ['range', 1, 168]
+                'rule' => ['range', 0, 168]
                 ])
             ->requirePresence('duration', 'create')
             ->notEmpty('duration');
@@ -121,5 +121,68 @@ class WeeklyhoursTable extends Table
             }
         }
         return False;
+    }
+    
+    public function getMembers($project_id){
+        // returns an array with members
+        // the info is the members id, project role and email from user
+        $memberinfo = array();
+        
+        $members = TableRegistry::get('Members');   
+        $query = $members
+            ->find()
+            ->select(['id', 'project_role', 'user_id'])
+            ->where(['project_id =' => $project_id])
+            ->toArray();
+        
+        $users = TableRegistry::get('Users'); 
+        foreach($query as $temp){         
+            $query2 = $users
+                ->find()
+                ->select(['email'])
+                ->where(['id =' => $temp->user_id])
+                ->toArray();
+            
+            $temp_memberinfo['id'] = $temp->id;
+            $temp_memberinfo['member_name'] = $query2[0]->email." - ".$temp->project_role; 
+            //$temp_memberinfo['email'] = $query2[0]->email;
+            
+            $memberinfo[] = $temp_memberinfo;
+            
+            //$memberinfo[$query2[0]->email." ".$temp->project_role] = $temp->id;
+            //$memberinfo[$temp->id] = $query2[0]->email." ".$temp->project_role; 
+        }
+        
+        return $memberinfo;
+    }
+    
+    public function saveSessionReport($weeklyreport, $metrics, $weeklyhours){
+        $tableWeeklyreports = TableRegistry::get('Weeklyreports');
+        
+        if (!$tableWeeklyreports->save($weeklyreport)) {
+            return False;
+        }
+        // now the weeklyreport has its own id, so we can insert it in to the metrics and weeklyhours
+        
+        $tableMetrics = TableRegistry::get('Metrics');
+        foreach($metrics as $temp){
+            $temp['weeklyreport_id'] = $weeklyreport['id'];
+            
+            if (!$tableMetrics->save($temp)) {
+                return False;
+            }
+        }
+        
+        $tableWeeklyhours = TableRegistry::get('Weeklyhours');
+        foreach($weeklyhours as $temp){
+            $temp['weeklyreport_id'] = $weeklyreport['id'];
+            
+            if (!$tableWeeklyhours->save($temp)) {
+                return False;
+            }
+        }
+        
+        
+        return True;
     }
 }

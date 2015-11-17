@@ -45,7 +45,7 @@ CREATE TABLE metrics (
   id int(10) NOT NULL auto_increment PRIMARY KEY,
   project_id int(10) NOT NULL,
   metrictype_id int(10) NOT NULL,
-  weeklyreport_id int(10) NOT NULL,
+  weeklyreport_id int(10) NOT NULL, /*saa olla null*/
   date date NOT NULL,
   value float NOT NULL,
   FOREIGN KEY project_key (project_id) REFERENCES projects (id),
