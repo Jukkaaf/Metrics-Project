@@ -7,6 +7,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 /**
  * Weeklyhours Model
  *
@@ -156,6 +157,28 @@ class WeeklyhoursTable extends Table
         return $memberinfo;
     }
     
+    public function getHours($memberlist, $week){
+        $workinghours = TableRegistry::get('Workinghours');
+        $hours = array();
+        foreach($memberlist as $member){
+            $temphour = 0;
+            $query = $workinghours
+               ->find()
+               ->select(['duration', 'date'])
+               ->where(['member_id =' => $member['id']])
+               ->toArray();
+            
+            foreach($query as $temp){
+                $time = new Time($temp['date']);
+                if($time->weekOfYear == $week){
+                    $temphour = $temphour + $temp['duration'];
+                }
+            }
+            $hours[] = $temphour;
+        } 
+        return $hours;
+    }
+    
     public function saveSessionReport($weeklyreport, $metrics, $weeklyhours){
         $tableWeeklyreports = TableRegistry::get('Weeklyreports');
         
@@ -185,4 +208,6 @@ class WeeklyhoursTable extends Table
         
         return True;
     }
+    
+    
 }

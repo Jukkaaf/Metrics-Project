@@ -75,8 +75,11 @@ class WeeklyhoursController extends AppController
     public function addmultiple()
     {   
         $project_id = $this->request->session()->read('selected_project')['id'];
-        // create a list of key valuepairs where the key is the members email + role, and value is their member id
+        $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
+        // create a list of key valuepairs where thevalue is their member id and key is the members email + role
         $memberlist = $this->Weeklyhours->getMembers($project_id);
+        //count the workinghours for members so they can be translated to weeklyhours 
+        $hourlist = $this->Weeklyhours->getHours($memberlist, $current_weeklyreport['week']);
         
         $weeklyhours = $this->Weeklyhours->newEntity();
         if ($this->request->is('post')) {
@@ -108,7 +111,6 @@ class WeeklyhoursController extends AppController
                 if($this->request->data['submit'] == "submit"){
                     
                     // save all the parts of the weeklyreport that are saved in the session
-                    $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
                     $current_metrics = $this->request->session()->read('current_metrics');
                     
                     if($this->Weeklyhours->saveSessionReport($current_weeklyreport, $current_metrics, $weeklyhours)){
@@ -140,7 +142,7 @@ class WeeklyhoursController extends AppController
         }
         $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
-        $this->set(compact('weeklyhours', 'weeklyreports', 'members', 'memberlist'));
+        $this->set(compact('weeklyhours', 'weeklyreports', 'members', 'memberlist', 'hourlist'));
         $this->set('_serialize', ['weeklyhour']);
     }
     

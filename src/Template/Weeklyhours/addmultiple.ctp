@@ -9,14 +9,27 @@
         <legend><?= __('Add Weeklyhours, Page 3/3') ?></legend>
         <?php
             $current_weeklyhours = $this->request->session()->read('current_weeklyhours');
-            echo "<tr>";
-            for($count = 0; $count < count($memberlist); $count++){
-                print_r($memberlist[$count]['member_name']);
-                echo "<td>";
-                echo $this->Form->input("{$count}.duration", array('value' => $current_weeklyhours[$count]['duration']));
-                echo "</td>";
+            if(!is_null($current_weeklyhours)){
+                echo "<tr>";
+                for($count = 0; $count < count($memberlist); $count++){
+                    print_r($memberlist[$count]['member_name']);
+                    echo "<td>";
+                    echo $this->Form->input("{$count}.duration", array('value' => $current_weeklyhours[$count]['duration']));
+                    echo "</td>";
+                }
+                echo "</tr>";
             }
-            echo "</tr>";
+            else{
+                echo "<tr>";
+                for($count = 0; $count < count($memberlist); $count++){
+                    print_r($memberlist[$count]['member_name']);
+                    echo "<td>";
+                    echo $this->Form->input("{$count}.duration", array('value' => $hourlist[$count]));
+                    echo "</td>";
+                }
+                echo "</tr>";
+            }
+            
         ?>
     </fieldset>
     <?php 
