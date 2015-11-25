@@ -74,9 +74,6 @@ class ProjectsTable extends Table
             ->allowEmpty('finished_date');
 
         $validator
-            ->allowEmpty('status');
-
-        $validator
             ->allowEmpty('description');
 
         $validator

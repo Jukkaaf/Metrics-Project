@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <th><?= __('Worktype') ?></th>
-            <td><?= $this->Number->format($workinghour->worktype) ?></td>
+            <td><?= $workinghour->has('worktype') ? $this->Html->link($workinghour->worktype->description, ['controller' => 'Worktypes', 'action' => 'view', $workinghour->worktype->id]) : '' ?></td>
         </tr>
         <tr>
             <th><?= __('Date') ?></th>

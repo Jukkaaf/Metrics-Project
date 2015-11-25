@@ -23,7 +23,7 @@ if($this->request->session()->check('selected_project')){
                 <th><?= $this->Paginator->sort('date') ?></th>
                 <th><?= $this->Paginator->sort('description') ?></th>
                 <th><?= $this->Paginator->sort('duration') ?></th>
-                <th><?= $this->Paginator->sort('worktype') ?></th>
+                <th><?= $this->Paginator->sort('worktype_id') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -35,7 +35,7 @@ if($this->request->session()->check('selected_project')){
                 <td><?= h($workinghour->date->format('Y-m-d')) ?></td>
                 <td><?= h($workinghour->description) ?></td>
                 <td><?= $this->Number->format($workinghour->duration) ?></td>
-                <td><?= $this->Number->format($workinghour->worktype) ?></td>
+                <td><?= $workinghour->has('worktype') ? $this->Html->link($workinghour->worktype->description, ['controller' => 'Workypes', 'action' => 'view', $workinghour->worktype->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $workinghour->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $workinghour->id]) ?>

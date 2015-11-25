@@ -10,7 +10,7 @@
         <legend><?= __('Add Metric') ?></legend>
         <?php
             echo $this->Form->input('metrictype_id', ['options' => $metrictypes]);
-            echo $this->Form->input('weeklyreport_id', ['options' => $weeklyreports]);
+            echo $this->Form->input('weeklyreport_id', ['empty' => 'No weeklyreport', 'options' => $weeklyreports]);
             echo $this->Form->input('date');
             echo $this->Form->input('value');
         ?>

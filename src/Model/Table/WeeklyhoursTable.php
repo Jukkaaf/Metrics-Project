@@ -93,6 +93,7 @@ class WeeklyhoursTable extends Table
     {
         $rules->add($rules->existsIn(['weeklyreport_id'], 'Weeklyreports'));
         $rules->add($rules->existsIn(['member_id'], 'Members'));
+        $rules->add($rules->isUnique(['member_id', 'weeklyreport_id']));
         return $rules;
     }
     

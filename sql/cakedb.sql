@@ -14,13 +14,17 @@ CREATE TABLE metrictypes (
   description varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE worktypes (
+  id int(10) NOT NULL auto_increment PRIMARY KEY,
+  description varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE projects (
   id int(10) NOT NULL auto_increment PRIMARY KEY,
   project_name varchar(50) NOT NULL,
   created_on date NOT NULL,
   updated_on date,
   finished_date date,
-  status varchar(30),
   description varchar(100),
   is_public tinyint(1) NOT NULL,
   UNIQUE KEY (project_name)
@@ -45,7 +49,7 @@ CREATE TABLE metrics (
   id int(10) NOT NULL auto_increment PRIMARY KEY,
   project_id int(10) NOT NULL,
   metrictype_id int(10) NOT NULL,
-  weeklyreport_id int(10) NOT NULL, /*saa olla null*/
+  weeklyreport_id int(10),
   date date NOT NULL,
   value float NOT NULL,
   FOREIGN KEY project_key (project_id) REFERENCES projects (id),
@@ -67,11 +71,12 @@ CREATE TABLE members (
 CREATE TABLE workinghours (
   id int(10) NOT NULL auto_increment PRIMARY KEY,
   member_id int(10) NOT NULL,
+  worktype_id int(10) NOT NULL,
   date date NOT NULL,
   description varchar(100) NOT NULL,
   duration float NOT NULL,
-  worktype int(2),
-  FOREIGN KEY member_key (member_id) REFERENCES members (id)
+  FOREIGN KEY member_key (member_id) REFERENCES members (id),
+  FOREIGN KEY worktype_key (worktype_id) REFERENCES worktypes (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE weeklyhours (

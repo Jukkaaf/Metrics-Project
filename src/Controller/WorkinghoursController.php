@@ -20,7 +20,7 @@ class WorkinghoursController extends AppController
     {
         $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
-            'contain' => ['Members'],
+            'contain' => ['Members', 'Worktypes'],
             'conditions' => array('Members.project_id' => $project_id)
         ];
         $this->set('workinghours', $this->paginate($this->Workinghours));
@@ -36,8 +36,10 @@ class WorkinghoursController extends AppController
      */
     public function view($id = null)
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $workinghour = $this->Workinghours->get($id, [
-            'contain' => ['Members']
+            'contain' => ['Members', 'Worktypes'],
+            'conditions' => array('Members.project_id' => $project_id)
         ]);
         $this->set('workinghour', $workinghour);
         $this->set('_serialize', ['workinghour']);
@@ -64,8 +66,9 @@ class WorkinghoursController extends AppController
             }
         }
         $project_id = $this->request->session()->read('selected_project')['id'];
+        $worktypes = $this->Workinghours->Worktypes->find('list', ['limit' => 200]);
         $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
-        $this->set(compact('workinghour', 'members'));
+        $this->set(compact('workinghour', 'members', 'worktypes'));
         $this->set('_serialize', ['workinghour']);
     }
     
@@ -82,8 +85,9 @@ class WorkinghoursController extends AppController
             }
         }
         $project_id = $this->request->session()->read('selected_project')['id'];
+        $worktypes = $this->Workinghours->Worktypes->find('list', ['limit' => 200]);
         $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
-        $this->set(compact('workinghour', 'members'));
+        $this->set(compact('workinghour', 'members', 'worktypes'));
         $this->set('_serialize', ['workinghour']);
     }
     
@@ -114,8 +118,10 @@ class WorkinghoursController extends AppController
      */
     public function edit($id = null)
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $workinghour = $this->Workinghours->get($id, [
-            'contain' => []
+            'contain' => ['Members', 'Worktypes'],
+            'conditions' => array('Members.project_id' => $project_id)
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);
@@ -126,9 +132,9 @@ class WorkinghoursController extends AppController
                 $this->Flash->error(__('The workinghour could not be saved. Please, try again.'));
             }
         }
-        $project_id = $this->request->session()->read('selected_project')['id'];
+        $worktypes = $this->Workinghours->Worktypes->find('list', ['limit' => 200]);
         $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
-        $this->set(compact('workinghour', 'members'));
+        $this->set(compact('workinghour', 'members', 'worktypes'));
         $this->set('_serialize', ['workinghour']);
     }
 
@@ -153,31 +159,6 @@ class WorkinghoursController extends AppController
     
     public function isAuthorized($user)
     {   
-        
-        // Check that the parameter in the request(the id in the url)
-        // belongs to the project that is currently selected.
-        // This is done so that users cant jump between projects by altering the url
-        if($this->request->pass != null){
-            // what is the member_id of the Workinghour
-            $query = $this->Workinghours
-                ->find()
-                ->select(['member_id'])
-                ->where(['id =' => $this->request->pass[0]])
-                ->toArray();
-            
-            // what is the project_id of the member
-            $members = TableRegistry::get('Members');    
-            $query2 = $members
-                ->find()
-                ->select(['project_id'])
-                ->where(['id =' => $query[0]->member_id])
-                ->toArray();
-            $project_id = $this->request->session()->read('selected_project')['id'];
-            // does the project_id of the the object the parameter points to
-            if($query2[0]->project_id != $project_id){
-                return False;
-            }
-        }
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }

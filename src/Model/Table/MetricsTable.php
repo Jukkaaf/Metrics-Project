@@ -40,7 +40,7 @@ class MetricsTable extends Table
         ]);
         $this->belongsTo('Weeklyreports', [
             'foreignKey' => 'weeklyreport_id',
-            'joinType' => 'INNER'
+            'joinType' => 'LEFT'
         ]);
     }
 
@@ -65,6 +65,9 @@ class MetricsTable extends Table
             ->add('value', 'valid', ['rule' => 'numeric'])
             ->requirePresence('value', 'create')
             ->notEmpty('value');
+        
+        $validator
+            ->allowEmpty('weeklyreport_id');
         return $validator;
     }
 
@@ -79,7 +82,6 @@ class MetricsTable extends Table
     {
         $rules->add($rules->existsIn(['project_id'], 'Projects'));
         $rules->add($rules->existsIn(['metrictype_id'], 'Metrictypes'));
-        $rules->add($rules->existsIn(['weeklyreport_id'], 'Weeklyreports'));
         return $rules;
     }
 }

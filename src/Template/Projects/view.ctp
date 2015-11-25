@@ -20,10 +20,6 @@
             <td><?= h($project->project_name) ?></td>
         </tr>
         <tr>
-            <th><?= __('Status') ?></th>
-            <td><?= h($project->status) ?></td>
-        </tr>
-        <tr>
             <th><?= __('Description') ?></th>
             <td><?= h($project->description) ?></td>
         </tr>

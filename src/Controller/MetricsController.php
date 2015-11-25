@@ -36,8 +36,10 @@ class MetricsController extends AppController
      */
     public function view($id = null)
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $metric = $this->Metrics->get($id, [
-            'contain' => ['Projects', 'Metrictypes', 'Weeklyreports']
+            'contain' => ['Projects', 'Metrictypes', 'Weeklyreports'],
+            'conditions' => array('Metrics.project_id' => $project_id)
         ]);
         $this->set('metric', $metric);
         $this->set('_serialize', ['metric']);
@@ -198,7 +200,8 @@ class MetricsController extends AppController
     {    
         $project_id = $this->request->session()->read('selected_project')['id'];
         $metric = $this->Metrics->get($id, [
-            'contain' => []
+            'contain' => [],
+            'conditions' => array('Metrics.project_id' => $project_id)
         ]);
         
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -243,6 +246,7 @@ class MetricsController extends AppController
         // Check that the parameter in the request(the id in the url)
         // belongs to the project that is currently selected.
         // This is done so that users cant jump between projects by altering the url
+        /*
         if($this->request->pass != null){
             $query = $this->Metrics
                 ->find()
@@ -257,7 +261,7 @@ class MetricsController extends AppController
                 return False;
             }
         }
-        
+        */
         
         return parent::isAuthorized($user);
     }

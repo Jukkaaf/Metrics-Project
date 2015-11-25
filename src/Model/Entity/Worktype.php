@@ -4,21 +4,13 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Project Entity.
+ * Worktype Entity.
  *
  * @property int $id
- * @property string $project_name
- * @property \Cake\I18n\Time $created_on
- * @property \Cake\I18n\Time $updated_on
- * @property \Cake\I18n\Time $finished_date
  * @property string $description
- * @property bool $is_public
- * @property \App\Model\Entity\Member[] $members
- * @property \App\Model\Entity\Metric[] $metrics
- * @property \App\Model\Entity\Requirement[] $requirements
- * @property \App\Model\Entity\Weeklyreport[] $weeklyreports
+ * @property \App\Model\Entity\Workinghour[] $workinghours
  */
-class Project extends Entity
+class Worktype extends Entity
 {
 
     /**

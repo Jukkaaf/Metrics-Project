@@ -19,7 +19,6 @@
                 <th><?= $this->Paginator->sort('created_on') ?></th>
                 <th><?= $this->Paginator->sort('updated_on') ?></th>
                 <th><?= $this->Paginator->sort('finished_date') ?></th>
-                <th><?= $this->Paginator->sort('status') ?></th>
                 <th><?= $this->Paginator->sort('description') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -32,7 +31,6 @@
                 <td><?= h($project->created_on->format('Y-m-d')) ?></td>
                 <td><?= h($project->updated_on) ?></td>
                 <td><?= h($project->finished_date) ?></td>
-                <td><?= h($project->status) ?></td>
                 <td><?= h($project->description) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>

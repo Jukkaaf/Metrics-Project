@@ -37,6 +37,10 @@ class WorkinghoursTable extends Table
             'foreignKey' => 'weeklyreport_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Worktypes', [
+            'foreignKey' => 'worktype_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -69,10 +73,6 @@ class WorkinghoursTable extends Table
             ->requirePresence('duration', 'create')
             ->notEmpty('duration');
 
-        $validator
-            ->add('worktype', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('worktype');
-
         return $validator;
     }
 
@@ -86,6 +86,7 @@ class WorkinghoursTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['member_id'], 'Members'));
+        $rules->add($rules->existsIn(['worktype_id'], 'Worktypes'));
         return $rules;
     }
 }

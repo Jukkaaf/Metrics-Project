@@ -19,7 +19,6 @@
             echo $this->Form->input('created_on');
             echo $this->Form->input('updated_on', ['empty' => true, 'default' => '']);
             echo $this->Form->input('finished_date', ['empty' => true, 'default' => '']);
-            echo $this->Form->input('status');
             echo $this->Form->input('description');
             echo $this->Form->input('is_public');
         ?>

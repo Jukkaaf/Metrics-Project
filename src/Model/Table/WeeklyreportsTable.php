@@ -218,6 +218,7 @@ class WeeklyreportsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['project_id'], 'Projects'));
+        $rules->add($rules->isUnique(['week', 'project_id']));
         return $rules;
     }
 }

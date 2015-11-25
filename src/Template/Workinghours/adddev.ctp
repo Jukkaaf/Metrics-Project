@@ -13,7 +13,7 @@
             echo $this->Form->input('date');
             echo $this->Form->input('description');
             echo $this->Form->input('duration');
-            echo $this->Form->input('worktype');
+            echo $this->Form->input('worktype_id', ['options' => $worktypes]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

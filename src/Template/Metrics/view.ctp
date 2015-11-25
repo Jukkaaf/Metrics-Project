@@ -14,7 +14,7 @@
         </tr>
         <tr>
             <th><?= __('Metrictype') ?></th>
-            <td><?= $metric->has('metrictype') ? $this->Html->link($metric->metrictype->id, ['controller' => 'Metrictypes', 'action' => 'view', $metric->metrictype->id]) : '' ?></td>
+            <td><?= $metric->has('metrictype') ? $this->Html->link($metric->metrictype->description, ['controller' => 'Metrictypes', 'action' => 'view', $metric->metrictype->id]) : '' ?></td>
         </tr>
         <tr>
             <th><?= __('Weeklyreport') ?></th>
