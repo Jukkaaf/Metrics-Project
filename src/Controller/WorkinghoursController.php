@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 /**
  * Workinghours Controller
  *
@@ -86,7 +86,14 @@ class WorkinghoursController extends AppController
         }
         $project_id = $this->request->session()->read('selected_project')['id'];
         $worktypes = $this->Workinghours->Worktypes->find('list', ['limit' => 200]);
-        $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
+        $now = Time::now();
+        /*
+        $members = $this->Workinghours->Members->find('list', ['limit' => 200, 
+            'conditions' => array('Members.project_id' => $project_id, 'OR' => array('Members.ending_date >' => $now, 'Members.ending_date' => NULL))]);
+        */
+        $members = $this->Workinghours->Members->find('list', ['limit' => 200])
+                                                ->where(['Members.project_id' => $project_id, 'Members.ending_date >' => $now])
+                                                ->orWhere(['Members.project_id' => $project_id, 'Members.ending_date IS' => NULL]);
         $this->set(compact('workinghour', 'members', 'worktypes'));
         $this->set('_serialize', ['workinghour']);
     }
@@ -133,7 +140,10 @@ class WorkinghoursController extends AppController
             }
         }
         $worktypes = $this->Workinghours->Worktypes->find('list', ['limit' => 200]);
-        $members = $this->Workinghours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
+        $now = Time::now();
+        $members = $this->Workinghours->Members->find('list', ['limit' => 200])
+                                                ->where(['Members.project_id' => $project_id, 'Members.ending_date >' => $now])
+                                                ->orWhere(['Members.project_id' => $project_id, 'Members.ending_date IS' => NULL]);
         $this->set(compact('workinghour', 'members', 'worktypes'));
         $this->set('_serialize', ['workinghour']);
     }

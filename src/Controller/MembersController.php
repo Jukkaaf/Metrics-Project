@@ -67,7 +67,7 @@ class MembersController extends AppController
                 $this->Flash->error(__('The member could not be saved. Please, try again.'));
             }
         }          
-        $users = $this->Members->Users->find('list', ['limit' => 200]);
+        $users = $this->Members->Users->find('list', ['limit' => 200, 'conditions'=>array('Users.role !=' => 'inactive')]);
         $this->set(compact('member', 'users', 'projects'));
         $this->set('_serialize', ['member']);
     }
@@ -98,7 +98,7 @@ class MembersController extends AppController
                 $this->Flash->error(__('The member could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Members->Users->find('list', ['limit' => 200]);
+        $users = $this->Members->Users->find('list', ['limit' => 200, 'conditions'=>array('Users.role !=' => 'inactive')]);
         $this->set(compact('member', 'users', 'projects'));
         $this->set('_serialize', ['member']);
     }

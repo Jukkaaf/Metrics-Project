@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 /**
  * Weeklyhours Controller
  *
@@ -64,7 +64,10 @@ class WeeklyhoursController extends AppController
         }
         $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
-        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
+        $now = Time::now();
+        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200])
+                                                ->where(['Members.project_id' => $project_id, 'Members.ending_date >' => $now])
+                                                ->orWhere(['Members.project_id' => $project_id, 'Members.ending_date IS' => NULL]);
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }
@@ -210,7 +213,10 @@ class WeeklyhoursController extends AppController
             }
         }
         $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
-        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
+        $now = Time::now();
+        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200])
+                                                ->where(['Members.project_id' => $project_id, 'Members.ending_date >' => $now])
+                                                ->orWhere(['Members.project_id' => $project_id, 'Members.ending_date IS' => NULL]);
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }

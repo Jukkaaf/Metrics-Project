@@ -129,12 +129,13 @@ class WeeklyhoursTable extends Table
         // returns an array with members
         // the info is the members id, project role and email from user
         $memberinfo = array();
-        
+        $now = Time::now();
         $members = TableRegistry::get('Members');   
         $query = $members
             ->find()
             ->select(['id', 'project_role', 'user_id'])
-            ->where(['project_id =' => $project_id])
+            ->where(['project_id' => $project_id, 'ending_date >' => $now])
+            ->orWhere(['project_id' => $project_id, 'ending_date IS' => NULL])
             ->toArray();
         
         $users = TableRegistry::get('Users'); 

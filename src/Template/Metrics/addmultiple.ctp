@@ -41,7 +41,7 @@
     </fieldset>
     <?php 
         echo $this->Form->button('Next Page', ['name' => 'submit', 'value' => 'next']);
-        echo $this->Form->button('Last Page', ['name' => 'submit', 'value' => 'last']); 
+        echo $this->Form->button('Previous Page', ['name' => 'submit', 'value' => 'previous', 'style' => 'float: left']); 
         //echo $this->Form->button('qwe', ['type' => 'submit', 'value' => 'qwe']); 
     ?>
     <?= $this->Form->end() ?>
