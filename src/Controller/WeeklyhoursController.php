@@ -36,8 +36,10 @@ class WeeklyhoursController extends AppController
      */
     public function view($id = null)
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyhour = $this->Weeklyhours->get($id, [
-            'contain' => ['Weeklyreports', 'Members']
+            'contain' => ['Weeklyreports', 'Members'],
+            'conditions' => array('Members.project_id' => $project_id)
         ]);
         $this->set('weeklyhour', $weeklyhour);
         $this->set('_serialize', ['weeklyhour']);
@@ -191,8 +193,10 @@ class WeeklyhoursController extends AppController
      */
     public function edit($id = null)
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyhour = $this->Weeklyhours->get($id, [
-            'contain' => []
+            'contain' => ['Members'],
+            'conditions' => array('Members.project_id' => $project_id)
         ]);
         
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -205,7 +209,6 @@ class WeeklyhoursController extends AppController
                 $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
             }
         }
-        $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
@@ -229,38 +232,5 @@ class WeeklyhoursController extends AppController
             $this->Flash->error(__('The weeklyhour could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
-    }
-    
-    public function isAuthorized($user)
-    {   
-        // Check that the parameter in the request(the id in the url)
-        // belongs to the project that is currently selected.
-        // This is done so that users cant jump between projects by altering the url
-        if($this->request->pass != null){
-            // what is the member_id of the weeklyhour
-            $query = $this->Weeklyhours
-                ->find()
-                ->select(['member_id'])
-                ->where(['id =' => $this->request->pass[0]])
-                ->toArray();
-            
-            // what is the project_id of the member
-            $members = TableRegistry::get('Members');    
-            $query2 = $members
-                ->find()
-                ->select(['project_id'])
-                ->where(['id =' => $query[0]->member_id])
-                ->toArray();
-            
-            $project_id = $this->request->session()->read('selected_project')['id'];
-            
-            // does the project_id of the the object the parameter points to
-            if($query2[0]->project_id != $project_id){
-                return False;
-            }
-        }
-        
-        
-        return parent::isAuthorized($user);
     }
 }

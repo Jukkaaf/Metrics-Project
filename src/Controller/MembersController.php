@@ -37,8 +37,10 @@ class MembersController extends AppController
      */
     public function view($id = null)
     {
+        $project_id = $this->request->session()->read('selected_project')['id'];
         $member = $this->Members->get($id, [
-            'contain' => ['Users', 'Projects', 'Workinghours', 'Weeklyhours']
+            'contain' => ['Users', 'Projects', 'Workinghours', 'Weeklyhours'],
+            'conditions' => array('Members.project_id' => $project_id)
         ]);
         $this->set('member', $member);
         $this->set('_serialize', ['member']);
@@ -81,7 +83,8 @@ class MembersController extends AppController
     {
         $project_id = $this->request->session()->read('selected_project')['id'];
         $member = $this->Members->get($id, [
-            'contain' => []
+            'contain' => [],
+            'conditions' => array('Members.project_id' => $project_id)
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $member = $this->Members->patchEntity($member, $this->request->data);
@@ -122,24 +125,6 @@ class MembersController extends AppController
     
     public function isAuthorized($user)
     {   
-        // Check that the parameter in the request(the id in the url)
-        // belongs to the project that is currently selected.
-        // This is done so that users cant jump between projects by altering the url
-        if($this->request->pass != null){
-            $query = $this->Members
-                ->find()
-                ->select(['project_id'])
-                ->where(['id =' => $this->request->pass[0]])
-                ->toArray();
-            
-            $project_id = $this->request->session()->read('selected_project')['id'];
-            
-            // does the project_id of the the object the parameter points to
-            if($query[0]->project_id != $project_id){
-                return False;
-            }
-        }
-
         // Admin can access every action
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
