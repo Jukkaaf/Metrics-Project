@@ -39,7 +39,13 @@ class ProjectsController extends AppController
         $this->set('project', $project);
         $this->set('_serialize', ['project']);
         
-        $this->request->session()->write('selected_project', $project);
+        if($this->request->session()->read('selected_project')['id'] != $project['id']){
+            $this->request->session()->write('selected_project', $project);
+            // remove the all data from the weeklyreport form if any exists
+            $this->request->session()->delete('current_weeklyreport');
+            $this->request->session()->delete('current_metrics');
+            $this->request->session()->delete('current_weeklyhours');
+        }  
     }
 
     /**
