@@ -56,7 +56,7 @@ class WorkinghoursController extends AppController
         if ($this->request->is('post')) {
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
             
-            $workinghour['member_id'] = $this->request->session()->read('selected_project_memberid');;
+            $workinghour['member_id'] = $this->request->session()->read('selected_project_memberid');
             
             if ($this->Workinghours->save($workinghour)) {
                 $this->Flash->success(__('The workinghour has been saved.'));
@@ -92,8 +92,8 @@ class WorkinghoursController extends AppController
             'conditions' => array('Members.project_id' => $project_id, 'OR' => array('Members.ending_date >' => $now, 'Members.ending_date' => NULL))]);
         */
         $members = $this->Workinghours->Members->find('list', ['limit' => 200])
-                                                ->where(['Members.project_id' => $project_id, 'Members.ending_date >' => $now])
-                                                ->orWhere(['Members.project_id' => $project_id, 'Members.ending_date IS' => NULL]);
+                                                ->where(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date >' => $now])
+                                                ->orWhere(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date IS' => NULL]);
         $this->set(compact('workinghour', 'members', 'worktypes'));
         $this->set('_serialize', ['workinghour']);
     }
@@ -142,8 +142,8 @@ class WorkinghoursController extends AppController
         $worktypes = $this->Workinghours->Worktypes->find('list', ['limit' => 200]);
         $now = Time::now();
         $members = $this->Workinghours->Members->find('list', ['limit' => 200])
-                                                ->where(['Members.project_id' => $project_id, 'Members.ending_date >' => $now])
-                                                ->orWhere(['Members.project_id' => $project_id, 'Members.ending_date IS' => NULL]);
+                                                ->where(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date >' => $now])
+                                                ->orWhere(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date IS' => NULL]);
         $this->set(compact('workinghour', 'members', 'worktypes'));
         $this->set('_serialize', ['workinghour']);
     }
@@ -177,7 +177,8 @@ class WorkinghoursController extends AppController
         
         if ($this->request->action === 'add') 
         {
-            if($project_role != "notmember"){
+            // supervisor cannot have workinghours, and the add function simply takes the member_id of the current user
+            if($project_role != "notmember" || $project_role == "supervisor"){
                 return True;
             }
             return False;

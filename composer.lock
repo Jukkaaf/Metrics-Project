@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b0d60e640664b8f1a496ccc95dfee859",
-    "content-hash": "5a6e0241c2ad93c131269a9e6f051a64",
+    "hash": "34608f3618ab4518c5c6716cf801ed3b",
+    "content-hash": "ad287df6992dfe35e66a4ff169e421c4",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -287,6 +287,88 @@
             "time": "2015-06-10 10:35:13"
         },
         {
+            "name": "destinydriven/cakephp3-highcharts",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/destinydriven/cakephp3-highcharts.git",
+                "reference": "0a387a20d76e9bf728ac448e2bda02fb452311e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/destinydriven/cakephp3-highcharts/get/0a387a20d76e9bf728ac448e2bda02fb452311e5.zip",
+                "reference": "0a387a20d76e9bf728ac448e2bda02fb452311e5",
+                "shasum": ""
+            },
+            "require": {
+                "ghunti/highcharts-php": "^3.0",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "ghunti/highcharts-php": "^3.0",
+                "phpunit/phpunit": "*"
+            },
+            "type": "cakephp-plugin",
+            "extra": {
+                "installer-name": "Highcharts"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Highcharts\\": "src",
+                    "Ghunti\\HighchartsPHP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Highcharts plugin for CakePHP",
+            "time": "2015-07-02 21:47:32"
+        },
+        {
+            "name": "ghunti/highcharts-php",
+            "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ghunti/HighchartsPHP.git",
+                "reference": "60efed11be137740f8e8671258808ed07a7458db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ghunti/HighchartsPHP/zipball/60efed11be137740f8e8671258808ed07a7458db",
+                "reference": "60efed11be137740f8e8671258808ed07a7458db",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ghunti\\HighchartsPHP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Gonçalo Queirós",
+                    "email": "mail@goncaloqueiros.net",
+                    "homepage": "http://goncaloqueiros.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A php wrapper for highcharts and highstock javascript libraries",
+            "homepage": "http://goncaloqueiros.net/highcharts.php",
+            "keywords": [
+                "charts",
+                "highcharts",
+                "highstock",
+                "javascript",
+                "php"
+            ],
+            "time": "2015-08-12 00:05:14"
+        },
+        {
             "name": "ircmaxell/password-compat",
             "version": "v1.0.4",
             "source": {
@@ -476,7 +558,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/43313ad89c0ad1851aeefafc164e2822e49867e3",
+                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/06740769d9b02365cfbed104f9a44776a3d14478",
                 "reference": "43313ad89c0ad1851aeefafc164e2822e49867e3",
                 "shasum": ""
             },
@@ -1187,6 +1269,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "destinydriven/cakephp3-highcharts": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,

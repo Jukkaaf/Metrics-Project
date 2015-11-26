@@ -66,8 +66,8 @@ class WeeklyhoursController extends AppController
         $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $now = Time::now();
         $members = $this->Weeklyhours->Members->find('list', ['limit' => 200])
-                                                ->where(['Members.project_id' => $project_id, 'Members.ending_date >' => $now])
-                                                ->orWhere(['Members.project_id' => $project_id, 'Members.ending_date IS' => NULL]);
+                                                ->where(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date >' => $now])
+                                                ->orWhere(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date IS' => NULL]);
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }
@@ -215,8 +215,8 @@ class WeeklyhoursController extends AppController
         $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
         $now = Time::now();
         $members = $this->Weeklyhours->Members->find('list', ['limit' => 200])
-                                                ->where(['Members.project_id' => $project_id, 'Members.ending_date >' => $now])
-                                                ->orWhere(['Members.project_id' => $project_id, 'Members.ending_date IS' => NULL]);
+                                                ->where(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date >' => $now])
+                                                ->orWhere(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date IS' => NULL]);
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }

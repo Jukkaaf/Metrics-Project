@@ -134,26 +134,22 @@ class WeeklyhoursTable extends Table
         $query = $members
             ->find()
             ->select(['id', 'project_role', 'user_id'])
-            ->where(['project_id' => $project_id, 'ending_date >' => $now])
-            ->orWhere(['project_id' => $project_id, 'ending_date IS' => NULL])
+            ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date >' => $now])
+            ->orWhere(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date IS' => NULL])
             ->toArray();
         
         $users = TableRegistry::get('Users'); 
         foreach($query as $temp){         
             $query2 = $users
                 ->find()
-                ->select(['email'])
+                ->select(['role', 'first_name', 'last_name'])
                 ->where(['id =' => $temp->user_id])
                 ->toArray();
             
             $temp_memberinfo['id'] = $temp->id;
-            $temp_memberinfo['member_name'] = $query2[0]->email." - ".$temp->project_role; 
-            //$temp_memberinfo['email'] = $query2[0]->email;
-            
-            $memberinfo[] = $temp_memberinfo;
-            
-            //$memberinfo[$query2[0]->email." ".$temp->project_role] = $temp->id;
-            //$memberinfo[$temp->id] = $query2[0]->email." ".$temp->project_role; 
+            $temp_memberinfo['member_name'] = $query2[0]->first_name." ".$query2[0]->last_name." - ".$temp->project_role; 
+
+            $memberinfo[] = $temp_memberinfo; 
         }
         
         return $memberinfo;
