@@ -73,6 +73,10 @@ Router::scope('/', function ($routes) {
     $routes->fallbacks('DashedRoute');
 });
 
+// the plugin loading underneath for some reason did not load highcharts for cakephp
+Router::plugin('Highcharts', function ($routes) {
+        $routes->fallbacks('InflectedRoute');
+});
 /**
  * Load all plugin routes.  See the Plugin documentation on
  * how to customize the loading of plugin routes.

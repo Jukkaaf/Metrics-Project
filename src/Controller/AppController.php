@@ -27,7 +27,7 @@ use Cake\ORM\TableRegistry;
  */
 class AppController extends Controller
 {
-
+    
     /**
      * Initialization hook method.
      *
@@ -63,6 +63,14 @@ class AppController extends Controller
     
     public function isAuthorized($user)
     {   
+        // temp. Allow usage of the highcharts demopage
+        if ($this->request->action === 'area' || $this->request->action === 'areaspline' || $this->request->action === 'bar'
+                 || $this->request->action === 'column' || $this->request->action === 'line' || $this->request->action === 'pie'
+                 || $this->request->action === 'pie_drill_down' || $this->request->action === 'scatter' || $this->request->action === 'donut'
+                 || $this->request->action === 'bubble') {
+            return True;
+        }
+
         // Admin can access every action
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
