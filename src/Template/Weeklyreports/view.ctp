@@ -41,6 +41,10 @@
             <td><?= h($weeklyreport->week) ?></tr>
         </tr>
         <tr>
+            <th><?= __('Year') ?></th>
+            <td><?= h($weeklyreport->year) ?></tr>
+        </tr>
+        <tr>
             <th><?= __('Created_on') ?></th>
             <td><?= h($weeklyreport->created_on) ?></td>
         </tr>

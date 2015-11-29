@@ -35,13 +35,14 @@ CREATE TABLE weeklyreports (
   project_id int(10) NOT NULL,
   title varchar(50) NOT NULL,
   week int(2) NOT NULL,
+  year int(4) NOT NULL,
   reglink varchar(100),
   problems varchar(400),
   meetings varchar(400) NOT NULL,
   additional varchar(400),
   created_on date NOT NULL,
   updated_on date,
-  UNIQUE KEY (week, project_id),
+  UNIQUE KEY (week, year, project_id),
   FOREIGN KEY project_key (project_id) REFERENCES projects (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

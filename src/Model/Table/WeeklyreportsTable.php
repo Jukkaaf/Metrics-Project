@@ -54,6 +54,7 @@ class WeeklyreportsTable extends Table
                 ->find()
                 ->select(['project_id', 'week'])
                 ->where(['project_id =' => $report['project_id']])
+                ->where(['year =' => $report['year']])
                 ->where(['week =' => $report['week']]);
                 
         foreach($query as $temp){
@@ -182,6 +183,16 @@ class WeeklyreportsTable extends Table
                 ])
             ->requirePresence('week', 'create')
             ->notEmpty('week');
+        
+        $validator
+            ->add('year', 'valid', [
+                'rule' => 'numeric',
+                // this is the weeknumber range
+                // maximum weeknumber is 53
+                'rule' => ['range', 2000, 2100]
+                ])
+            ->requirePresence('year', 'create')
+            ->notEmpty('year');
 
         $validator
             ->allowEmpty('reglink');
@@ -218,7 +229,7 @@ class WeeklyreportsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['project_id'], 'Projects'));
-        $rules->add($rules->isUnique(['week', 'project_id']));
+        $rules->add($rules->isUnique(['week', 'year', 'project_id']));
         return $rules;
     }
 }

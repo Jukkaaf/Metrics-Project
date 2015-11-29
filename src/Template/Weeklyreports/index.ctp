@@ -22,6 +22,7 @@ if($this->request->session()->check('selected_project')){
                 <th><?= $this->Paginator->sort('project_id') ?></th>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('week') ?></th>
+                <th><?= $this->Paginator->sort('year') ?></th>
                 <th><?= $this->Paginator->sort('reglink') ?></th>
                 <th><?= $this->Paginator->sort('problems') ?></th>
                 <th><?= $this->Paginator->sort('meetings') ?></th>
@@ -37,6 +38,7 @@ if($this->request->session()->check('selected_project')){
                 <td><?= $weeklyreport->has('project') ? $this->Html->link($weeklyreport->project->project_name, ['controller' => 'Projects', 'action' => 'view', $weeklyreport->project->id]) : '' ?></td>
                 <td><?= h($weeklyreport->title) ?></td>
                 <td><?= h($weeklyreport->week) ?></td>
+                <td><?= h($weeklyreport->year) ?></td>
                 <td><?= h($weeklyreport->reglink) ?></td>
                 <td><?= h($weeklyreport->problems) ?></td>
                 <td><?= h($weeklyreport->meetings) ?></td>

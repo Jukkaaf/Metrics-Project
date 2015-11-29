@@ -15,6 +15,7 @@
             if(!is_null($current_weeklyreport)){
                 echo $this->Form->input('title', array('value' => $current_weeklyreport['title']));
                 echo $this->Form->input('week', array('value' => $current_weeklyreport['week']));
+                echo $this->Form->input('year', array('value' => $current_weeklyreport['year']));
                 echo $this->Form->input('reglink', array('value' => $current_weeklyreport['reglink']));
                 echo $this->Form->input('problems', array('value' => $current_weeklyreport['problems']));
                 echo $this->Form->input('meetings', array('value' => $current_weeklyreport['meetings']));
@@ -24,6 +25,7 @@
                 $now = Time::now();
                 echo $this->Form->input('title');
                 echo $this->Form->input('week', array('value' => $now->weekOfYear));
+                echo $this->Form->input('year', array('value' => $now->year));
                 echo $this->Form->input('reglink');
                 echo $this->Form->input('problems');
                 echo $this->Form->input('meetings');

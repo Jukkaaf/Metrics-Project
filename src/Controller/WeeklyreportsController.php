@@ -76,9 +76,6 @@ class WeeklyreportsController extends AppController
      */
     public function add()
     {
-        $now = Time::now();
-        $weeknro = $now->weekOfYear;
-        
         $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreport = $this->Weeklyreports->newEntity();
         if ($this->request->is('post')) {
@@ -97,22 +94,6 @@ class WeeklyreportsController extends AppController
                     return $this->redirect(
                         ['controller' => 'Metrics', 'action' => 'addmultiple']
                     ); 
-
-                    /*
-                    if ($this->Weeklyreports->save($weeklyreport)) {
-                        $this->Flash->success(__('The first part saved'));
-
-                        // save the current weeklyreport in the session so it can be used on the next page on the form
-                        $this->request->session()->write('current_weeklyreport', $weeklyreport);
-
-                        return $this->redirect(
-                            ['controller' => 'Metrics', 'action' => 'addmultiple']
-                        );            
-                    } else {
-                        $this->Flash->error(__('The weeklyreport could not be saved. Please, try again.'));
-                    }
-                     * 
-                     */
                 }
                 else {
                     $this->Flash->error(__('Report failed validation'));

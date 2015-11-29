@@ -17,6 +17,7 @@
         <?php
             echo $this->Form->input('title');
             echo $this->Form->input('week');
+            echo $this->Form->input('year');
             echo $this->Form->input('reglink');
             echo $this->Form->input('problems');
             echo $this->Form->input('meetings');

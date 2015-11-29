@@ -11,6 +11,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Project $project
  * @property string $title
  * @property int week
+ * @property int year
  * @property string $reglink
  * @property string $problems
  * @property string $meetings

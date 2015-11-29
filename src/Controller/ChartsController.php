@@ -3,10 +3,12 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Highcharts\Controller\Component\HighchartsComponent;
+use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 class ChartsController extends AppController
 {
-    public $name = 'SingleSeriesDemo';
+    public $name = 'Charts';
     //public $helpers = array('Html');
     public $helpers = ['Highcharts.Highcharts'];
     public $uses = array();
@@ -14,12 +16,331 @@ class ChartsController extends AppController
     public $chartData = array(7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6);
     public $chartData2 = array(3.0, 3.9, 5.5, 6.5, 9.2, 17.5, 8.2, 6.5, 13.3, 28.3, 23.9, 29.6);
 
-
+    
     public function initialize() {
-            parent::initialize();
-            $this->loadComponent('Highcharts.Highcharts');
+        parent::initialize();
+        $this->loadComponent('Highcharts.Highcharts');
     }
+    
+    public function index() {
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+            
+            $chart_limits['weekmin'] = $data['weekmin'];
+            $chart_limits['weekmax'] = $data['weekmax'];
+            $chart_limits['yearmin'] = $data['yearmin'];
+            $chart_limits['yearmax'] = $data['yearmax'];
+            
+            $this->request->session()->write('chart_limits', $chart_limits);
+            $page = $_SERVER['PHP_SELF'];
+        }
 
+        // get the chart objects
+        $phaseChart = $this->phaseChart();
+        $reqChart = $this->reqChart();
+        $commitChart = $this->commitChart();
+        $testcaseChart = $this->testcaseChart();
+        
+        $project_id = $this->request->session()->read('selected_project')['id'];
+        
+        // figure out the limits for the metrics that go in the chart
+        if(!$this->request->session()->check('chart_limits')){
+            $time = Time::now();
+            // show last year, current year and next year
+            $chart_limits['weekmin'] = 0;
+            $chart_limits['weekmax'] =  53;
+            $chart_limits['yearmin'] = $time->year - 1;
+            $chart_limits['yearmax'] = $time->year + 1;
+            
+            $this->request->session()->write('chart_limits', $chart_limits);
+        }
+        $chart_limits = $this->request->session()->read('chart_limits');
+        
+        $weekmin = array(1 => 1, 2 => 2, 13 => 12, 34 => 34, 44 => 44, 53 => 53);
+        $weekmax = array(1 => 1, 2 => 2, 13 => 12, 34 => 34, 44 => 44, 53 => 53);
+        $yearmin = array(2014 => 2014, 2015 => 2015, 2016 => 2016);
+        $yearmax = array(2014 => 2014, 2015 => 2015, 2016 => 2016);
+        
+        // get all the data
+        $weeklyreports = $this->Charts->reports($project_id, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
+        $phaseData = $this->Charts->phaseAreaData($project_id, $weeklyreports['id']);
+        $reqData = $this->Charts->reqColumnData($project_id, $weeklyreports['id']);
+        $commitData = $this->Charts->commitAreaData($project_id, $weeklyreports['id']);
+        $testcaseData = $this->Charts->testcaseAreaData($project_id, $weeklyreports['id']);
+        
+        // insert the data in to the charts
+        $phaseChart->xAxis->categories = $weeklyreports['weeks'];
+        $phaseChart->series[] = array(
+            'name' => 'Total phases',
+            'data' => $phaseData['phaseTotal']
+        );
+        $phaseChart->series[] = array(
+            'name' => 'Phase',
+            'data' => $phaseData['phase']
+        );
+        
+        
+        $reqChart->xAxis->categories = $weeklyreports['weeks'];
+        $reqChart->series[] = array(
+            'name' => 'New',
+            'data' => $reqData['new']
+        );
+        $reqChart->series[] = array(
+            'name' => 'In progress',
+            'data' => $reqData['inprogress']
+        );
+        $reqChart->series[] = array(
+            'name' => 'Closed',
+            'data' => $reqData['closed']
+        );
+        $reqChart->series[] = array(
+            'name' => 'Rejected',
+            'data' => $reqData['rejected']
+        );
+        
+     
+        $commitChart->xAxis->categories = $weeklyreports['weeks'];    
+        $commitChart->series[] = array(
+            'name' => 'commits',
+            'data' => $commitData['commits']
+        );
+
+        
+        $testcaseChart->xAxis->categories = $weeklyreports['weeks'];
+        $testcaseChart->series[] = array(
+            'name' => 'Total tests',
+            'data' => $testcaseData['testsTotal']
+        );
+        $testcaseChart->series[] = array(
+            'name' => 'Passed tests',
+            'data' => $testcaseData['testsPassed']
+        );
+        
+        
+        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'weekmin', 'weekmax', 'yearmin', 'yearmax'));
+    }
+    
+    
+    
+    
+    
+    public function testcaseChart() {
+        $myChart = $this->Highcharts->createChart();
+
+        $myChart->title = array(
+            'text' => 'Test Cases demo', 
+            'x' => 20,
+            'y' => 20,
+            'align' => 'left',
+            'styleFont' => '18px Metrophobic, Arial, sans-serif',
+            'styleColor' => '#0099ff',
+        );
+
+        $myChart->chart->renderTo = 'testcasewrapper';
+        $myChart->chart->type = 'area';
+        $myChart->chart->width =  800;
+        $myChart->chart->height = 600;
+        $myChart->chart->marginTop = 60;
+        $myChart->chart->marginLeft = 90;
+        $myChart->chart->marginRight = 30;
+        $myChart->chart->marginBottom = 110;
+        $myChart->chart->spacingRight = 10;
+        $myChart->chart->spacingBottom = 15;
+        $myChart->chart->spacingLeft = 0;
+        $myChart->chart->alignTicks = FALSE;
+        $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
+        $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));                
+
+        $myChart->title->text = 'Test cases area';
+        //$myChart->subtitle->text = "Source: <a href=\"http://thebulletin.metapress.com/content/c4120650912x74k7/fulltext.pdf\">thebulletin.metapress.com</a>";
+        $myChart->xAxis->labels->formatter = $this->Highcharts->createJsExpr("function() { return this.value;}");
+        $myChart->yAxis->title->text = 'temp';
+        $myChart->yAxis->labels->formatter = $this->Highcharts->createJsExpr("function() { return this.value;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
+        return this.series.name +' <b>'+
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->plotOptions->area->marker->enabled = false;
+        $myChart->plotOptions->area->marker->symbol = 'circle';
+        $myChart->plotOptions->area->marker->radius = 2;
+        $myChart->plotOptions->area->marker->states->hover->enabled = true;
+
+        $myChart->legend->enabled = true;
+        $myChart->legend->layout = 'horizontal';
+        $myChart->legend->align = 'center';
+        $myChart->legend->verticalAlign  = 'bottom';
+        $myChart->legend->itemStyle = array('color' => '#222');
+        $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
+        $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+
+        $myChart->xAxis->labels->enabled = true;
+        $myChart->xAxis->labels->align = 'right';
+        $myChart->xAxis->labels->step = 1;
+        $myChart->xAxis->labels->x = 5;
+        $myChart->xAxis->labels->y = 20;
+        $myChart->yAxis->title->text = 'Ammount of test cases';
+        $myChart->enable->autoStep = false;
+        // credits setting  [Highcharts.com  displayed on chart]
+        $myChart->credits->enabled = true;
+        $myChart->credits->text = 'Example.com';
+        $myChart->credits->href = 'http://example.com';
+        
+        return $myChart;
+    }
+    
+    public function commitChart(){
+        $myChart = $this->Highcharts->createChart();
+
+        $myChart->title = array(
+            'text' => 'Commits demo', 
+            'x' => 20,
+            'y' => 20,
+            'align' => 'left',
+            'styleFont' => '18px Metrophobic, Arial, sans-serif',
+            'styleColor' => '#0099ff',
+        );
+
+        $myChart->chart->renderTo = 'commitwrapper';
+        $myChart->chart->type = 'area';
+        $myChart->chart->width =  800;
+        $myChart->chart->height = 600;
+        $myChart->chart->marginTop = 60;
+        $myChart->chart->marginLeft = 90;
+        $myChart->chart->marginRight = 30;
+        $myChart->chart->marginBottom = 110;
+        $myChart->chart->spacingRight = 10;
+        $myChart->chart->spacingBottom = 15;
+        $myChart->chart->spacingLeft = 0;
+        $myChart->chart->alignTicks = FALSE;
+        $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
+        $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));                
+
+        $myChart->title->text = 'Commits demo, area';
+        $myChart->xAxis->labels->formatter = $this->Highcharts->createJsExpr("function() { return this.value;}");
+        $myChart->yAxis->title->text = 'temp';
+        $myChart->yAxis->labels->formatter = $this->Highcharts->createJsExpr("function() { return this.value;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
+        return this.series.name +' produced <b>'+
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->plotOptions->area->marker->enabled = false;
+        $myChart->plotOptions->area->marker->symbol = 'circle';
+        $myChart->plotOptions->area->marker->radius = 2;
+        $myChart->plotOptions->area->marker->states->hover->enabled = true;
+
+        $myChart->legend->enabled = true;
+        $myChart->legend->layout = 'horizontal';
+        $myChart->legend->align = 'center';
+        $myChart->legend->verticalAlign  = 'bottom';
+        $myChart->legend->itemStyle = array('color' => '#222');
+        $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
+        $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+
+        $myChart->xAxis->labels->enabled = true;
+        $myChart->xAxis->labels->align = 'right';
+        $myChart->xAxis->labels->step = 1;
+        $myChart->xAxis->labels->x = 5;
+        $myChart->xAxis->labels->y = 20;
+        $myChart->yAxis->title->text = 'Ammount of commits';
+        $myChart->enable->autoStep = false;
+        $myChart->credits->enabled = true;
+        $myChart->credits->text = 'Example.com';
+        $myChart->credits->href = 'http://example.com';
+
+        return $myChart;
+    }
+    
+    public function reqChart() {
+        $myChart = $this->Highcharts->createChart();
+
+        $myChart->chart->renderTo = 'reqwrapper';
+        $myChart->chart->type = 'column';
+        $myChart->title->text = 'Requirements';
+        $myChart->subtitle->text = 'req';
+
+        $myChart->yAxis->min = 0;
+        $myChart->yAxis->title->text = 'Requirements';
+        $myChart->legend->layout = 'vertical';
+        $myChart->legend->backgroundColor = '#FFFFFF';
+        $myChart->legend->align = 'left';
+        $myChart->legend->verticalAlign = 'top';
+        $myChart->legend->x = 100;
+        $myChart->legend->y = 70;
+        $myChart->legend->floating = 1;
+        $myChart->legend->shadow = 1;
+
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
+            return this.y;}");
+
+        $myChart->plotOptions->column->pointPadding = 0.2;
+        $myChart->plotOptions->column->borderWidth = 0;
+
+        return $myChart;
+    }
+    
+    public function phaseChart(){
+        $chartName = 'Area Chart';
+
+        $myChart = $this->Highcharts->createChart();
+
+        $myChart->title = array(
+            'text' => 'Phases', 
+            'x' => 20,
+            'y' => 20,
+            'align' => 'left',
+            'styleFont' => '18px Metrophobic, Arial, sans-serif',
+            'styleColor' => '#0099ff',
+        );
+
+        $myChart->chart->renderTo = 'phasewrapper';
+        $myChart->chart->type = 'area';
+        $myChart->chart->width =  800;
+        $myChart->chart->height = 600;
+        $myChart->chart->marginTop = 60;
+        $myChart->chart->marginLeft = 90;
+        $myChart->chart->marginRight = 30;
+        $myChart->chart->marginBottom = 110;
+        $myChart->chart->spacingRight = 10;
+        $myChart->chart->spacingBottom = 15;
+        $myChart->chart->spacingLeft = 0;
+        $myChart->chart->alignTicks = FALSE;
+        $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
+        $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));                
+
+        $myChart->title->text = 'Phases';
+        //$myChart->subtitle->text = "Source: <a href=\"http://thebulletin.metapress.com/content/c4120650912x74k7/fulltext.pdf\">thebulletin.metapress.com</a>";
+        $myChart->xAxis->labels->formatter = $this->Highcharts->createJsExpr("function() { return this.value;}");
+        $myChart->yAxis->title->text = 'temp';
+        $myChart->yAxis->labels->formatter = $this->Highcharts->createJsExpr("function() { return this.value;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
+        return this.series.name +' <b>'+
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->plotOptions->area->marker->enabled = false;
+        $myChart->plotOptions->area->marker->symbol = 'circle';
+        $myChart->plotOptions->area->marker->radius = 2;
+        $myChart->plotOptions->area->marker->states->hover->enabled = true;
+
+        $myChart->legend->enabled = true;
+        $myChart->legend->layout = 'horizontal';
+        $myChart->legend->align = 'center';
+        $myChart->legend->verticalAlign  = 'bottom';
+        $myChart->legend->itemStyle = array('color' => '#222');
+        $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
+        $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+
+        $myChart->xAxis->labels->enabled = true;
+        $myChart->xAxis->labels->align = 'right';
+        $myChart->xAxis->labels->step = 1;
+        $myChart->xAxis->labels->x = 5;
+        $myChart->xAxis->labels->y = 20;
+        $myChart->yAxis->title->text = 'Ammount Phases';
+        $myChart->enable->autoStep = false;
+        // credits setting  [Highcharts.com  displayed on chart]
+        $myChart->credits->enabled = true;
+        $myChart->credits->text = 'Example.com';
+        $myChart->credits->href = 'http://example.com';
+        
+        return $myChart;
+    }
+    
     public function area() {
         $chartName = 'Area Chart';
 
