@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use App\Controller\MemberController;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 /**
  * Projects Controller
  *
@@ -58,26 +59,6 @@ class ProjectsController extends AppController
         $project = $this->Projects->newEntity();
         if ($this->request->is('post')) {
             $project = $this->Projects->patchEntity($project, $this->request->data);
-            
-            print_r($project['id']);
-            // create a folder for the project
-            
-            //disabled since uplading reports is not currently supported
-            //$path = ROOT . DS . 'reports' . DS . $this->request->data['project_name'];
-            //$dir = new Folder($path, true, 0755);
-            /*
-            if(!is_null($dir->path)){
-                if ($this->Projects->save($project)) {
-                    $this->Flash->success(__('The project has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                } 
-                else {
-                    $this->Flash->error(__('The project could not be saved. Please, try again.'));
-                }
-            }
-            else{
-                $this->Flash->error(__('Could not create a folder for the project. Please change the name'));
-            }*/
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('The project has been saved.'));
                 if($this->Auth->user('role') != "admin"){
@@ -169,7 +150,7 @@ class ProjectsController extends AppController
         if ($this->request->action === 'view') 
         {   
             // this is where we figure out what role the user has in the project
-            
+            $time = Time::now();
             $project_role = "";
             $project_memberid = -1;
             // what kind of member is the user
@@ -177,23 +158,32 @@ class ProjectsController extends AppController
 
             $query = $members
                 ->find()
-                ->select(['project_role', 'id'])
+                ->select(['project_role', 'id', 'ending_date'])
                 ->where(['user_id =' => $this->Auth->user('id'), 'project_id =' => $this->request->pass[0]])
                 ->toArray();
 
+            // for loop goes through all the memberships that this user has for this project
+            // its most likely just 1, but since it has not been limited to that we must check for all possibilities
+            // the idea is that the highest membership is saved, 
+            // so if he or she is a developer and a supervisor, we save the latter
             foreach($query as $temp){
-                if($temp->project_role == "supervisor"){
+                // if supervisor, overwrite all other memberships
+                if($temp->project_role == "supervisor" && $temp->ending_date > $time){
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
                 }
-                elseif($temp->project_role == "manager" && $project_role != "supervisor"){
+                // if the user is a manager in the project 
+                // but we have not yet found out that he or she is a supervisor
+                // if dev or null then it gets overwritten
+                elseif($temp->project_role == "manager" && $project_role != "supervisor" && $temp->ending_date > $time){
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
                 }
-                elseif($project_role != "supervisor" && $project_role != "manager"){
+                // if we have not found out that the user is a manager or a supervisor
+                elseif($project_role != "supervisor" && $project_role != "manager" && $temp->ending_date > $time){
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
-                }
+                }      
             }
             
             if($this->Auth->user('role') == "admin"){

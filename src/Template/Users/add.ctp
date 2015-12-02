@@ -14,7 +14,8 @@
             echo $this->Form->input('first_name');
             echo $this->Form->input('last_name');
             echo $this->Form->input('phone');
-            echo $this->Form->input('role');
+            echo $this->Form->input('role', 
+                ['options' => array('user' => 'user', 'admin' => 'admin', 'inactive' => 'inactive')]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

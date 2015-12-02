@@ -16,21 +16,53 @@ class ChartsTable extends Table
     
     public function reports($project_id, $weekmin, $weekmax, $yearmin, $yearmax){
         $weeklyreports = TableRegistry::get('Weeklyreports');
-        $query = $weeklyreports
-            ->find()
-            ->select(['id', 'week', 'year'])
-            ->where(['project_id =' => $project_id, 
-                'week >=' => $weekmin, 'week <=' => $weekmax, 
-                'year >=' => $yearmin, 'year <=' => $yearmax])
-            ->toArray();
-        
         $organize = array(); 
+        if($yearmin != $yearmax){
+            $query = $weeklyreports
+                ->find()
+                ->select(['id', 'week', 'year'])
+                ->where(['project_id' => $project_id, 
+                    'week >=' => $weekmin, 
+                    'year' => $yearmin]) // min year, weeknum is min or bigger
+                ->orWhere(['project_id' => $project_id, 
+                    'week <=' => $weekmax, 
+                    'year' => $yearmax]) // max year, but weeknumber is max or smaller
+                ->toArray();
+        
+            $query2 = $weeklyreports
+                ->find()
+                ->select(['id', 'week', 'year'])
+                ->Where(['project_id' => $project_id, 
+                    'year >' => $yearmin, 'year <' => $yearmax]) // possible middle year, all weeks are good
+                ->toArray();
+
+            foreach($query2 as $temp){
+                $temparray = array();
+                $temparray['id'] = $temp->id;
+                $temparray['week'] = $temp->week;
+                $temparray['year'] = $temp->year;
+
+                $organize[] = $temparray ;
+            }
+        }
+        else{
+            // if min and max years are same then we just look at week limits
+            $query = $weeklyreports
+                ->find()
+                ->select(['id', 'week', 'year'])
+                ->where(['project_id' => $project_id, 
+                    'week >=' => $weekmin, 'week <=' => $weekmax, 
+                    'year' => $yearmin])
+
+                ->toArray();
+        }
+         
         foreach($query as $temp){
             $temparray = array();
             $temparray['id'] = $temp->id;
             $temparray['week'] = $temp->week;
             $temparray['year'] = $temp->year;
-            
+
             $organize[] = $temparray ;
         }
         
@@ -43,10 +75,7 @@ class ChartsTable extends Table
             $year[$key] = $row['year'];
         }
         
-        //print_r($organize);
         array_multisort($year, SORT_ASC, $week, SORT_ASC, $organize);
-        //print_r($organize);
-        
 
         $idlist = array();
         $weeklist = array();

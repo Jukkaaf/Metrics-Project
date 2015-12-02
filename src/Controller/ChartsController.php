@@ -9,13 +9,8 @@ use Cake\I18n\Time;
 class ChartsController extends AppController
 {
     public $name = 'Charts';
-    //public $helpers = array('Html');
     public $helpers = ['Highcharts.Highcharts'];
     public $uses = array();
-    //public $layout = 'Highcharts.demo';
-    public $chartData = array(7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6);
-    public $chartData2 = array(3.0, 3.9, 5.5, 6.5, 9.2, 17.5, 8.2, 6.5, 13.3, 28.3, 23.9, 29.6);
-
     
     public function initialize() {
         parent::initialize();
@@ -50,14 +45,14 @@ class ChartsController extends AppController
             $chart_limits['weekmin'] = 0;
             $chart_limits['weekmax'] =  53;
             $chart_limits['yearmin'] = $time->year - 1;
-            $chart_limits['yearmax'] = $time->year + 1;
+            $chart_limits['yearmax'] = $time->year;
             
             $this->request->session()->write('chart_limits', $chart_limits);
         }
         $chart_limits = $this->request->session()->read('chart_limits');
         
-        $weekmin = array(1 => 1, 2 => 2, 13 => 12, 34 => 34, 44 => 44, 53 => 53);
-        $weekmax = array(1 => 1, 2 => 2, 13 => 12, 34 => 34, 44 => 44, 53 => 53);
+        $weekmin = array(1 => 1, 2 => 2, 12 => 12, 34 => 34, 44 => 44, 53 => 53);
+        $weekmax = array(1 => 1, 2 => 2, 12 => 12, 34 => 34, 44 => 44, 53 => 53);
         $yearmin = array(2014 => 2014, 2015 => 2015, 2016 => 2016);
         $yearmax = array(2014 => 2014, 2015 => 2015, 2016 => 2016);
         
