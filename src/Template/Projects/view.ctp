@@ -13,19 +13,11 @@
     </ul>
 </nav>
 <div class="projects view large-9 medium-8 columns content">
-    <h3><?= h($project->id) ?></h3>
+    <h3><?= h($project->project_name) ?></h3>
     <table class="vertical-table">
-        <tr>
-            <th><?= __('Project Name') ?></th>
-            <td><?= h($project->project_name) ?></td>
-        </tr>
         <tr>
             <th><?= __('Description') ?></th>
             <td><?= h($project->description) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= $this->Number->format($project->id) ?></td>
         </tr>
         <tr>
             <th><?= __('Created On') ?></th>

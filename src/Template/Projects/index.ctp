@@ -14,11 +14,7 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('project_name') ?></th>
-                <th><?= $this->Paginator->sort('created_on') ?></th>
-                <th><?= $this->Paginator->sort('updated_on') ?></th>
-                <th><?= $this->Paginator->sort('finished_date') ?></th>
                 <th><?= $this->Paginator->sort('description') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -26,11 +22,7 @@
         <tbody>
             <?php foreach ($projects as $project): ?>
             <tr>
-                <td><?= $this->Number->format($project->id) ?></td>
                 <td><?= h($project->project_name) ?></td>
-                <td><?= h($project->created_on->format('Y-m-d')) ?></td>
-                <td><?= h($project->updated_on) ?></td>
-                <td><?= h($project->finished_date) ?></td>
                 <td><?= h($project->description) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>

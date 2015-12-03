@@ -17,24 +17,16 @@ if($this->request->session()->check('selected_project')){
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('user_id') ?></th>
-                <th><?= $this->Paginator->sort('project_id') ?></th>
                 <th><?= $this->Paginator->sort('project_role') ?></th>
-                <th><?= $this->Paginator->sort('starting_date') ?></th>
-                <th><?= $this->Paginator->sort('ending_date') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($members as $member): ?>
             <tr>
-                <td><?= $this->Number->format($member->id) ?></td>
-                <td><?= $member->has('user') ? $this->Html->link($member->user->email, ['controller' => 'Users', 'action' => 'view', $member->user->id]) : '' ?></td>
-                <td><?= $member->has('project') ? $this->Html->link($member->project->project_name, ['controller' => 'Projects', 'action' => 'view', $member->project->id]) : '' ?></td>
+                <td><?= $member->has('user') ? $this->Html->link($member->user->first_name . " ". $member->user->last_name, ['controller' => 'Users', 'action' => 'view', $member->user->id]) : '' ?></td>
                 <td><?= h($member->project_role) ?></td>
-                <td><?= h($member->starting_date) ?></td>
-                <td><?= h($member->ending_date) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $member->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $member->id]) ?>

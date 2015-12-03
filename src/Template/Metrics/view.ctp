@@ -6,23 +6,11 @@
     </ul>
 </nav>
 <div class="metrics view large-9 medium-8 columns content">
-    <h3><?= h($metric->id) ?></h3>
+    <h3><?= h($metric->metrictype->description) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th><?= __('Project') ?></th>
-            <td><?= $metric->has('project') ? $this->Html->link($metric->project->id, ['controller' => 'Projects', 'action' => 'view', $metric->project->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Metrictype') ?></th>
-            <td><?= $metric->has('metrictype') ? $this->Html->link($metric->metrictype->description, ['controller' => 'Metrictypes', 'action' => 'view', $metric->metrictype->id]) : '' ?></td>
-        </tr>
-        <tr>
             <th><?= __('Weeklyreport') ?></th>
-            <td><?= $metric->has('weeklyreport') ? $this->Html->link($metric->weeklyreport->id, ['controller' => 'Meeklyreports', 'action' => 'view', $metric->weeklyreport->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= $this->Number->format($metric->id) ?></td>
+            <td><?= $metric->has('weeklyreport') ? $this->Html->link($metric->weeklyreport->title, ['controller' => 'Meeklyreports', 'action' => 'view', $metric->weeklyreport->id]) : '' ?></td>
         </tr>
         <tr>
             <th><?= __('Value') ?></th>

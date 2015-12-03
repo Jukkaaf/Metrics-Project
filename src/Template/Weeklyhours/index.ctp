@@ -17,9 +17,8 @@ if($this->request->session()->check('selected_project')){
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
-                <th><?= $this->Paginator->sort('weeklyreport_id') ?></th>
                 <th><?= $this->Paginator->sort('member_id') ?></th>
+                <th><?= $this->Paginator->sort('weeklyreport_id') ?></th>
                 <th><?= $this->Paginator->sort('duration') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -27,9 +26,8 @@ if($this->request->session()->check('selected_project')){
         <tbody>
             <?php foreach ($weeklyhours as $weeklyhour): ?>
             <tr>
-                <td><?= $this->Number->format($weeklyhour->id) ?></td>
-                <td><?= $weeklyhour->has('weeklyreport') ? $this->Html->link($weeklyhour->weeklyreport->title, ['controller' => 'Weeklyreports', 'action' => 'view', $weeklyhour->weeklyreport->id]) : '' ?></td>
                 <td><?= $weeklyhour->has('member') ? $this->Html->link($weeklyhour->member->id, ['controller' => 'Members', 'action' => 'view', $weeklyhour->member->id]) : '' ?></td>
+                <td><?= $weeklyhour->has('weeklyreport') ? $this->Html->link($weeklyhour->weeklyreport->title, ['controller' => 'Weeklyreports', 'action' => 'view', $weeklyhour->weeklyreport->id]) : '' ?></td>
                 <td><?= $this->Number->format($weeklyhour->duration) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $weeklyhour->id]) ?>

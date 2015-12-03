@@ -6,20 +6,8 @@
     </ul>
 </nav>
 <div class="members view large-9 medium-8 columns content">
-    <h3><?= h($member->id) ?></h3>
+    <h3><?= h($member->user->first_name . " ". $member->user->last_name) ?></h3>
     <table class="vertical-table">
-        <tr>
-            <th><?= __('User') ?></th>
-            <td><?= $member->has('user') ? $this->Html->link($member->user->id, ['controller' => 'Users', 'action' => 'view', $member->user->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Project') ?></th>
-            <td><?= $member->has('project') ? $this->Html->link($member->project->id, ['controller' => 'Projects', 'action' => 'view', $member->project->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= $this->Number->format($member->id) ?></td>
-        </tr>
         <tr>
             <th><?= __('Project Role') ?></th>
             <td><?= h($member->project_role) ?></td>
@@ -31,6 +19,10 @@
         <tr>
             <th><?= __('Ending Date') ?></th>
             <td><?= h($member->ending_date) ?></tr>
+        </tr>
+        <tr>
+            <th><?= __('Email') ?></th>
+            <td><?= $member->has('user') ? $this->Html->link($member->user->email, ['controller' => 'Users', 'action' => 'view', $member->user->id]) : '' ?></td>
         </tr>
     </table>
     <div class="related">

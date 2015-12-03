@@ -18,14 +18,9 @@ if($this->request->session()->check('selected_project')){
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
-                <th><?= $this->Paginator->sort('project_id') ?></th>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('week') ?></th>
                 <th><?= $this->Paginator->sort('year') ?></th>
-                <th><?= $this->Paginator->sort('reglink') ?></th>
-                <th><?= $this->Paginator->sort('problems') ?></th>
-                <th><?= $this->Paginator->sort('meetings') ?></th>
                 <th><?= $this->Paginator->sort('created_on') ?></th>
                 <th><?= $this->Paginator->sort('updated_on') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
@@ -34,20 +29,13 @@ if($this->request->session()->check('selected_project')){
         <tbody>
             <?php foreach ($weeklyreports as $weeklyreport): ?>
             <tr>
-                <td><?= $this->Number->format($weeklyreport->id) ?></td>
-                <td><?= $weeklyreport->has('project') ? $this->Html->link($weeklyreport->project->project_name, ['controller' => 'Projects', 'action' => 'view', $weeklyreport->project->id]) : '' ?></td>
                 <td><?= h($weeklyreport->title) ?></td>
                 <td><?= h($weeklyreport->week) ?></td>
                 <td><?= h($weeklyreport->year) ?></td>
-                <td><?= h($weeklyreport->reglink) ?></td>
-                <td><?= h($weeklyreport->problems) ?></td>
-                <td><?= h($weeklyreport->meetings) ?></td>
                 <td><?= h($weeklyreport->created_on->format('Y-m-d')) ?></td>
                 <td><?= h($weeklyreport->updated_on) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $weeklyreport->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $weeklyreport->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $weeklyreport->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyreport->id)]) ?>
+                    <?= $this->Html->link(__('Select'), ['action' => 'view', $weeklyreport->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

@@ -18,11 +18,9 @@ if($this->request->session()->check('selected_project')){
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('member_id') ?></th>
-                <th><?= $this->Paginator->sort('date') ?></th>
-                <th><?= $this->Paginator->sort('description') ?></th>
                 <th><?= $this->Paginator->sort('duration') ?></th>
+                <th><?= $this->Paginator->sort('date') ?></th>    
                 <th><?= $this->Paginator->sort('worktype_id') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -30,11 +28,9 @@ if($this->request->session()->check('selected_project')){
         <tbody>
             <?php foreach ($workinghours as $workinghour): ?>
             <tr>
-                <td><?= $this->Number->format($workinghour->id) ?></td>
                 <td><?= $workinghour->has('member') ? $this->Html->link($workinghour->member->id, ['controller' => 'Members', 'action' => 'view', $workinghour->member->id]) : '' ?></td>
-                <td><?= h($workinghour->date->format('Y-m-d')) ?></td>
-                <td><?= h($workinghour->description) ?></td>
                 <td><?= $this->Number->format($workinghour->duration) ?></td>
+                <td><?= h($workinghour->date->format('Y-m-d')) ?></td>
                 <td><?= $workinghour->has('worktype') ? $this->Html->link($workinghour->worktype->description, ['controller' => 'Workypes', 'action' => 'view', $workinghour->worktype->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $workinghour->id]) ?>

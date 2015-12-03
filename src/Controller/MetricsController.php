@@ -211,7 +211,10 @@ class MetricsController extends AppController
             
             if ($this->Metrics->save($metric)) {
                 $this->Flash->success(__('The metric has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
+                echo "<script>
+                        window.history.go(-2);
+                </script>";
             } else {
                 $this->Flash->error(__('The metric could not be saved. Please, try again.'));
             }

@@ -146,47 +146,6 @@ class WeeklyhoursController extends AppController
         $this->set('_serialize', ['weeklyhour']);
     }
     
-    public function addmultiple_temp()
-    {
-        // here just because of weeklyhours.ctp, look in to removing
-        $weeklyhour = $this->Weeklyhours->newEntity();
-        
-        if ($this->request->is('post')) {
-            // because this form has multiple weeklyhours we cannot just put the data in to an entity
-            // here we just take all the data from the form
-            $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
-            $formdata = $this->request->data;
-            $weeklyhours = $this->Weeklyhours->formatData($formdata, $current_weeklyreport);
-            $duplicates = $this->Weeklyhours->duplicates($weeklyhours);
-    
-            if(!$duplicates){    
-                // newEntities makes all the objects in the array to their own entities
-                $entities = $this->Weeklyhours->newEntities($weeklyhours);       
-                $saving_ok = True;
-                // saving all the entities one by one
-                foreach($entities as $ent){
-                    if (!$this->Weeklyhours->save($ent)) {
-                        $this->Flash->error(__('The weeklyhours could not be saved. Please, try again.'));
-                        $saving_ok = False;
-                    } 
-                }
-
-                if($saving_ok){
-                    $this->Flash->success(__('The weeklyhours have been saved. Weeklyreport complete.'));
-                    $this->request->session()->delete('current_weeklyreport');
-                    return $this->redirect(['controller' => 'Weeklyreports', 'action' => 'index']);  
-                }
-            }
-            else{
-                $this->Flash->error(__('The weeklyhours could not be saved. Duplicate members'));
-            }
-        }
-        $project_id = $this->request->session()->read('selected_project')['id'];
-        $weeklyreports = $this->Weeklyhours->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
-        $members = $this->Weeklyhours->Members->find('list', ['limit' => 200, 'conditions' => array('Members.project_id' => $project_id)]);
-        $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
-        $this->set('_serialize', ['weeklyhour']);
-    }
     /**
      * Edit method
      *
@@ -207,7 +166,10 @@ class WeeklyhoursController extends AppController
             // can edit without changing weeklyreport id
             if ($this->Weeklyhours->save($weeklyhour)) {
                 $this->Flash->success(__('The weeklyhour has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
+                echo "<script>
+                        window.history.go(-2);
+                </script>";
             } else {
                 $this->Flash->error(__('The weeklyhour could not be saved. Please, try again.'));
             }
