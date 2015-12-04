@@ -10,6 +10,7 @@ if($this->request->session()->check('selected_project')){
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li>
         <li><?= $this->Html->link(__('New Weeklyreport'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
         <!--<li><?= $this->Html->link(__('Upload Weeklyreport'), ['action' => 'upload']) ?></li>-->
     </ul>
 </nav>

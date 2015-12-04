@@ -40,6 +40,40 @@ print_r($this->request->session()->read('selected_project_role'));
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+    <style>
+    ulnav {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    .linav {
+        float: left;
+        border-right:1px solid #bbb;
+    }
+
+    li:last-child {
+        border-right: none;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: left;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+        background-color: #111;
+    }
+
+    .active {
+        background-color: #4CAF50;
+    }
+    </style>
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
@@ -61,6 +95,20 @@ print_r($this->request->session()->read('selected_project_role'));
             </li>
         </ul>
 
+        <?php if($this->request->session()->check('selected_project')){ ?>
+            <ul id="ulnav">
+                <li class="linav"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></a></li>
+                <li class="linav"><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
+                <li class="linav"><?= $this->Html->link(__('Weeklyreports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
+                <li class="linav"><?= $this->Html->link(__('Workinghours'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
+                <li class="linav"><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
+                <ul style="float:right;list-style-type:none;">
+                  <li class="linav"><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
+                </ul>
+            </ul>
+        <?php } ?>
+        
+        
         <!--
         <section class="top-bar-section">
             <ul class="right">

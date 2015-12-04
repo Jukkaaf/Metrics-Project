@@ -1,10 +1,3 @@
-<?php
-if($this->request->session()->check('selected_project')){
-    $selected_project = $this->request->session()->read('selected_project');
-    $id = $selected_project['id'];
-}
-?>
-
 <?php echo $this->Highcharts->includeExtraScripts(); ?>
 
 <div class="metrics form large-9 medium-8 columns content">
@@ -26,7 +19,7 @@ if($this->request->session()->check('selected_project')){
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li> 
+        <li><?= $this->Html->link(__('Weeklyreports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li> 
     </ul>
 </nav>
 <div class="metrics index large-9 medium-8 columns content">
