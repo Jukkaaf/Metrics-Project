@@ -168,19 +168,19 @@ class ProjectsController extends AppController
             // so if he or she is a developer and a supervisor, we save the latter
             foreach($query as $temp){
                 // if supervisor, overwrite all other memberships
-                if($temp->project_role == "supervisor" && $temp->ending_date > $time){
+                if($temp->project_role == "supervisor" && ($temp->ending_date > $time || $temp->ending_date == NULL)){
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
                 }
                 // if the user is a manager in the project 
                 // but we have not yet found out that he or she is a supervisor
                 // if dev or null then it gets overwritten
-                elseif($temp->project_role == "manager" && $project_role != "supervisor" && $temp->ending_date > $time){
+                elseif($temp->project_role == "manager" && $project_role != "supervisor" && ($temp->ending_date > $time || $temp->ending_date == NULL)){
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
                 }
                 // if we have not found out that the user is a manager or a supervisor
-                elseif($project_role != "supervisor" && $project_role != "manager" && $temp->ending_date > $time){
+                elseif($project_role != "supervisor" && $project_role != "manager" && ($temp->ending_date > $time || $temp->ending_date == NULL)){
                     $project_role = $temp->project_role;
                     $project_memberid = $temp->id;
                 }      
