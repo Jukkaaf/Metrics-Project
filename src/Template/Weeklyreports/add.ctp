@@ -1,10 +1,10 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?></li>
     </ul>
 </nav>
-<div class="weeklyreports form large-9 medium-8 columns content">
+<div class="weeklyreports form large-5 medium-8 columns content float: left">
     <?= $this->Form->create($weeklyreport) ?>
     <fieldset>
         <legend><?= __('Add Weeklyreport, Page 1/3') ?></legend>

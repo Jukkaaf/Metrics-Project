@@ -16,7 +16,7 @@
 $cakeDescription = 'CakePHP: the rapid development php framework';
 
 //debug prints
-print_r($this->request->session()->read('selected_project_role'));
+//print_r($this->request->session()->read('selected_project_role'));
 ?>
 <!DOCTYPE html>
 <html>
@@ -76,12 +76,18 @@ print_r($this->request->session()->read('selected_project_role'));
     </style>
 </head>
 <body>
+    <div style="background-color: #15848F; color: white; font-weight: bold">
+        <?php
+        print_r($this->request->session()->read('selected_project_role'));
+        ?>
+    </div>
     <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
+        <ul class="title-area large-2 medium-4 columns">
             <li class="name">
                 <h1><a href=""><?= $this->fetch('title') ?></a></h1>
             </li>
         </ul>
+        <!--
         <ul class="top-bar-section">
             <li class="right">
                 <?php
@@ -94,20 +100,34 @@ print_r($this->request->session()->read('selected_project_role'));
                 ?>
             </li>
         </ul>
-
-        <?php if($this->request->session()->check('selected_project')){ ?>
+        -->
+        <ul id="ulnav">
+            <li class="linav"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></a></li>
+        </ul>
+        <?php if(empty($this->request->session()->read('Auth'))){ ?>
             <ul id="ulnav">
-                <li class="linav"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></a></li>
+                <ul style="float:right;list-style-type:none;">
+                  <li class="linav"><?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?></li>
+                  <li class="linav"><?= $this->Html->link(__('Sign up'), ['controller' => 'Users', 'action' => 'signup']) ?></li>
+                </ul>
+            </ul>   
+        <?php } elseif($this->request->session()->check('selected_project')){ ?>
+            <ul id="ulnav">
                 <li class="linav"><?= $this->Html->link(__('Project'), ['controller' => 'Projects', 'action' => 'view', $this->request->session()->read('selected_project')['id']]) ?></li>
                 <li class="linav"><?= $this->Html->link(__('Weeklyreports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li>
                 <li class="linav"><?= $this->Html->link(__('Workinghours'), ['controller' => 'Workinghours', 'action' => 'index']) ?></li>
                 <li class="linav"><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
                 <ul style="float:right;list-style-type:none;">
-                  <li class="linav"><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
+                    <li class="linav"><?= $this->Html->link(__('Profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?></li>
+                    <li class="linav"><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
                 </ul>
             </ul>
-        <?php } ?>
-        
+        <?php } else{?>
+            <ul style="float:right;list-style-type:none;">
+                <li class="linav"><?= $this->Html->link(__('Profile'), ['controller' => 'Users', 'action' => 'editprofile']) ?></li>
+                <li class="linav"><?= $this->Html->link(__('Log out'), ['controller' => 'Users', 'action' => 'logout']) ?></li>
+            </ul>
+        <?php }?>
         
         <!--
         <section class="top-bar-section">

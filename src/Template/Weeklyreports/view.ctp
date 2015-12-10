@@ -1,11 +1,11 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Edit Weeklyreport'), ['action' => 'edit', $weeklyreport->id]) ?> </li>
     </ul>
 </nav>
-<div class="weeklyreports view large-9 medium-8 columns content">
+<div class="weeklyreports view large-7 medium-8 columns content float: left">
     <h3><?= h($weeklyreport->title) ?></h3>
     <table class="vertical-table">
         <tr>

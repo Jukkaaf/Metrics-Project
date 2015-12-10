@@ -5,16 +5,14 @@ if($this->request->session()->check('selected_project')){
 }
 ?>
 
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li>
         <li><?= $this->Html->link(__('New Weeklyreport'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('Charts'), ['controller' => 'Charts', 'action' => 'index']) ?></li>
-        <!--<li><?= $this->Html->link(__('Upload Weeklyreport'), ['action' => 'upload']) ?></li>-->
     </ul>
 </nav>
-<div class="weeklyreports index large-9 medium-8 columns content">
+<div class="weeklyreports index large-7 medium-8 columns content float: left">
     <h3><?= __('Weeklyreports') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
