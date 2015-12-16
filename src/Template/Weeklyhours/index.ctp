@@ -1,18 +1,10 @@
-<?php
-if($this->request->session()->check('selected_project')){
-    $selected_project = $this->request->session()->read('selected_project');
-    $id = $selected_project['id'];
-}
-?>
-
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li> 
         <li><?= $this->Html->link(__('New Weeklyhour'), ['action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="weeklyhours index large-9 medium-8 columns content">
+<div class="weeklyhours index large-7 medium-8 columns content  float: left">
     <h3><?= __('Weeklyhours') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
@@ -25,8 +17,15 @@ if($this->request->session()->check('selected_project')){
         </thead>
         <tbody>
             <?php foreach ($weeklyhours as $weeklyhour): ?>
-            <tr>
-                <td><?= $weeklyhour->has('member') ? $this->Html->link($weeklyhour->member->id, ['controller' => 'Members', 'action' => 'view', $weeklyhour->member->id]) : '' ?></td>
+            <tr>        
+                <?php
+                    foreach($memberlist as $member){
+                        if($weeklyhour->member->id == $member['id']){
+                           $weeklyhour->member['member_name'] = $member['member_name'];
+                        }
+                    }
+                ?>
+                <td><?= $weeklyhour->has('member') ? $this->Html->link($weeklyhour->member->member_name, ['controller' => 'Members', 'action' => 'view', $weeklyhour->member->id]) : '' ?></td>
                 <td><?= $weeklyhour->has('weeklyreport') ? $this->Html->link($weeklyhour->weeklyreport->title, ['controller' => 'Weeklyreports', 'action' => 'view', $weeklyhour->weeklyreport->id]) : '' ?></td>
                 <td><?= $this->Number->format($weeklyhour->duration) ?></td>
                 <td class="actions">

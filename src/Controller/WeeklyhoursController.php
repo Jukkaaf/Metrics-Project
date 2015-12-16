@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 /**
  * Weeklyhours Controller
  *
@@ -23,7 +24,13 @@ class WeeklyhoursController extends AppController
             'contain' => ['Weeklyreports', 'Members'],
             'conditions' => array('Members.project_id' => $project_id)
         ];
+        
+        $membersTable = TableRegistry::get('Members');
+        // list of members so we can display usernames instead of id's
+        $memberlist = $membersTable->getMembers($project_id);
+        
         $this->set('weeklyhours', $this->paginate($this->Weeklyhours));
+        $this->set(compact('memberlist'));
         $this->set('_serialize', ['weeklyhours']);
     }
 
@@ -41,6 +48,15 @@ class WeeklyhoursController extends AppController
             'contain' => ['Weeklyreports', 'Members'],
             'conditions' => array('Members.project_id' => $project_id)
         ]);
+        $membersTable = TableRegistry::get('Members');
+        // list of members so we can display usernames instead of id's
+        $memberlist = $membersTable->getMembers($project_id);
+
+        foreach($memberlist as $member){
+            if($weeklyhour->member->id == $member['id']){
+               $weeklyhour->member['member_name'] = $member['member_name'];
+            }
+        }
         $this->set('weeklyhour', $weeklyhour);
         $this->set('_serialize', ['weeklyhour']);
     }
@@ -77,7 +93,9 @@ class WeeklyhoursController extends AppController
         $project_id = $this->request->session()->read('selected_project')['id'];
         $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
         // create a list of key valuepairs where thevalue is their member id and key is the members email + role
-        $memberlist = $this->Weeklyhours->getMembers($project_id);
+        $membersTable = TableRegistry::get('Members');
+        // list of members so we can display usernames instead of id's
+        $memberlist = $membersTable->getMembers($project_id);
         //count the workinghours for members so they can be translated to weeklyhours 
         $hourlist = $this->Weeklyhours->getHours($memberlist, $current_weeklyreport['week']);
         

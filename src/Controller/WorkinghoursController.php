@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 /**
  * Workinghours Controller
  *
@@ -23,7 +24,13 @@ class WorkinghoursController extends AppController
             'contain' => ['Members', 'Worktypes'],
             'conditions' => array('Members.project_id' => $project_id)
         ];
+        
+        $membersTable = TableRegistry::get('Members');
+        // list of members so we can display usernames instead of id's
+        $memberlist = $membersTable->getMembers($project_id);
+
         $this->set('workinghours', $this->paginate($this->Workinghours));
+        $this->set(compact('memberlist'));
         $this->set('_serialize', ['workinghours']);
     }
 
@@ -41,6 +48,18 @@ class WorkinghoursController extends AppController
             'contain' => ['Members', 'Worktypes'],
             'conditions' => array('Members.project_id' => $project_id)
         ]);
+        
+        $membersTable = TableRegistry::get('Members');
+        // list of members so we can display usernames instead of id's
+        $memberlist = $membersTable->getMembers($project_id);
+
+        foreach($memberlist as $member){
+            if($workinghour->member->id == $member['id']){
+               $workinghour->member['member_name'] = $member['member_name'];
+            }
+        }
+
+        
         $this->set('workinghour', $workinghour);
         $this->set('_serialize', ['workinghour']);
     }
@@ -129,7 +148,7 @@ class WorkinghoursController extends AppController
         $workinghour = $this->Workinghours->get($id, [
             'contain' => ['Members', 'Worktypes'],
             'conditions' => array('Members.project_id' => $project_id)
-        ]);
+        ]);  
         if ($this->request->is(['patch', 'post', 'put'])) {
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);
             if ($this->Workinghours->save($workinghour)) {
@@ -144,7 +163,7 @@ class WorkinghoursController extends AppController
         $members = $this->Workinghours->Members->find('list', ['limit' => 200])
                                                 ->where(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date >' => $now])
                                                 ->orWhere(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date IS' => NULL]);
-        $this->set(compact('workinghour', 'members', 'worktypes'));
+        $this->set(compact('workinghour', 'members', 'worktypes', 'memberlist'));
         $this->set('_serialize', ['workinghour']);
     }
 

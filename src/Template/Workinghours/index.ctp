@@ -1,19 +1,11 @@
-<?php
-if($this->request->session()->check('selected_project')){
-    $selected_project = $this->request->session()->read('selected_project');
-    $id = $selected_project['id'];
-}
-?>
-
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li>
-        <li><?= $this->Html->link(__('New Workinghour'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('New Workinghour, for someone else'), ['action' => 'adddev']) ?></li>
+        <li><?= $this->Html->link(__('Log time'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Log time for another member'), ['action' => 'adddev']) ?></li>
     </ul>
 </nav>
-<div class="workinghours index large-9 medium-8 columns content">
+<div class="workinghours index large-8 medium-8 columns content float: left">
     <h3><?= __('Workinghours') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
@@ -28,7 +20,14 @@ if($this->request->session()->check('selected_project')){
         <tbody>
             <?php foreach ($workinghours as $workinghour): ?>
             <tr>
-                <td><?= $workinghour->has('member') ? $this->Html->link($workinghour->member->id, ['controller' => 'Members', 'action' => 'view', $workinghour->member->id]) : '' ?></td>
+                <?php
+                    foreach($memberlist as $member){
+                        if($workinghour->member->id == $member['id']){
+                           $workinghour->member['member_name'] = $member['member_name'];
+                        }
+                    }
+                ?>
+                <td><?= $workinghour->has('member') ? $this->Html->link($workinghour->member->member_name, ['controller' => 'Members', 'action' => 'view', $workinghour->member->id]) : '' ?></td>
                 <td><?= $this->Number->format($workinghour->duration) ?></td>
                 <td><?= h($workinghour->date->format('Y-m-d')) ?></td>
                 <td><?= $workinghour->has('worktype') ? $this->Html->link($workinghour->worktype->description, ['controller' => 'Workypes', 'action' => 'view', $workinghour->worktype->id]) : '' ?></td>

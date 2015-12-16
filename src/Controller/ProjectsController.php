@@ -22,7 +22,6 @@ class ProjectsController extends AppController
     public function index()
     {
         $project_list = $this->request->session()->read('project_list');
-        print_r($project_list);
         
         $this->paginate = [
             'conditions' => array('id IN' => $project_list)
@@ -167,6 +166,7 @@ class ProjectsController extends AppController
                 $project_list[] = $temp->id;
             }
             
+            $this->request->session()->write('is_admin', True);
             $this->request->session()->write('project_list', $project_list);
             return True;
         } 
@@ -177,15 +177,19 @@ class ProjectsController extends AppController
 
             $query = $members
                 ->find()
-                ->select(['project_id', 'ending_date'])
+                ->select(['project_id', 'ending_date', 'project_role'])
                 ->where(['user_id =' => $this->Auth->user('id')])
                 ->toArray();
             
+            $is_supervisor = False;
             $project_list = array();
             foreach($query as $temp){
                 if($temp->ending_date < $time || $temp->ending_date == NULL){
-                    $project_list[] = $temp->project_id; 
-                }   
+                    $project_list[] = $temp->project_id;
+                    if($temp->project_role == 'supervisor'){
+                        $is_supervisor = True;
+                    }
+                }
             }
             // add public projects to the list
             $query2 = $this->Projects
@@ -198,6 +202,7 @@ class ProjectsController extends AppController
                 $project_list[] = $temp->id;
             }
             
+            $this->request->session()->write('is_supervisor', $is_supervisor);
             $this->request->session()->write('project_list', $project_list);
             return True;
         }  

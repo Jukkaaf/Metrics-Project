@@ -1,10 +1,24 @@
 <nav class="large-2 medium-4 columns" id="actions-sidebar">    
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('Worktypes'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
+        <?php
+            $admin = $this->request->session()->read('is_admin');
+            $supervisor = $this->request->session()->read('is_supervisor');
+            if($admin){
+        ?>
+            <li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
+            <li><?= $this->Html->link(__('Manage Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link(__('Metrictypes'), ['controller' => 'Metrictypes', 'action' => 'index']) ?> </li>
+            <li><?= $this->Html->link(__('Worktypes'), ['controller' => 'Worktypes', 'action' => 'index']) ?> </li>
+        <?php
+            }
+            if(!$admin && $supervisor){
+        ?>
+            <li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
+        <?php
+            }
+        ?>
+        
     </ul>    
 </nav>
 <div class="projects index large-8 medium-8 columns content float: left">

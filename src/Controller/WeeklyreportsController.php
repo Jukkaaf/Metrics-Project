@@ -68,9 +68,9 @@ class WeeklyreportsController extends AppController
         ]);
         
         // get weeklyhours because the weeklyhours table has a function we want to use
-        $weeklyhours = TableRegistry::get('Weeklyhours');
+        $members = TableRegistry::get('Members');
         // list of members so we can display usernames instead of id's
-        $memberlist = $weeklyhours->getMembers($project_id);
+        $memberlist = $members->getMembers($project_id);
         foreach($weeklyreport->weeklyhours as $weeklyhours){
             foreach($memberlist as $member){
                 if($weeklyhours->member_id == $member['id']){

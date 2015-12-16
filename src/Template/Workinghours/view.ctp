@@ -1,16 +1,16 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('Edit Workinghour'), ['action' => 'edit', $workinghour->id]) ?> </li>
     </ul>
 </nav>
-<div class="workinghours view large-9 medium-8 columns content">
-    <h3><?= h($workinghour->id) ?></h3>
+<div class="workinghours view large-7 medium-8 columns content float: left">
+    <h3><?= h("View workinghour") ?></h3>
     <table class="vertical-table">
         <tr>
             <th><?= __('Member') ?></th>
-            <td><?= $workinghour->has('member') ? $this->Html->link($workinghour->member->id, ['controller' => 'Members', 'action' => 'view', $workinghour->member->id]) : '' ?></td>
+            <td><?= $workinghour->has('member') ? $this->Html->link($workinghour->member->member_name, ['controller' => 'Members', 'action' => 'view', $workinghour->member->id]) : '' ?></td>
         </tr>
         <tr>
             <th><?= __('Description') ?></th>

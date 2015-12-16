@@ -1,14 +1,6 @@
-<?php
-if($this->request->session()->check('selected_project')){
-    $selected_project = $this->request->session()->read('selected_project');
-    $id = $selected_project['id'];
-}
-?>
-
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Back'), ['controller' => 'Projects', 'action' => 'view', $id]) ?></li>        
+        <li class="heading"><?= __('Actions') ?></li>     
         <li><?= $this->Html->link(__('New Member'), ['action' => 'add']) ?></li>
     </ul>
 </nav>

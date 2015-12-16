@@ -6,7 +6,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 /**
  * Members Model
  *
@@ -90,5 +91,36 @@ class MembersTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['project_id'], 'Projects'));
         return $rules;
+    }
+    
+    
+    public function getMembers($project_id){
+        // returns an array with members
+        // the info is the members id, project role and email from user
+        $memberinfo = array();
+        $now = Time::now();
+        $members = TableRegistry::get('Members');   
+        $query = $members
+            ->find()
+            ->select(['id', 'project_role', 'user_id'])
+            ->where(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date >' => $now])
+            ->orWhere(['project_id' => $project_id, 'project_role !=' => 'supervisor', 'ending_date IS' => NULL])
+            ->toArray();
+        
+        $users = TableRegistry::get('Users'); 
+        foreach($query as $temp){         
+            $query2 = $users
+                ->find()
+                ->select(['role', 'first_name', 'last_name'])
+                ->where(['id =' => $temp->user_id])
+                ->toArray();
+            
+            $temp_memberinfo['id'] = $temp->id;
+            $temp_memberinfo['member_name'] = $query2[0]->first_name." ".$query2[0]->last_name." - ".$temp->project_role; 
+
+            $memberinfo[] = $temp_memberinfo; 
+        }
+        
+        return $memberinfo;
     }
 }

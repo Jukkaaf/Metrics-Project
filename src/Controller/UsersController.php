@@ -46,6 +46,8 @@ class UsersController extends AppController
         $this->request->session()->delete('current_metrics');
         $this->request->session()->delete('current_weeklyhours');
         $this->request->session()->delete('project_list');
+        $this->request->session()->delete('is_admin');
+        $this->request->session()->delete('is_supervisor');
         
         $this->Flash->success('You are now logged out.');
         return $this->redirect($this->Auth->logout());
