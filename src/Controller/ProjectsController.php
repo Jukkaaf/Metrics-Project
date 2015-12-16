@@ -21,6 +21,13 @@ class ProjectsController extends AppController
      */
     public function index()
     {
+        $project_list = $this->request->session()->read('project_list');
+        print_r($project_list);
+        
+        $this->paginate = [
+            'conditions' => array('id IN' => $project_list)
+        ];
+        
         $this->set('projects', $this->paginate($this->Projects));
         $this->set('_serialize', ['projects']);
     }
@@ -128,8 +135,9 @@ class ProjectsController extends AppController
     
     // this allows anyone to go to the frontpage
     public function beforeFilter(\Cake\Event\Event $event)
-    {
-        $this->Auth->allow(['index']);
+    {   
+        // we now have to do stuff in isauthorized in index, so this will be removed
+        //$this->Auth->allow(['index']);
     }
     
     public function isAuthorized($user)
@@ -146,6 +154,53 @@ class ProjectsController extends AppController
         if (isset($user['role']) && $user['role'] === 'inactive') {
             return False;
         }
+        
+        // the admin can see all the projects
+        if ($this->request->action === 'index' && $user['role'] === 'admin'){
+            $query = $this->Projects
+                ->find()
+                ->select(['id'])
+                ->toArray();
+            
+            $project_list = array();
+            foreach($query as $temp){
+                $project_list[] = $temp->id;
+            }
+            
+            $this->request->session()->write('project_list', $project_list);
+            return True;
+        } 
+        
+        if ($this->request->action === 'index'){    
+            $time = Time::now();
+            $members = TableRegistry::get('Members');    
+
+            $query = $members
+                ->find()
+                ->select(['project_id', 'ending_date'])
+                ->where(['user_id =' => $this->Auth->user('id')])
+                ->toArray();
+            
+            $project_list = array();
+            foreach($query as $temp){
+                if($temp->ending_date < $time || $temp->ending_date == NULL){
+                    $project_list[] = $temp->project_id; 
+                }   
+            }
+            // add public projects to the list
+            $query2 = $this->Projects
+                ->find()
+                ->select(['id'])
+                ->where(['is_public' => 1])
+                ->toArray();
+            
+            foreach($query2 as $temp){
+                $project_list[] = $temp->id;
+            }
+            
+            $this->request->session()->write('project_list', $project_list);
+            return True;
+        }  
         
         if ($this->request->action === 'view') 
         {   
@@ -197,8 +252,19 @@ class ProjectsController extends AppController
             $this->request->session()->write('selected_project_role', $project_role);
             $this->request->session()->write('selected_project_memberid', $project_memberid);
             // if the user is not a member of the project return false
-            if($project_role == "notmember"){
-                return False;
+            // unless the project is public
+            if($project_role == "notmember"){  
+                $query = $this->Projects
+                    ->find()
+                    ->select(['is_public'])
+                    ->where(['id' => $this->request->pass[0]])
+                    ->toArray();          
+                if($query[0]->is_public == 1){
+                    return True;
+                }
+                else{
+                    return False;
+                }    
             }
             else{
                 return True;
