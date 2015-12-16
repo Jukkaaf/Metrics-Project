@@ -54,3 +54,11 @@
         <?php echo $this->Highcharts->render($testcaseChart, 'testcasechart'); ?>
     </div>
 </div>
+<div class="metrics index large-9 medium-8 columns content">   
+    <div class="chart">
+        <h4>Hours Chart</h4>
+        <div id="hourswrapper" style="display: block; float: left; width:90%; margin-bottom: 20px;"></div>
+        <div class="clear"></div>
+        <?php echo $this->Highcharts->render($hoursChart, 'hourschart'); ?>
+    </div>
+</div>

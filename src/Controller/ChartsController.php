@@ -62,6 +62,7 @@ class ChartsController extends AppController
         $reqData = $this->Charts->reqColumnData($project_id, $weeklyreports['id']);
         $commitData = $this->Charts->commitAreaData($project_id, $weeklyreports['id']);
         $testcaseData = $this->Charts->testcaseAreaData($project_id, $weeklyreports['id']);
+        $hoursData=$this->Charts->hoursData($project_id);
         
         // insert the data in to the charts
         $phaseChart->xAxis->categories = $weeklyreports['weeks'];
@@ -111,7 +112,13 @@ class ChartsController extends AppController
             'data' => $testcaseData['testsPassed']
         );
         
-        
+        //new chart: hours stacked by work type         
+        //$hoursChart->xAxis->categories = $weeklyreports['weeks'];
+        //Different expression here: see line 376 for multiple categories
+        $hoursChart->series[] = array(
+            'name' => 'Total hours',
+            'data' => $hoursData['hoursTotal']
+        );
         $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'weekmin', 'weekmax', 'yearmin', 'yearmax'));
     }
     
@@ -327,6 +334,81 @@ class ChartsController extends AppController
         $myChart->xAxis->labels->x = 5;
         $myChart->xAxis->labels->y = 20;
         $myChart->yAxis->title->text = 'Ammount Phases';
+        $myChart->enable->autoStep = false;
+        // credits setting  [Highcharts.com  displayed on chart]
+        $myChart->credits->enabled = true;
+        $myChart->credits->text = 'Example.com';
+        $myChart->credits->href = 'http://example.com';
+        
+        return $myChart;
+    }
+    
+    public function hoursChart(){
+        $chartName = 'Area Chart';
+
+        $myChart = $this->Highcharts->createChart();
+
+        $myChart->title = array(
+            'text' => 'Hours (stacked)', 
+            'x' => 20,
+            'y' => 20,
+            'align' => 'left',
+            'styleFont' => '18px Metrophobic, Arial, sans-serif',
+            'styleColor' => '#0099ff',
+        );
+
+        $myChart->chart->renderTo = 'hourswrapper';
+        $myChart->chart->type = 'column';
+        $myChart->chart->width =  800;
+        $myChart->chart->height = 600;
+        $myChart->chart->marginTop = 60;
+        $myChart->chart->marginLeft = 90;
+        $myChart->chart->marginRight = 30;
+        $myChart->chart->marginBottom = 110;
+        $myChart->chart->spacingRight = 10;
+        $myChart->chart->spacingBottom = 15;
+        $myChart->chart->spacingLeft = 0;
+        $myChart->chart->alignTicks = FALSE;
+        $myChart->chart->backgroundColor->linearGradient = array(0, 0, 0, 300);
+        $myChart->chart->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));                
+
+        $myChart->title->text = 'Hours';
+        $myChart->xAxis->categories = array(
+                    'Planning and management',
+                    'Coding and testing',
+                    'Studying',
+                    'Documentation',
+                    'Other'
+        );
+        $myChart->xAxis->labels->formatter = $this->Highcharts->createJsExpr("function() { return this.value;}");
+        $myChart->yAxis->title->text = 'temp';
+        $myChart->yAxis->labels->formatter = $this->Highcharts->createJsExpr("function() { return this.value;}");
+        $myChart->tooltip->formatter = $this->Highcharts->createJsExpr("function() {
+        return this.series.name +' <b>'+
+        Highcharts.numberFormat(this.y, 0) +'</b><br/>Week number '+ this.x;}");
+        $myChart->plotOptions->area->marker->enabled = false;
+        $myChart->plotOptions->area->marker->symbol = 'circle';
+        $myChart->plotOptions->area->marker->radius = 2;
+        $myChart->plotOptions->area->marker->states->hover->enabled = true;
+
+        $myChart->legend->enabled = true;
+        $myChart->legend->layout = 'horizontal';
+        $myChart->legend->align = 'center';
+        $myChart->legend->verticalAlign  = 'bottom';
+        $myChart->legend->itemStyle = array('color' => '#222');
+        $myChart->legend->backgroundColor->linearGradient = array(0, 0, 0, 25);
+        $myChart->legend->backgroundColor->stops = array(array(0, 'rgb(217, 217, 217)'), array(1, 'rgb(255, 255, 255)'));
+
+        $myChart->plotOptions->column->stacking = "normal";
+        $myChart->plotOptions->column->dataLabels->enabled = 1;
+        $myChart->plotOptions->column->dataLabels->color = $this->Highcharts->createJsExpr(
+        "(Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'");
+        $myChart->xAxis->labels->enabled = true;
+        $myChart->xAxis->labels->align = 'right';
+        $myChart->xAxis->labels->step = 1;
+        $myChart->xAxis->labels->x = 5;
+        $myChart->xAxis->labels->y = 20;
+        $myChart->yAxis->title->text = 'Total hours';
         $myChart->enable->autoStep = false;
         // credits setting  [Highcharts.com  displayed on chart]
         $myChart->credits->enabled = true;
