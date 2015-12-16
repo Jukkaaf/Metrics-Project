@@ -235,4 +235,23 @@ class ChartsTable extends Table
         
         return $data;
     }
+    
+     public function hoursData($project_id){
+        $base = TableRegistry::get('Workinghours');
+//select the sum of work durations, grouped by work type         
+        $query = $base
+                    ->find()
+                    ->select(['SUM(duration)'])
+                    ->where(['id =' => $project_id])
+                    ->group(['worktype_id'])
+                    ->toArray();
+
+        $data = array();
+        $data['management'] = $query[0]->value;
+        $data['code'] = $query[1]->value;
+        $data['document'] = $query[2]->value;
+        $data['study'] = $query[3]->value;
+        $data['other'] = $query[4]->value;
+        return $data;
+    }
 }
