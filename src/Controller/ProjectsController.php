@@ -136,7 +136,20 @@ class ProjectsController extends AppController
     public function beforeFilter(\Cake\Event\Event $event)
     {   
         // we now have to do stuff in isauthorized in index, so this will be removed
-        //$this->Auth->allow(['index']);
+        if(!$this->Auth->user()){
+            // add public projects to the list
+            $query2 = $this->Projects
+                ->find()
+                ->select(['id'])
+                ->where(['is_public' => 1])
+                ->toArray();     
+            foreach($query2 as $temp){
+                $project_list[] = $temp->id;
+            }
+            $this->request->session()->write('project_list', $project_list);
+            
+            $this->Auth->allow(['index']);
+        }    
     }
     
     public function isAuthorized($user)

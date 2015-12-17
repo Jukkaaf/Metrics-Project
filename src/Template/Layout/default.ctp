@@ -104,7 +104,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <ul id="ulnav">
             <li class="linav"><?= $this->Html->link(__('Home'), ['controller' => 'Projects', 'action' => 'index']) ?></a></li>
         </ul>
-        <?php if(empty($this->request->session()->read('Auth'))){ ?>
+        <?php if(empty($this->request->session()->read('Auth.User'))){ ?>
             <ul id="ulnav">
                 <ul style="float:right;list-style-type:none;">
                   <li class="linav"><?= $this->Html->link(__('Log in'), ['controller' => 'Users', 'action' => 'login']) ?></li>
