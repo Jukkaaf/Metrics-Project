@@ -1,25 +1,20 @@
 <?php echo $this->Highcharts->includeExtraScripts(); ?>
 
-<div class="metrics form large-9 medium-8 columns content">
-    <?= $this->Form->create() ?>
-    <fieldset>
-        <legend><?= __('Edit limits') ?></legend>
-        <?php
-            echo $this->Form->input('weekmin', ['options' => $weekmin]);
-            echo $this->Form->input('weekmax', ['options' => $weekmax]);
-            echo $this->Form->input('yearmin', ['options' => $yearmin]);
-            echo $this->Form->input('yearmax', ['options' => $yearmax]);
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
-</div>
-
-
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Weeklyreports'), ['controller' => 'Weeklyreports', 'action' => 'index']) ?></li> 
+        <li class="heading"><?= __('Actions') ?></li> 
+        <?= $this->Form->create() ?>
+        <fieldset>
+            <legend><?= __('Edit limits') ?></legend>
+            <?php
+                echo $this->Form->input('weekmin', array('type' => 'number', 'value' => $this->request->session()->read('chart_limits')['weekmin']));
+                echo $this->Form->input('weekmax', array('type' => 'number', 'value' => $this->request->session()->read('chart_limits')['weekmax']));
+                echo $this->Form->input('yearmin', array('type' => 'number', 'value' => $this->request->session()->read('chart_limits')['yearmin']));
+                echo $this->Form->input('yearmax', array('type' => 'number', 'value' => $this->request->session()->read('chart_limits')['yearmax']));
+            ?>
+        </fieldset>
+        <?= $this->Form->button(__('Submit')) ?>
+        <?= $this->Form->end() ?>
     </ul>
 </nav>
 <div class="metrics index large-9 medium-8 columns content">
@@ -56,7 +51,7 @@
 </div>
 <div class="metrics index large-9 medium-8 columns content">   
     <div class="chart">
-        <h4>Hours Chart</h4>
+        <h4>Total Hours Chart</h4>
         <div id="hourswrapper" style="display: block; float: left; width:90%; margin-bottom: 20px;"></div>
         <div class="clear"></div>
         <?php echo $this->Highcharts->render($hoursChart, 'hourschart'); ?>

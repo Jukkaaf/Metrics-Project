@@ -52,11 +52,6 @@ class ChartsController extends AppController
         }
         $chart_limits = $this->request->session()->read('chart_limits');
         
-        $weekmin = array(1 => 1, 2 => 2, 12 => 12, 34 => 34, 44 => 44, 53 => 53);
-        $weekmax = array(1 => 1, 2 => 2, 12 => 12, 34 => 34, 44 => 44, 53 => 53);
-        $yearmin = array(2014 => 2014, 2015 => 2015, 2016 => 2016);
-        $yearmax = array(2014 => 2014, 2015 => 2015, 2016 => 2016);
-        
         // get all the data
         $weeklyreports = $this->Charts->reports($project_id, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
         $phaseData = $this->Charts->phaseAreaData($project_id, $weeklyreports['id']);
@@ -127,7 +122,7 @@ class ChartsController extends AppController
                 $hoursData['other']
             )
         );
-        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'weekmin', 'weekmax', 'yearmin', 'yearmax'));
+        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart'));
     }
     
     public function testcaseChart() {
