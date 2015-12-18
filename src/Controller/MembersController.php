@@ -59,12 +59,18 @@ class MembersController extends AppController
             $member = $this->Members->patchEntity($member, $this->request->data);
             
             $member['project_id'] = $project_id;
-
-            if ($this->Members->save($member)) {
-                $this->Flash->success(__('The member has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The member could not be saved. Please, try again.'));
+            
+            // mangers cannot add supervisors
+            if($member['project_role'] != "supervisor" || $this->request->session()->read('selected_project_role') != 'manager'){
+                if ($this->Members->save($member)) {
+                    $this->Flash->success(__('The member has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The member could not be saved. Please, try again.'));
+                }
+            }
+            else{
+                $this->Flash->error(__('Managers cannot add supervisors'));
             }
         }          
         $users = $this->Members->Users->find('list', ['limit' => 200, 'conditions'=>array('Users.role !=' => 'inactive')]);
@@ -133,7 +139,15 @@ class MembersController extends AppController
         $project_role = $this->request->session()->read('selected_project_role');
         
         //special rule for members controller.
-        //only supervisors admins can add edit and delete members
+        //only supervisors admins can edit and delete members
+        // managers can add members, not supervisors
+        if ($this->request->action === 'add') 
+        {
+            if($project_role == "manager"){
+                return True;
+            }
+        }
+        
         if ($this->request->action === 'add' || $this->request->action === 'edit'
             || $this->request->action === 'delete') 
         {

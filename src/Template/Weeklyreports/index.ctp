@@ -2,6 +2,7 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New Weeklyreport'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Weeklyhours'), ['controller' => 'Weeklyhours', 'action' => 'index']) ?> </li> 
     </ul>
 </nav>
 <div class="weeklyreports index large-7 medium-8 columns content float: left">

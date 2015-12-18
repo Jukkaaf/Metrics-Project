@@ -1,7 +1,6 @@
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('Edit Workinghour'), ['action' => 'edit', $workinghour->id]) ?> </li>
     </ul>
 </nav>

@@ -1,11 +1,10 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('Edit Member'), ['action' => 'edit', $member->id]) ?> </li>
     </ul>
 </nav>
-<div class="members view large-9 medium-8 columns content">
+<div class="members view large-6 medium-8 columns content float: left">
     <h3><?= h($member->user->first_name . " ". $member->user->last_name) ?></h3>
     <table class="vertical-table">
         <tr>

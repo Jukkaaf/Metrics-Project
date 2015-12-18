@@ -20,7 +20,8 @@ class MetricsController extends AppController
         $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Projects', 'Metrictypes', 'Weeklyreports'],
-            'conditions' => array('Metrics.project_id' => $project_id)
+            'conditions' => array('Metrics.project_id' => $project_id),
+            'order' => ['date' => 'DESC']
         ];
         $this->set('metrics', $this->paginate($this->Metrics));
         $this->set('_serialize', ['metrics']);

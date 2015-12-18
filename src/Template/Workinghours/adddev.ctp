@@ -1,10 +1,9 @@
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Back'), ['action' => 'index']) ?> </li>
     </ul>
 </nav>
-<div class="workinghours form large-7 medium-8 columns content float: left">
+<div class="workinghours form large-4 medium-8 columns content float: left">
     <?= $this->Form->create($workinghour) ?>
     <fieldset>
         <legend><?= __('Add Workinghour') ?></legend>

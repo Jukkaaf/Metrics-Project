@@ -46,7 +46,8 @@ class WeeklyreportsController extends AppController
         $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Projects'],
-            'conditions' => array('Weeklyreports.project_id' => $project_id)
+            'conditions' => array('Weeklyreports.project_id' => $project_id),
+            'order' => ['created_on' => 'DESC']
         ];
         $this->set('weeklyreports', $this->paginate($this->Weeklyreports));
         $this->set('_serialize', ['weeklyreports']);

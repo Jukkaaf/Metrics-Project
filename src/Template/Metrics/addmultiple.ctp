@@ -1,9 +1,9 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
     </ul>
 </nav>
-<div class="metrics form large-9 medium-8 columns content">
+<div class="metrics form large-4 medium-8 columns content float: left">
     <?= $this->Form->create($metric) ?>
     <fieldset>
         <legend><?= __('Add Metrics, Page 2/3') ?></legend>

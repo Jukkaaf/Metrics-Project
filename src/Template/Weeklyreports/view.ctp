@@ -5,7 +5,7 @@
         <li><?= $this->Html->link(__('Edit Weeklyreport'), ['action' => 'edit', $weeklyreport->id]) ?> </li>
     </ul>
 </nav>
-<div class="weeklyreports view large-7 medium-8 columns content float: left">
+<div class="weeklyreports view large-6 medium-8 columns content float: left">
     <h3><?= h($weeklyreport->title) ?></h3>
     <table class="vertical-table">
         <tr>
@@ -60,8 +60,6 @@
                     <td class="actions">
                         <?= $this->Html->link(__('Edit'), ['controller' => 'Weeklyhours', 'action' => 'edit', $weeklyhours->id]) ?>
 
-                        <?= $this->Form->postLink(__('Delete'), ['controller' => 'Weeklyhours', 'action' => 'delete', $weeklyhours->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyhours->id)]) ?>
-
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -83,8 +81,6 @@
                     <td><?= h($metrics->value) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('Edit'), ['controller' => 'Metrics', 'action' => 'edit', $metrics->id]) ?>
-
-                        <?= $this->Form->postLink(__('Delete'), ['controller' => 'Metrics', 'action' => 'delete', $metrics->id], ['confirm' => __('Are you sure you want to delete # {0}?', $metrics->id)]) ?>
 
                     </td>
                 </tr>

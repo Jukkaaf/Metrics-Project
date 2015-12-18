@@ -22,7 +22,8 @@ class WorkinghoursController extends AppController
         $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Members', 'Worktypes'],
-            'conditions' => array('Members.project_id' => $project_id)
+            'conditions' => array('Members.project_id' => $project_id),
+            'order' => ['date' => 'DESC']
         ];
         
         $membersTable = TableRegistry::get('Members');
