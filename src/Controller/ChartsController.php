@@ -35,6 +35,7 @@ class ChartsController extends AppController
         $reqChart = $this->reqChart();
         $commitChart = $this->commitChart();
         $testcaseChart = $this->testcaseChart();
+        $hoursChart = $this->hoursChart();
         
         $project_id = $this->request->session()->read('selected_project')['id'];
         
@@ -62,7 +63,7 @@ class ChartsController extends AppController
         $reqData = $this->Charts->reqColumnData($project_id, $weeklyreports['id']);
         $commitData = $this->Charts->commitAreaData($project_id, $weeklyreports['id']);
         $testcaseData = $this->Charts->testcaseAreaData($project_id, $weeklyreports['id']);
-        $hoursData=$this->Charts->hoursData($project_id);
+        $hoursData = $this->Charts->hoursData($project_id);
         
         // insert the data in to the charts
         $phaseChart->xAxis->categories = $weeklyreports['weeks'];
@@ -115,16 +116,19 @@ class ChartsController extends AppController
         //new chart: hours stacked by work type         
         //$hoursChart->xAxis->categories = $weeklyreports['weeks'];
         //Different expression here: see line 376 for multiple categories
+
         $hoursChart->series[] = array(
-            'name' => 'Total hours',
-            'data' => $hoursData['hoursTotal']
+            'name' => 'Management',
+            'data' => array(
+                $hoursData['management'],
+                $hoursData['code'],
+                $hoursData['document'],
+                $hoursData['study'],
+                $hoursData['other']
+            )
         );
-        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'weekmin', 'weekmax', 'yearmin', 'yearmax'));
+        $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'weekmin', 'weekmax', 'yearmin', 'yearmax'));
     }
-    
-    
-    
-    
     
     public function testcaseChart() {
         $myChart = $this->Highcharts->createChart();

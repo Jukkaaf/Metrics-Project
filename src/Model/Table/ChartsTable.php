@@ -236,22 +236,79 @@ class ChartsTable extends Table
         return $data;
     }
     
-     public function hoursData($project_id){
-        $base = TableRegistry::get('Workinghours');
-//select the sum of work durations, grouped by work type         
-        $query = $base
-                    ->find()
-                    ->select(['SUM(duration)'])
-                    ->where(['id =' => $project_id])
-                    ->group(['worktype_id'])
-                    ->toArray();
-
+    public function hoursData($project_id){   
+        $members = TableRegistry::get('Members');
+        
+        // get a list of the members in the project
+        $query = $members
+                ->find()
+                ->select(['id'])
+                ->where(['project_id =' => $project_id])
+                ->toArray();
+        $memberlist = array();
+        foreach($query as $temp){
+            $memberlist[] = $temp->id;
+        }
+        
+        $workinghours = TableRegistry::get('Workinghours');
+        // get all the different work types one by one
         $data = array();
-        $data['management'] = $query[0]->value;
-        $data['code'] = $query[1]->value;
-        $data['document'] = $query[2]->value;
-        $data['study'] = $query[3]->value;
-        $data['other'] = $query[4]->value;
+        $query = $workinghours
+                ->find()
+                ->select(['duration'])
+                ->where(['worktype_id =' => 1, 'member_id IN' => $memberlist])
+                ->toArray();
+        $num = 0;
+        // count the total ammount of the duration of the worktype
+        foreach($query as $temp){
+            $num += $temp->duration;
+        }
+        $data['management'] = $num;
+        
+        $query = $workinghours
+                ->find()
+                ->select(['duration'])
+                ->where(['worktype_id =' => 2, 'member_id IN' => $memberlist])
+                ->toArray();
+        $num = 0;
+        foreach($query as $temp){
+            $num += $temp->duration;
+        }
+        $data['code'] = $num;
+        
+        $query = $workinghours
+                ->find()
+                ->select(['duration'])
+                ->where(['worktype_id =' => 3, 'member_id IN' => $memberlist])
+                ->toArray();
+        $num = 0;
+        foreach($query as $temp){
+            $num += $temp->duration;
+        }
+        $data['document'] = $num;
+        
+        $query = $workinghours
+                ->find()
+                ->select(['duration'])
+                ->where(['worktype_id =' => 4, 'member_id IN' => $memberlist])
+                ->toArray();
+        $num = 0;
+        foreach($query as $temp){
+            $num += $temp->duration;
+        }
+        $data['study'] = $num;
+        
+        $query = $workinghours
+                ->find()
+                ->select(['duration'])
+                ->where(['worktype_id =' => 5, 'member_id IN' => $memberlist])
+                ->toArray();
+        $num = 0;
+        foreach($query as $temp){
+            $num += $temp->duration;
+        }
+        $data['other'] = $num;
+        
         return $data;
     }
 }
