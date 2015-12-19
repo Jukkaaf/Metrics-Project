@@ -1,7 +1,6 @@
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Weeklyhour'), ['action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="weeklyhours index large-7 medium-8 columns content  float: left">
@@ -31,7 +30,6 @@
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $weeklyhour->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $weeklyhour->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $weeklyhour->id], ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyhour->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

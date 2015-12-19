@@ -18,7 +18,7 @@
         <?php
             }
         ?>
-        
+        <li><?= $this->Html->link(__('Public statistics'), ['controller' => 'Projects', 'action' => 'statistics']) ?> </li>
     </ul>    
 </nav>
 <div class="projects index large-8 medium-8 columns content float: left">

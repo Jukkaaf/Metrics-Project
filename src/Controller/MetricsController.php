@@ -59,6 +59,7 @@ class MetricsController extends AppController
             $metric = $this->Metrics->patchEntity($metric, $this->request->data);
             
             $metric['project_id'] = $project_id;
+            $metric['weeklyreport_id'] = NULL;
 
             if ($this->Metrics->save($metric)) {
                 $this->Flash->success(__('The metric has been saved.'));
@@ -138,58 +139,6 @@ class MetricsController extends AppController
         $this->set('_serialize', ['metric']);
     }
     
-    // probably bad/outdated code, update to be similar to the addmultiple in weeklyhours
-    public function addmultiple_old(){        
-        $project_id = $this->request->session()->read('selected_project')['id'];
-        $metric = $this->Metrics->newEntity();
-        
-        if ($this->request->is('post')) {
-            $formdata = $this->Metrics->patchEntity($metric, $this->request->data);
-            
-            $keys = ["phase", "totalPhases", "reqNew", "reqInProgress", "reqClosed", "reqRejected", "commits", "passedTestCases", "totalTestCases"];
-            // the project in this session
-            $selected_project = $this->request->session()->read('selected_project');
-            $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
-            
-            // rolling counter for the metrictype
-            // $keys array must be in same order as the metrictypes are in the database
-            $metrictype = 1;
-            $saveSuccess = True;
-            
-            // go trough the data from the form and read the data with keys from $keys array
-            foreach($keys as $key){
-                if($saveSuccess){
-                    $metric = $this->Metrics->newEntity();
-                    
-                    $metric['project_id'] = $selected_project['id'];                      
-                    $metric['metrictype_id'] = $metrictype;
-                    $metrictype += 1;
-                    $metric['weeklyreport_id'] = $current_weeklyreport['id'];
-                    $metric['date'] = $current_weeklyreport['created_on'];
-                    $metric['value'] = $formdata[$key];
-
-                    if (!$this->Metrics->save($metric)){
-                        $saveSuccess = False;
-                    }
-                    
-                }  
-            }
-            if($saveSuccess){
-                $this->Flash->success(__('The metrics were saved.'));
-                return $this->redirect(
-                    ['controller' => 'Weeklyhours', 'action' => 'addtest']
-                );   
-            }
-            else{
-                $this->Flash->error(__('The metrics could not be saved. Please, try again.'));
-            }
-        }
-        $projects = $this->Metrics->Projects->find('list', ['limit' => 200]);
-        $metrictypes = $this->Metrics->Metrictypes->find('list', ['limit' => 200]);
-        $weeklyreports = $this->Metrics->Weeklyreports->find('list', ['limit' => 200, 'conditions' => array('Weeklyreports.project_id' => $project_id)]);
-        $this->set(compact('metric', 'projects', 'metrictypes', 'weeklyreports'));
-        $this->set('_serialize', ['metric']);
-    }
     /**
      * Edit method
      *
@@ -237,12 +186,20 @@ class MetricsController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $metric = $this->Metrics->get($id);
-        if ($this->Metrics->delete($metric)) {
-            $this->Flash->success(__('The metric has been deleted.'));
-        } else {
-            $this->Flash->error(__('The metric could not be deleted. Please, try again.'));
+
+        if($metric['weeklyreport_id'] == NULL){
+            if ($this->Metrics->delete($metric)) {
+                $this->Flash->success(__('The metric has been deleted.'));
+            }
+            else {
+                $this->Flash->error(__('The metric could not be deleted. Please, try again.'));
+            } 
         }
+        else {
+            $this->Flash->error(__('Cannot delete metrics that belong to a weeklyreport'));
+        } 
         return $this->redirect(['action' => 'index']);
+        
     }
     
     public function isAuthorized($user)

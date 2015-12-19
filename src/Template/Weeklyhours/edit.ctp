@@ -1,12 +1,6 @@
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $weeklyhour->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $weeklyhour->id)]
-            )
-        ?></li>
     </ul>
 </nav>
 <div class="weeklyhours form large-5 medium-8 columns content float: left">
@@ -14,7 +8,7 @@
     <fieldset>
         <legend><?= __('Edit Weeklyhour') ?></legend>
         <?php
-            echo $this->Form->input('weeklyreport_id', ['options' => $weeklyreports]);
+            //echo $this->Form->input('weeklyreport_id', ['options' => $weeklyreports]);
             echo $this->Form->input('member_id', ['options' => $members]);
             echo $this->Form->input('duration');
         ?>

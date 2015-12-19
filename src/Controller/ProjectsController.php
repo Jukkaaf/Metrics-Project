@@ -54,7 +54,12 @@ class ProjectsController extends AppController
             $this->request->session()->delete('current_weeklyhours');
         }  
     }
+    
+    public function statistics()
+    {
 
+    }
+    
     /**
      * Add method
      *
@@ -65,6 +70,10 @@ class ProjectsController extends AppController
         $project = $this->Projects->newEntity();
         if ($this->request->is('post')) {
             $project = $this->Projects->patchEntity($project, $this->request->data);
+            
+            $time = Time::now();
+            $project['created_on'] = $time;
+            
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('The project has been saved.'));
                 if($this->Auth->user('role') != "admin"){
@@ -102,6 +111,10 @@ class ProjectsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $project = $this->Projects->patchEntity($project, $this->request->data);
+            
+            $time = Time::now();
+            $project['updated_on'] = $time;
+            
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('The project has been saved.'));
                 return $this->redirect(['action' => 'view', $id]);
@@ -149,7 +162,9 @@ class ProjectsController extends AppController
             $this->request->session()->write('project_list', $project_list);
             
             $this->Auth->allow(['index']);
-        }    
+        }
+        
+        $this->Auth->allow(['statistics']);
     }
     
     public function isAuthorized($user)
