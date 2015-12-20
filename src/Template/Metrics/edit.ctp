@@ -7,6 +7,19 @@
                 ['confirm' => __('Are you sure you want to delete # {0}?', $metric->id)]
             )
         ?></li>
+        <?php
+            $admin = $this->request->session()->read('is_admin');
+            if($admin){
+        ?>
+            <li><?= $this->Form->postLink(
+                        __('Delete admin'),
+                    ['action' => 'deleteadmin', $metric->id],
+                    ['confirm' => __('Are you sure you want to delete # {0}?', $metric->id)]
+                )
+            ?></li>
+        <?php
+            }
+        ?> 
     </ul>
 </nav>
 <div class="metrics form large-4 medium-8 columns content float: left">

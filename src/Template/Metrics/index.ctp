@@ -2,6 +2,14 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New Metric'), ['action' => 'add']) ?></li>
+        <?php
+            $admin = $this->request->session()->read('is_admin');
+            if($admin){
+        ?>
+            <li><?= $this->Html->link(__('New Metric admin'), ['action' => 'addadmin']) ?></li>
+        <?php
+            }
+        ?> 
     </ul>
 </nav>
 <div class="metrics index large-7 medium-8 columns content float: left">

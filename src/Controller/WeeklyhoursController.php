@@ -66,7 +66,7 @@ class WeeklyhoursController extends AppController
      *
      * @return void Redirects on successful add, renders view otherwise.
      */
-    /*
+    
     public function add()
     {
         $weeklyhour = $this->Weeklyhours->newEntity();
@@ -88,7 +88,7 @@ class WeeklyhoursController extends AppController
         $this->set(compact('weeklyhour', 'weeklyreports', 'members'));
         $this->set('_serialize', ['weeklyhour']);
     }
-    */
+    
     public function addmultiple()
     {   
         $project_id = $this->request->session()->read('selected_project')['id'];
@@ -209,7 +209,7 @@ class WeeklyhoursController extends AppController
      * @return void Redirects to index.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    /*
+    
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -221,6 +221,20 @@ class WeeklyhoursController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
-     * 
-     */
+    
+    
+    public function isAuthorized($user)
+    {   
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        // managers supervisors and developers cannot add or delete weeklyhours
+        if ($this->request->action === 'add' || $this->request->action === 'delete') 
+        {
+            return False;
+        }
+        
+        return parent::isAuthorized($user);
+    }
 }

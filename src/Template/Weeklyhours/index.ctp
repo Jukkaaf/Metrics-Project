@@ -1,6 +1,14 @@
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
+        <?php
+            $admin = $this->request->session()->read('is_admin');
+            if($admin){
+        ?>
+            <li><?= $this->Html->link(__('New Weeklyhour'), ['action' => 'add']) ?></li>
+        <?php
+            }
+        ?> 
     </ul>
 </nav>
 <div class="weeklyhours index large-7 medium-8 columns content  float: left">

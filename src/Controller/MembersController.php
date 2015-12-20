@@ -97,11 +97,17 @@ class MembersController extends AppController
             
             $member['project_id'] = $project_id;
 
-            if ($this->Members->save($member)) {
-                $this->Flash->success(__('The member has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The member could not be saved. Please, try again.'));
+            // mangers cannot edit supervisors
+            if($member['project_role'] != "supervisor" || $this->request->session()->read('selected_project_role') != 'manager'){
+                if ($this->Members->save($member)) {
+                    $this->Flash->success(__('The member has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The member could not be saved. Please, try again.'));
+                }
+            }
+            else{
+                $this->Flash->error(__('Managers cannot edit supervisors'));
             }
         }
         $users = $this->Members->Users->find('list', ['limit' => 200, 'conditions'=>array('Users.role !=' => 'inactive')]);
@@ -120,10 +126,16 @@ class MembersController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $member = $this->Members->get($id);
-        if ($this->Members->delete($member)) {
-            $this->Flash->success(__('The member has been deleted.'));
-        } else {
-            $this->Flash->error(__('The member could not be deleted. Please, try again.'));
+        // managers cannot delete supervisors
+        if($member['project_role'] != "supervisor" || $this->request->session()->read('selected_project_role') != 'manager'){
+            if ($this->Members->delete($member)) {
+                $this->Flash->success(__('The member has been deleted.'));
+            } else {
+                $this->Flash->error(__('The member could not be deleted. Please, try again.'));
+            }
+        }
+        else{
+            $this->Flash->error(__('Managers cannot delete supervisors'));
         }
         return $this->redirect(['action' => 'index']);
     }

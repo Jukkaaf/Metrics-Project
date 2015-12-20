@@ -17,25 +17,6 @@ class WeeklyreportsController extends AppController
         $this->loadComponent('Upload');     
     }
     
-    // uploading new weeklyreports as txt files
-    public function upload(){
-        if ( !empty( $this->request->data ) ) {
-            $report = [];
-            $file_content = $this->Upload->send($this->request->data['uploadfile']);
-            if($file_content != null){
-                // read the file in to a key value array
-                $report = $this->Weeklyreports->parseReport($file_content);
-                // save the report in the session
-                // the file contents are also stored in the report variable
-                $this->request->session()->write('report', $report);
-                
-                return $this->redirect(
-                    ['controller' => 'Weeklyreports', 'action' => 'add']
-                );
-            }
-        }
-    }
-    
     /**
      * Index method
      *
@@ -47,7 +28,7 @@ class WeeklyreportsController extends AppController
         $this->paginate = [
             'contain' => ['Projects'],
             'conditions' => array('Weeklyreports.project_id' => $project_id),
-            'order' => ['created_on' => 'DESC']
+            'order' => ['year' => 'DESC', 'week' => 'DESC']
         ];
         $this->set('weeklyreports', $this->paginate($this->Weeklyreports));
         $this->set('_serialize', ['weeklyreports']);
