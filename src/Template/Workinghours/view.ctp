@@ -1,11 +1,11 @@
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Workinghour'), ['action' => 'edit', $workinghour->id]) ?> </li>
+        <li><?= $this->Html->link(__('Edit logged time'), ['action' => 'edit', $workinghour->id]) ?> </li>
     </ul>
 </nav>
 <div class="workinghours view large-7 medium-8 columns content float: left">
-    <h3><?= h("View workinghour") ?></h3>
+    <h3><?= h("View logged time") ?></h3>
     <table class="vertical-table">
         <tr>
             <th><?= __('Member') ?></th>

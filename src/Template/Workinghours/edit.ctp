@@ -12,7 +12,7 @@
 <div class="workinghours form large-7 medium-8 columns content float: left">
     <?= $this->Form->create($workinghour) ?>
     <fieldset>
-        <legend><?= __('Edit Workinghour') ?></legend>
+        <legend><?= __('Edit logged time') ?></legend>
         <?php
             echo $this->Form->input('member_id', ['options' => $members]);
             echo $this->Form->input('date');

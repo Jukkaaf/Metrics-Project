@@ -54,11 +54,11 @@ $cakeDescription = 'MMT';
         border-right:1px solid #bbb;
     }
 
-    li:last-child {
+    .linav:last-child {
         border-right: none;
     }
 
-    li a {
+    .linav a {
         display: block;
         color: white;
         text-align: left;
@@ -66,7 +66,7 @@ $cakeDescription = 'MMT';
         text-decoration: none;
     }
 
-    li a:hover:not(.active) {
+    .linav a:hover:not(.active) {
         background-color: #111;
     }
 

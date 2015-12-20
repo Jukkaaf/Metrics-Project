@@ -6,7 +6,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 /**
  * Projects Model
  *
@@ -82,5 +83,41 @@ class ProjectsTable extends Table
             ->notEmpty('is_public');
 
         return $validator;
+    }
+    
+    public function getPublicProjects(){  
+        $projects = TableRegistry::get('Projects');
+        $query = $projects
+            ->find()
+            ->select(['id'])
+            ->where(['is_public' => 1])
+            ->toArray();
+        $publicProjects = array();
+        foreach($query as $temp){
+            $project = array();
+            $project['id'] = $temp->id;
+            $publicProjects[] = $project;
+        }
+        return $publicProjects;
+    }
+    
+    public function getWeeklyreportWeeks($project_id){
+        $weeklyreports = TableRegistry::get('Weeklyreports'); 
+        $query = $weeklyreports
+            ->find()
+            ->select(['week', 'year'])
+            ->where(['project_id' => $project_id])
+            ->toArray();
+        
+        //print_r($query);
+        
+        $weeks = array();
+        foreach($query as $temp){
+            $report = array();
+            $report['week'] = $temp->week;
+            $report['year'] = $temp->year;
+            $weeks[] = $report;
+        }
+        return $weeks;
     }
 }

@@ -57,6 +57,16 @@ class ProjectsController extends AppController
     
     public function statistics()
     {
+        $publicProjects = $this->Projects->getPublicProjects();
+        //print_r($publicProjects);
+        foreach($publicProjects as $project){
+            $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id']);
+            print_r($project['reports']);
+        }
+    }
+    
+    public function faq()
+    {
 
     }
     
@@ -165,6 +175,7 @@ class ProjectsController extends AppController
         }
         
         $this->Auth->allow(['statistics']);
+        $this->Auth->allow(['faq']);
     }
     
     public function isAuthorized($user)
