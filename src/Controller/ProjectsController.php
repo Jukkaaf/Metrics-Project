@@ -23,10 +23,16 @@ class ProjectsController extends AppController
     {
         $project_list = $this->request->session()->read('project_list');
         
-        $this->paginate = [
-            'conditions' => array('id IN' => $project_list)
-        ];
-        
+        if($project_list != NULL){
+            $this->paginate = [
+                'conditions' => array('id IN' => $project_list)
+            ];   
+        }
+        else{
+            $this->paginate = [
+                'conditions' => array('id' => NULL)
+            ];     
+        }
         $this->set('projects', $this->paginate($this->Projects));
         $this->set('_serialize', ['projects']);
     }
@@ -166,6 +172,7 @@ class ProjectsController extends AppController
                 ->select(['id'])
                 ->where(['is_public' => 1])
                 ->toArray();     
+            $project_list = array();
             foreach($query2 as $temp){
                 $project_list[] = $temp->id;
             }
