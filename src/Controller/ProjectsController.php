@@ -25,12 +25,14 @@ class ProjectsController extends AppController
         
         if($project_list != NULL){
             $this->paginate = [
-                'conditions' => array('id IN' => $project_list)
+                'conditions' => array('id IN' => $project_list),
+                'order' => ['project_name' => 'ASC']
             ];   
         }
         else{
             $this->paginate = [
-                'conditions' => array('id' => NULL)
+                'conditions' => array('id' => NULL),
+                'order' => ['project_name' => 'ASC']
             ];     
         }
         $this->set('projects', $this->paginate($this->Projects));

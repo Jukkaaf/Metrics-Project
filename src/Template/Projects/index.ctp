@@ -23,33 +23,69 @@
     </ul>    
 </nav>
 <div class="projects index large-8 medium-8 columns content float: left">
-    <h3><?= __('Projects') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th><?= $this->Paginator->sort('project_name') ?></th>
-                <th><?= $this->Paginator->sort('description') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($projects as $project): ?>
-            <tr>
-                <td><?= h($project->project_name) ?></td>
-                <td><?= h($project->description) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-        </ul>
-        <p><?= $this->Paginator->counter() ?></p>
+    <?php if($this->request->session()->check('Auth.User')){ ?>
+        <h3><?= __('Projects') ?></h3>
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th><?= $this->Paginator->sort('project_name') ?></th>
+                    <th><?= $this->Paginator->sort('description') ?></th>
+                    <th class="actions"><?= __('Actions') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($projects as $project): ?>
+                    <tr>
+                        <td><?= h($project->project_name) ?></td>
+                        <td><?= h($project->description) ?></td>
+                        <td class="actions">
+                            <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="paginator">
+            <ul class="pagination">
+                <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('next') . ' >') ?>
+            </ul>
+            <p><?= $this->Paginator->counter() ?></p>
+        </div>   
+    <?php }?>
+    
+    <div>
+        <h3><?= __('Public projects') ?></h3>
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th><?= $this->Paginator->sort('project_name') ?></th>
+                    <th><?= $this->Paginator->sort('description') ?></th>
+                    <th class="actions"><?= __('Actions') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($projects as $project): ?>
+                    <?php if($project->is_public){ ?>
+                        <tr>
+                            <td><?= h($project->project_name) ?></td>
+                            <td><?= h($project->description) ?></td>
+                            <td class="actions">
+                                <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="paginator">
+            <ul class="pagination">
+                <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('next') . ' >') ?>
+            </ul>
+            <p><?= $this->Paginator->counter() ?></p>
+        </div>
     </div>
 </div>
