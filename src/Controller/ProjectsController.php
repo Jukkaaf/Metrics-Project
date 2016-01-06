@@ -95,6 +95,7 @@ class ProjectsController extends AppController
         foreach($publicProjects as $project){
             $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
                                   $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
+            $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
             $projects[] = $project;
         }
         $this->set(compact('projects'));

@@ -17,6 +17,7 @@
 <div class="projects view large-9 medium-8 columns content float: left">
     <h3><?= h('Public statistics') ?></h3>
     <table border="1">
+        <h4><?= h('Weeklyreports') ?></h4>
         <tbody>
             <tr>
                 <td></td>
@@ -35,6 +36,17 @@
                     <?php foreach ($project['reports'] as $report): ?>
                         <td><?= h($report) ?></td>
                     <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </tbody> 
+    </table>
+    <table border="1" style="width:50%;">
+        <h4><?= h('Total Weeklyhours') ?></h4>
+        <tbody>
+            <?php foreach ($projects as $project): ?>
+                <tr>
+                    <td><?= h($project['project_name']) ?></td>
+                    <td><?= h($project['duration']) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody> 
