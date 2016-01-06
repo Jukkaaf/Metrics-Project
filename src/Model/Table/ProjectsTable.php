@@ -89,35 +89,56 @@ class ProjectsTable extends Table
         $projects = TableRegistry::get('Projects');
         $query = $projects
             ->find()
-            ->select(['id'])
+            ->select(['id', 'project_name'])
             ->where(['is_public' => 1])
             ->toArray();
         $publicProjects = array();
         foreach($query as $temp){
             $project = array();
             $project['id'] = $temp->id;
+            $project['project_name'] = $temp->project_name;
             $publicProjects[] = $project;
         }
         return $publicProjects;
     }
     
-    public function getWeeklyreportWeeks($project_id){
+    public function getWeeklyreportWeeks($project_id, $min, $max, $year){
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
         $query = $weeklyreports
             ->find()
-            ->select(['week', 'year'])
-            ->where(['project_id' => $project_id])
+            ->select(['week'])
+            ->where(['project_id' => $project_id, 'week >' => $min, 'week <' => $max, 'year' => $year])
             ->toArray();
         
         //print_r($query);
         
         $weeks = array();
         foreach($query as $temp){
-            $report = array();
-            $report['week'] = $temp->week;
-            $report['year'] = $temp->year;
-            $weeks[] = $report;
+            $weeks[] = $temp->week;
         }
-        return $weeks;
+        $time = Time::now();
+        // with the weeks when the report has not been filled
+        $completeList = array();
+        for($count = $min; $count <= $max; $count++){
+            if(in_array($count, $weeks)){
+                $completeList[] = 'X'; 
+            }
+            else{
+                // late
+                // if its the week after the week in question and its this year and its a weekday after tuesday
+                // or the current weeknumber is over 1 more than weeknumber in question and its the same year
+                // or its just the next year
+                // this is too simple to take in to account that sometimes there are reports from 2 different years
+                if(($time->weekOfYear == $count + 1 && $time->year == $year && $time->dayOfWeek > 2) 
+                    || ($time->weekOfYear > $count + 1 && $time->year == $year) 
+                    || ($time->year > $year)){
+                    $completeList[] = 'L';
+                }
+                else{
+                    $completeList[] = ' '; 
+                } 
+            } 
+        }
+        return $completeList;
     }
 }

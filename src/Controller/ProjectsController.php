@@ -65,12 +65,40 @@ class ProjectsController extends AppController
     
     public function statistics()
     {
-        $publicProjects = $this->Projects->getPublicProjects();
-        //print_r($publicProjects);
-        foreach($publicProjects as $project){
-            $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id']);
-            print_r($project['reports']);
+        // get the limits from the sidebar if changes were submitted
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+            
+            $statistics_limits['weekmin'] = $data['weekmin'];
+            $statistics_limits['weekmax'] = $data['weekmax'];
+            $statistics_limits['year'] = $data['year'];
+            
+            $this->request->session()->write('statistics_limits', $statistics_limits);
+            // reload page
+            $page = $_SERVER['PHP_SELF'];
         }
+        // current default settings
+        if(!$this->request->session()->check('statistics_limits')){
+            $time = Time::now();
+            // magic numbers for the springs project work course
+            $statistics_limits['weekmin'] = 5;
+            $statistics_limits['weekmax'] =  23;
+            
+            $statistics_limits['year'] = $time->year;
+            
+            $this->request->session()->write('statistics_limits', $statistics_limits);
+        }
+        $statistics_limits = $this->request->session()->read('statistics_limits');
+        
+        $publicProjects = $this->Projects->getPublicProjects();
+        $projects = array();
+        foreach($publicProjects as $project){
+            $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
+                                  $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
+            $projects[] = $project;
+        }
+        $this->set(compact('projects'));
+        $this->set('_serialize', ['projects']);
     }
     
     public function faq()
