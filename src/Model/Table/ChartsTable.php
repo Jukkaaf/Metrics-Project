@@ -202,7 +202,6 @@ class ChartsTable extends Table
         return $data;
     }
     
-    // add week limits or something!!
     public function phaseAreaData($project_id, $idlist){
         $metrics = TableRegistry::get('Metrics');
         
@@ -310,5 +309,26 @@ class ChartsTable extends Table
         $data['other'] = $num;
         
         return $data;
+    }
+    
+    public function weeklyhourAreaData($project_id, $idlist){
+        $weeklyhours = TableRegistry::get('Weeklyhours');
+        
+        $weeklyhourData = array();
+        
+        foreach($idlist as $temp){  
+            $query = $weeklyhours
+                    ->find()
+                    ->select(['duration'])
+                    ->where(['weeklyreport_id =' => $temp])
+                    ->toArray();
+            $duration = 0;
+            foreach($query as $dur){
+                $duration += $dur->duration;
+            }
+            $weeklyhourData[] = $duration;
+        }
+        
+        return $weeklyhourData;
     }
 }
