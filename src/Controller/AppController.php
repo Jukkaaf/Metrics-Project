@@ -63,14 +63,9 @@ class AppController extends Controller
     
     public function isAuthorized($user)
     {   
-        // temp. Allow usage of the highcharts demopage
-        if ($this->request->action === 'area' || $this->request->action === 'areaspline' || $this->request->action === 'bar'
-                 || $this->request->action === 'column' || $this->request->action === 'line' || $this->request->action === 'pie'
-                 || $this->request->action === 'pie_drill_down' || $this->request->action === 'scatter' || $this->request->action === 'donut'
-                 || $this->request->action === 'bubble') {
-            return True;
-        }
-
+        // The basic isAuthorized function that is inherited by all controllers
+        // These are the stock settings for authorizing access to pages
+        
         // Admin can access every action
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
@@ -80,8 +75,7 @@ class AppController extends Controller
             return False;
         }
         
-        // get the current sessions selected projects role for the user
-        // This come from the database with a query in projectscontroller/index
+        // the role of the user in the currently selected project
         $project_role = $this->request->session()->read('selected_project_role');     
         
         // if the user wants to go to a controller index he has to be a member of the current project
@@ -91,11 +85,10 @@ class AppController extends Controller
             }
         }
         
-        // if the user wants to add, edit, delete, upload or addmultiple he has to be a manager or supervisor
+        // if the user wants to add, edit or delete he has to be a manager or supervisor
         // all operations that all managers and supervisors can do but developers cant should be here
         if ($this->request->action === 'add' || $this->request->action === 'edit'
-            || $this->request->action === 'delete' || $this->request->action === 'upload'
-            || $this->request->action === 'addmultiple') 
+            || $this->request->action === 'delete') 
         {
             if($project_role == "supervisor" || $project_role == "manager"){
                 return True;

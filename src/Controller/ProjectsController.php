@@ -6,21 +6,12 @@ use App\Controller\MemberController;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
-/**
- * Projects Controller
- *
- * @property \App\Model\Table\ProjectsTable $Projects
- */
+
 class ProjectsController extends AppController
 {
-
-    /**
-     * Index method
-     *
-     * @return void
-     */
     public function index()
     {
+        // list of the projects that should be shown in the front page
         $project_list = $this->request->session()->read('project_list');
         
         if($project_list != NULL){
@@ -38,14 +29,8 @@ class ProjectsController extends AppController
         $this->set('projects', $this->paginate($this->Projects));
         $this->set('_serialize', ['projects']);
     }
-      
-    /**
-     * View method
-     *
-     * @param string|null $id Project id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
+    
+    // function that is run when you select a project
     public function view($id = null)
     {
         $project = $this->Projects->get($id, [
@@ -54,7 +39,9 @@ class ProjectsController extends AppController
         $this->set('project', $project);
         $this->set('_serialize', ['project']);
         
+        // if the selected project is a new one
         if($this->request->session()->read('selected_project')['id'] != $project['id']){
+            // write the new id 
             $this->request->session()->write('selected_project', $project);
             // remove the all data from the weeklyreport form if any exists
             $this->request->session()->delete('current_weeklyreport');
@@ -88,43 +75,46 @@ class ProjectsController extends AppController
             
             $this->request->session()->write('statistics_limits', $statistics_limits);
         }
+        // load the limits to a variable
         $statistics_limits = $this->request->session()->read('statistics_limits');
-        
+        // function in the projects table "ProjectsTable.php"
+        // return the list of public projects
         $publicProjects = $this->Projects->getPublicProjects();
         $projects = array();
+        // the weeklyreport weeks and the total weeklyhours duration is loaded for all projects
+        // functions in "ProjectsTable.php"
         foreach($publicProjects as $project){
             $project['reports'] = $this->Projects->getWeeklyreportWeeks($project['id'], 
                                   $statistics_limits['weekmin'], $statistics_limits['weekmax'], $statistics_limits['year']);
             $project['duration'] = $this->Projects->getWeeklyhoursDuration($project['id']);
             $projects[] = $project;
         }
+        // the projects and their data are made visible in the "statistics.php" page
         $this->set(compact('projects'));
         $this->set('_serialize', ['projects']);
     }
     
+    // empty function, because nothing needs to be done but the function has to exist
     public function faq()
     {
 
     }
     
-    /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $project = $this->Projects->newEntity();
         if ($this->request->is('post')) {
+            // data loaded from the form
             $project = $this->Projects->patchEntity($project, $this->request->data);
-            
+            // the current date is put in the project object
             $time = Time::now();
             $project['created_on'] = $time;
             
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('The project has been saved.'));
+                // if the project was not saved by an admin
                 if($this->Auth->user('role') != "admin"){
-                    // since the project was saved, we now have to add the creator as a supervisor member
+                    // the user is added to the project as a supervisor
                     $Members = TableRegistry::get('Members');
                     $Member = $Members->newEntity();
                     $Member['user_id'] = $this->Auth->user('id');
@@ -144,21 +134,15 @@ class ProjectsController extends AppController
         $this->set('_serialize', ['project']);
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Project id.
-     * @return void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
         $project = $this->Projects->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            // data from the form
             $project = $this->Projects->patchEntity($project, $this->request->data);
-            
+            // updated_on date is placed automatically
             $time = Time::now();
             $project['updated_on'] = $time;
             
@@ -173,13 +157,6 @@ class ProjectsController extends AppController
         $this->set('_serialize', ['project']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Project id.
-     * @return void Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -195,9 +172,9 @@ class ProjectsController extends AppController
     // this allows anyone to go to the frontpage
     public function beforeFilter(\Cake\Event\Event $event)
     {   
-        // we now have to do stuff in isauthorized in index, so this will be removed
+        // if the current user is not a logged in user
         if(!$this->Auth->user()){
-            // add public projects to the list
+            // publuc projects are added to the project list
             $query2 = $this->Projects
                 ->find()
                 ->select(['id'])
@@ -208,24 +185,16 @@ class ProjectsController extends AppController
                 $project_list[] = $temp->id;
             }
             $this->request->session()->write('project_list', $project_list);
-            
+            // allow access to index
             $this->Auth->allow(['index']);
         }
-        
+        // statistics and faq are open pages to everyone
         $this->Auth->allow(['statistics']);
         $this->Auth->allow(['faq']);
     }
     
     public function isAuthorized($user)
     {      
-        // Admin can access every action
-        /*
-        if (isset($user['role']) && $user['role'] === 'admin') {
-            $this->request->session()->write('selected_project_role', "admin");
-            $this->request->session()->write('selected_project_memberid', -1);
-            return true;
-        }
-        */
         // Inactive can only do what users who are not members can
         if (isset($user['role']) && $user['role'] === 'inactive') {
             return False;
@@ -245,22 +214,26 @@ class ProjectsController extends AppController
             
             $this->request->session()->write('is_admin', True);
             $this->request->session()->write('project_list', $project_list);
+            $this->request->session()->write('project_memberof_list', $project_list);
             return True;
         } 
         
         if ($this->request->action === 'index'){    
             $time = Time::now();
             $members = TableRegistry::get('Members');    
-
+            // find all the projects that the user is a member in
             $query = $members
                 ->find()
                 ->select(['project_id', 'ending_date', 'project_role'])
                 ->where(['user_id =' => $this->Auth->user('id')])
                 ->toArray();
             
+            
             $is_supervisor = False;
             $project_list = array();
             foreach($query as $temp){
+                // check if the user is a supervisor in any of the projects
+                // and add the projects to the projectlist
                 if($temp->ending_date < $time || $temp->ending_date == NULL){
                     $project_list[] = $temp->project_id;
                     if($temp->project_role == 'supervisor'){
@@ -275,24 +248,25 @@ class ProjectsController extends AppController
                 ->where(['is_public' => 1])
                 ->toArray();
             
+            $this->request->session()->write('is_supervisor', $is_supervisor);
+            $this->request->session()->write('project_memberof_list', $project_list);        
             foreach($query2 as $temp){
                 $project_list[] = $temp->id;
-            }
-            
-            $this->request->session()->write('is_supervisor', $is_supervisor);
+            } 
             $this->request->session()->write('project_list', $project_list);
+            
             return True;
         }  
         
+        // authorization for the selected project
         if ($this->request->action === 'view') 
         {   
-            // this is where we figure out what role the user has in the project
             $time = Time::now();
             $project_role = "";
             $project_memberid = -1;
             // what kind of member is the user
             $members = TableRegistry::get('Members');    
-
+            // load all the memberships that the user has for the selected project
             $query = $members
                 ->find()
                 ->select(['project_role', 'id', 'ending_date'])
@@ -322,10 +296,11 @@ class ProjectsController extends AppController
                     $project_memberid = $temp->id;
                 }      
             }
-            
+            // if the user is a admin, he is automatically a admin of the project
             if($this->Auth->user('role') == "admin"){
                 $project_role = "admin";
             }
+            // if the user is not a admin and not a member
             elseif($project_role == ""){
                 $project_role = "notmember";
             }
@@ -333,7 +308,7 @@ class ProjectsController extends AppController
 
             $this->request->session()->write('selected_project_role', $project_role);
             $this->request->session()->write('selected_project_memberid', $project_memberid);
-            // if the user is not a member of the project return false
+            // if the user is not a member of the project he can not access it
             // unless the project is public
             if($project_role == "notmember"){  
                 $query = $this->Projects

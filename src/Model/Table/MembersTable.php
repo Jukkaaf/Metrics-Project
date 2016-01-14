@@ -8,22 +8,9 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
-/**
- * Members Model
- *
- * @property \Cake\ORM\Association\BelongsTo $Users
- * @property \Cake\ORM\Association\BelongsTo $Projects
- * @property \Cake\ORM\Association\HasMany $Workinghours
- */
+
 class MembersTable extends Table
 {
-
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -48,12 +35,6 @@ class MembersTable extends Table
         ]);
     }
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
     public function validationDefault(Validator $validator)
     {
         $validator
@@ -79,13 +60,6 @@ class MembersTable extends Table
         return $validator;
     }
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'));
@@ -93,9 +67,8 @@ class MembersTable extends Table
         return $rules;
     }
     
-    
     public function getMembers($project_id){
-        // returns an array with members
+        // returns an array with project members
         // the info is the members id, project role and email from user
         $memberinfo = array();
         $now = Time::now();

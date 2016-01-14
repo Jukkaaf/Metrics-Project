@@ -21,7 +21,6 @@
     <fieldset>
         <legend><?= __('Edit Weeklyhour') ?></legend>
         <?php
-            //echo $this->Form->input('weeklyreport_id', ['options' => $weeklyreports]);
             echo $this->Form->input('member_id', ['options' => $members]);
             echo $this->Form->input('duration');
         ?>

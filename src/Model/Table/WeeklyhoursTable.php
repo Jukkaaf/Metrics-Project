@@ -8,21 +8,9 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
-/**
- * Weeklyhours Model
- *
- * @property \Cake\ORM\Association\BelongsTo $Weeklyreports
- * @property \Cake\ORM\Association\BelongsTo $Members
- */
+
 class WeeklyhoursTable extends Table
 {
-
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -41,8 +29,8 @@ class WeeklyhoursTable extends Table
         ]);
     }
     
+    // check if the weeklyreport and member_id pair already exists
     public function checkUnique($hour){
-        // check if the weeklyreport member_id pair already exists
         $weeklyhours = TableRegistry::get('Weeklyhours');
         $query = $weeklyhours
                 ->find()
@@ -57,13 +45,7 @@ class WeeklyhoursTable extends Table
         }
         return True;
     }
-    
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
+
     public function validationDefault(Validator $validator)
     {
         $validator
@@ -82,13 +64,6 @@ class WeeklyhoursTable extends Table
         return $validator;
     }
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['weeklyreport_id'], 'Weeklyreports'));
@@ -125,6 +100,7 @@ class WeeklyhoursTable extends Table
         return False;
     }
     
+    // count the ammount of workinghours for the members in the week
     public function getHours($memberlist, $week){
         $workinghours = TableRegistry::get('Workinghours');
         $hours = array();
@@ -147,18 +123,19 @@ class WeeklyhoursTable extends Table
         return $hours;
     }
     
+    // saving the weeklyreport created with the weeklyreportform
+    // this also saves the metrics and weeklyhours that belong to the weeklyreport
     public function saveSessionReport($weeklyreport, $metrics, $weeklyhours){
         $tableWeeklyreports = TableRegistry::get('Weeklyreports');
-        
+        // saving the actual weeklyreport
         if (!$tableWeeklyreports->save($weeklyreport)) {
             return False;
         }
-        // now the weeklyreport has its own id, so we can insert it in to the metrics and weeklyhours
-        
+        // saving the weeklyreport created an id for the weeklyreport
+        // the id will now be added to the metrics and weeklyhours 
         $tableMetrics = TableRegistry::get('Metrics');
         foreach($metrics as $temp){
             $temp['weeklyreport_id'] = $weeklyreport['id'];
-            
             if (!$tableMetrics->save($temp)) {
                 return False;
             }
@@ -167,13 +144,10 @@ class WeeklyhoursTable extends Table
         $tableWeeklyhours = TableRegistry::get('Weeklyhours');
         foreach($weeklyhours as $temp){
             $temp['weeklyreport_id'] = $weeklyreport['id'];
-            
             if (!$tableWeeklyhours->save($temp)) {
                 return False;
             }
-        }
-        
-        
+        }  
         return True;
     }
     

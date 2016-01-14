@@ -1,3 +1,8 @@
+<!-- The third page in the weeklyreport form.
+     A input is added for all developers managers.
+     Pre calculated workinghours are added automatically and if the user
+     goes backwards on the page the current values are saved.
+-->
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -9,6 +14,9 @@
         <legend><?= __('Add Weeklyhours, Page 3/3') ?></legend>
         <?php
             $current_weeklyhours = $this->request->session()->read('current_weeklyhours');
+            // if its not the first time the user visits this page in the same report
+            // then previous values are loaded
+            // else the pre calculated hours are added
             if(!is_null($current_weeklyhours)){
                 echo "<tr>";
                 for($count = 0; $count < count($memberlist); $count++){

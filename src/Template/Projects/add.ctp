@@ -9,9 +9,6 @@
         <legend><?= __('Add Project') ?></legend>
         <?php
             echo $this->Form->input('project_name');
-            //echo $this->Form->input('created_on');
-            //echo $this->Form->input('updated_on', ['empty' => true, 'default' => '']);
-            //echo $this->Form->input('finished_date', ['empty' => true, 'default' => '']);
             echo $this->Form->input('description');
             echo $this->Form->input('is_public', array("checked" => "checked"));
         ?>

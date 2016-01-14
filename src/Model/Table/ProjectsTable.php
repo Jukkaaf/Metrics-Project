@@ -8,23 +8,9 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
-/**
- * Projects Model
- *
- * @property \Cake\ORM\Association\HasMany $Members
- * @property \Cake\ORM\Association\HasMany $Metrics
- * @property \Cake\ORM\Association\HasMany $Requirements
- * @property \Cake\ORM\Association\HasMany $Weeklyreports
- */
+
 class ProjectsTable extends Table
 {
-
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -43,13 +29,7 @@ class ProjectsTable extends Table
             'foreignKey' => 'project_id'
         ]);
     }
-
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
+    
     public function validationDefault(Validator $validator)
     {
         $validator
@@ -85,6 +65,7 @@ class ProjectsTable extends Table
         return $validator;
     }
     
+    // return a list of all the public projects
     public function getPublicProjects(){  
         $projects = TableRegistry::get('Projects');
         $query = $projects
@@ -102,6 +83,7 @@ class ProjectsTable extends Table
         return $publicProjects;
     }
     
+    // get the total weeklyhours of a project
     public function getWeeklyhoursDuration($project_id){
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
         $query = $weeklyreports
@@ -128,6 +110,10 @@ class ProjectsTable extends Table
         return $duration;
     }
     
+    // get a list with 'X', 'L' or ' ' for the weeks based on the limits
+    // 'X' if that weeks report was returned
+    // 'L' if that weeks report should have been returned but its not
+    // ' ' if there is no report but its still not late
     public function getWeeklyreportWeeks($project_id, $min, $max, $year){
         $weeklyreports = TableRegistry::get('Weeklyreports'); 
         $query = $weeklyreports
@@ -135,9 +121,7 @@ class ProjectsTable extends Table
             ->select(['week'])
             ->where(['project_id' => $project_id, 'week >' => $min, 'week <' => $max, 'year' => $year])
             ->toArray();
-        
-        //print_r($query);
-        
+
         $weeks = array();
         foreach($query as $temp){
             $weeks[] = $temp->week;
@@ -146,20 +130,21 @@ class ProjectsTable extends Table
         // with the weeks when the report has not been filled
         $completeList = array();
         for($count = $min; $count <= $max; $count++){
+            // if the week is found, 'X'
             if(in_array($count, $weeks)){
                 $completeList[] = 'X'; 
             }
             else{
-                // late
+                // late,
                 // if its the week after the week in question and its this year and its a weekday after tuesday
                 // or the current weeknumber is over 1 more than weeknumber in question and its the same year
                 // or its just the next year
-                // this is too simple to take in to account that sometimes there are reports from 2 different years
                 if(($time->weekOfYear == $count + 1 && $time->year == $year && $time->dayOfWeek > 2) 
                     || ($time->weekOfYear > $count + 1 && $time->year == $year) 
                     || ($time->year > $year)){
                     $completeList[] = 'L';
                 }
+                // if its not late, but there is no report
                 else{
                     $completeList[] = ' '; 
                 } 

@@ -4,21 +4,13 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
-/**
- * Workinghours Controller
- *
- * @property \App\Model\Table\WorkinghoursTable $Workinghours
- */
+
 class WorkinghoursController extends AppController
 {
-
-    /**
-     * Index method
-     *
-     * @return void
-     */
     public function index()
     {
+        // only load workinghours from current project
+        // ordered by date
         $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Members', 'Worktypes'],
@@ -35,13 +27,6 @@ class WorkinghoursController extends AppController
         $this->set('_serialize', ['workinghours']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Workinghour id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function view($id = null)
     {
         $project_id = $this->request->session()->read('selected_project')['id'];
@@ -56,26 +41,21 @@ class WorkinghoursController extends AppController
 
         foreach($memberlist as $member){
             if($workinghour->member->id == $member['id']){
-               $workinghour->member['member_name'] = $member['member_name'];
+                // if the id's match add the name for the member
+                $workinghour->member['member_name'] = $member['member_name'];
             }
         }
-
-        
         $this->set('workinghour', $workinghour);
         $this->set('_serialize', ['workinghour']);
     }
 
-    /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $workinghour = $this->Workinghours->newEntity();
         if ($this->request->is('post')) {
+            // get data from the form
             $workinghour = $this->Workinghours->patchEntity($workinghour, $this->request->data);  
-            
+            // only allow members to add workinghours for themself
             $workinghour['member_id'] = $this->request->session()->read('selected_project_memberid');
             
             if ($this->Workinghours->save($workinghour)) {
@@ -92,6 +72,7 @@ class WorkinghoursController extends AppController
         $this->set('_serialize', ['workinghour']);
     }
     
+    // managers supervisors and admins can add workinghours for the developers
     public function adddev()
     {
         $workinghour = $this->Workinghours->newEntity();
@@ -107,10 +88,6 @@ class WorkinghoursController extends AppController
         $project_id = $this->request->session()->read('selected_project')['id'];
         $worktypes = $this->Workinghours->Worktypes->find('list', ['limit' => 200]);
         $now = Time::now();
-        /*
-        $members = $this->Workinghours->Members->find('list', ['limit' => 200, 
-            'conditions' => array('Members.project_id' => $project_id, 'OR' => array('Members.ending_date >' => $now, 'Members.ending_date' => NULL))]);
-        */
         $members = $this->Workinghours->Members->find('list', ['limit' => 200])
                                                 ->where(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date >' => $now])
                                                 ->orWhere(['Members.project_id' => $project_id, 'Members.project_role !=' => 'supervisor', 'Members.ending_date IS' => NULL]);
@@ -118,33 +95,9 @@ class WorkinghoursController extends AppController
         $this->set('_serialize', ['workinghour']);
     }
     
-    private function addUploaded(){
-        $report = $this->request->session()->read('report');
-        $hours_count = count($report['actual_hours']);
-        // if there are still working hours to add
-        if($report['actual_hours_index'] < $hours_count - 1){
-            // count the index in the session and reload the page with a new members info
-            $report['actual_hours_index'] = $report['actual_hours_index'] + 1;
-            $this->request->session()->write('report', $report);
-            return $this->redirect(
-                ['controller' => 'Workinghours', 'action' => 'add']
-            );
-        }
-        else{
-            $this->request->session()->delete('report');
-            return $this->redirect(['action' => 'index']);
-        }
-    }
-    
-    /**
-     * Edit method
-     *
-     * @param string|null $id Workinghour id.
-     * @return void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
+        // only allow editing workinghours from the current project
         $project_id = $this->request->session()->read('selected_project')['id'];
         $workinghour = $this->Workinghours->get($id, [
             'contain' => ['Members', 'Worktypes'],
@@ -168,13 +121,6 @@ class WorkinghoursController extends AppController
         $this->set('_serialize', ['workinghour']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Workinghour id.
-     * @return void Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -189,6 +135,7 @@ class WorkinghoursController extends AppController
     
     public function isAuthorized($user)
     {   
+        // admins can do anything
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }
@@ -198,7 +145,7 @@ class WorkinghoursController extends AppController
         if ($this->request->action === 'add') 
         {
             // supervisor cannot have workinghours, and the add function simply takes the member_id of the current user
-            if($project_role != "notmember" || $project_role == "supervisor"){
+            if($project_role != "notmember" && $project_role != "supervisor"){
                 return True;
             }
             return False;

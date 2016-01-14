@@ -18,6 +18,7 @@ class ChartsController extends AppController
     }
     
     public function index() {
+        // When the chart limits are updated this is where they are saved
         if ($this->request->is('post')) {
             $data = $this->request->data;
             
@@ -27,21 +28,11 @@ class ChartsController extends AppController
             $chart_limits['yearmax'] = $data['yearmax'];
             
             $this->request->session()->write('chart_limits', $chart_limits);
+            // refreshin the page to apply the new limits
             $page = $_SERVER['PHP_SELF'];
         }
-
-        // get the chart objects
-        $phaseChart = $this->phaseChart();
-        $reqChart = $this->reqChart();
-        $commitChart = $this->commitChart();
-        $testcaseChart = $this->testcaseChart();
-        $hoursChart = $this->hoursChart();
-        $weeklyhourChart = $this->weeklyhourChart();
-        $reqPercentChart = $this->reqPercentChart();
-        
-        $project_id = $this->request->session()->read('selected_project')['id'];
-        
-        // figure out the limits for the metrics that go in the chart
+        // Set the stock limits for the chart limits
+        // They are only set once, if the "chart_limits" cookie is not in the session
         if(!$this->request->session()->check('chart_limits')){
             $time = Time::now();
             // show last year, current year and next year
@@ -52,18 +43,33 @@ class ChartsController extends AppController
             
             $this->request->session()->write('chart_limits', $chart_limits);
         }
+        // Loadin the limits to a variable
         $chart_limits = $this->request->session()->read('chart_limits');
+        // The ID of the currently selected project
+        $project_id = $this->request->session()->read('selected_project')['id'];
         
-        // get all the data
+        // Get the chart objects for the charts
+        // these objects come from functions in this controller
+        $phaseChart = $this->phaseChart();
+        $reqChart = $this->reqChart();
+        $commitChart = $this->commitChart();
+        $testcaseChart = $this->testcaseChart();
+        $hoursChart = $this->hoursChart();
+        $weeklyhourChart = $this->weeklyhourChart();
+        $reqPercentChart = $this->reqPercentChart();    
+        
+        // Get all the data for the charts, based on the chartlimits
+        // Fuctions in "ChartsTable.php"
         $weeklyreports = $this->Charts->reports($project_id, $chart_limits['weekmin'], $chart_limits['weekmax'], $chart_limits['yearmin'], $chart_limits['yearmax']);
-        $phaseData = $this->Charts->phaseAreaData($project_id, $weeklyreports['id']);
-        $reqData = $this->Charts->reqColumnData($project_id, $weeklyreports['id']);
-        $commitData = $this->Charts->commitAreaData($project_id, $weeklyreports['id']);
-        $testcaseData = $this->Charts->testcaseAreaData($project_id, $weeklyreports['id']);
+        $phaseData = $this->Charts->phaseAreaData($weeklyreports['id']);
+        $reqData = $this->Charts->reqColumnData($weeklyreports['id']);
+        $commitData = $this->Charts->commitAreaData($weeklyreports['id']);
+        $testcaseData = $this->Charts->testcaseAreaData($weeklyreports['id']);
         $hoursData = $this->Charts->hoursData($project_id);
-        $weeklyhourData = $this->Charts->weeklyhourAreaData($project_id, $weeklyreports['id']);
+        $weeklyhourData = $this->Charts->weeklyhourAreaData($weeklyreports['id']);
         
-        // insert the data in to the charts
+        // Insert the data in to the charts, one by one
+        // phaseChart
         $phaseChart->xAxis->categories = $weeklyreports['weeks'];
         $phaseChart->series[] = array(
             'name' => 'Total phases',
@@ -74,7 +80,7 @@ class ChartsController extends AppController
             'data' => $phaseData['phase']
         );
         
-        
+        // reqChart
         $reqChart->xAxis->categories = $weeklyreports['weeks'];
         $reqChart->series[] = array(
             'name' => 'New',
@@ -93,14 +99,14 @@ class ChartsController extends AppController
             'data' => $reqData['rejected']
         );
         
-     
+        // commitChart
         $commitChart->xAxis->categories = $weeklyreports['weeks'];    
         $commitChart->series[] = array(
             'name' => 'commits',
             'data' => $commitData['commits']
         );
 
-        
+        // testcaseChart
         $testcaseChart->xAxis->categories = $weeklyreports['weeks'];
         $testcaseChart->series[] = array(
             'name' => 'Total tests',
@@ -110,11 +116,8 @@ class ChartsController extends AppController
             'name' => 'Passed tests',
             'data' => $testcaseData['testsPassed']
         );
-        
-        //new chart: hours stacked by work type         
-        //$hoursChart->xAxis->categories = $weeklyreports['weeks'];
-        //Different expression here: see line 376 for multiple categories
 
+        // hoursChart
         $hoursChart->series[] = array(
             'name' => 'Management',
             'data' => array(
@@ -126,12 +129,14 @@ class ChartsController extends AppController
             )
         );
         
+        // weeklyhourChart
         $weeklyhourChart->xAxis->categories = $weeklyreports['weeks'];    
         $weeklyhourChart->series[] = array(
             'name' => 'weekly hours',
             'data' => $weeklyhourData
         );
         
+        // reqPercentChart
         $reqPercentChart->xAxis->categories = $weeklyreports['weeks'];
         $reqPercentChart->series[] = array(
             'name' => 'New',
@@ -150,6 +155,7 @@ class ChartsController extends AppController
             'data' => $reqData['rejected']
         );
         
+        // This sets the charts visible in the actual charts page "Charts/index.php"
         $this->set(compact('phaseChart', 'reqChart', 'commitChart', 'testcaseChart', 'hoursChart', 'weeklyhourChart', 'reqPercentChart'));
     }
     
@@ -171,6 +177,12 @@ class ChartsController extends AppController
         
         return $myChart;
     }
+    
+    
+    // All the following functions are similar
+    // They create a custom chart object and return it
+    // Unfortunately the functions have to be in the controller, 
+    // because the chart objects cannot be created outside of the controller
     
     public function weeklyhourChart(){
         $myChart = $this->Highcharts->createChart();

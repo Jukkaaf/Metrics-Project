@@ -1,3 +1,6 @@
+<!-- This is the second page in the weeklyreport form.
+     $current_metrics is what was previously placed in the form if the user visits this page a second time
+-->
 <nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -42,7 +45,6 @@
     <?php 
         echo $this->Form->button('Next Page', ['name' => 'submit', 'value' => 'next']);
         echo $this->Form->button('Previous Page', ['name' => 'submit', 'value' => 'previous', 'style' => 'float: left']); 
-        //echo $this->Form->button('qwe', ['type' => 'submit', 'value' => 'qwe']); 
     ?>
     <?= $this->Form->end() ?>
 </div>

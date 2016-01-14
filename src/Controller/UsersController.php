@@ -3,19 +3,11 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
-/**
- * Users Controller
- *
- * @property \App\Model\Table\UsersTable $Users
- */
+
 class UsersController extends AppController
 {
     private static $PASS_MIN_LENGTH = 8;
-    /**
-     * Index method
-     *
-     * @return void
-     */
+
     public function index()
     {
         $this->set('users', $this->paginate($this->Users));
@@ -46,6 +38,7 @@ class UsersController extends AppController
         $this->request->session()->delete('current_metrics');
         $this->request->session()->delete('current_weeklyhours');
         $this->request->session()->delete('project_list');
+        $this->request->session()->delete('project_memberof_list');
         $this->request->session()->delete('is_admin');
         $this->request->session()->delete('is_supervisor');
         
@@ -53,13 +46,6 @@ class UsersController extends AppController
         return $this->redirect($this->Auth->logout());
     }
     
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
@@ -69,11 +55,6 @@ class UsersController extends AppController
         $this->set('_serialize', ['user']);
     }
 
-    /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $user = $this->Users->newEntity();
@@ -110,13 +91,6 @@ class UsersController extends AppController
         $this->set('_serialize', ['user']);
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
@@ -153,13 +127,6 @@ class UsersController extends AppController
         $this->set('_serialize', ['user']);
     }
     
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return void Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -191,7 +158,7 @@ class UsersController extends AppController
             return False;
         }
         
-        // All registered users can logout page
+        // All registered users can edit their own profile and logout
         if ($this->request->action === 'logout' || $this->request->action === 'editprofile') {
             return true;
         }

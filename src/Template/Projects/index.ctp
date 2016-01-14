@@ -23,6 +23,7 @@
     </ul>    
 </nav>
 <div class="projects index large-8 medium-8 columns content float: left">
+    <!-- List of the projects the user is a member of-->
     <?php if($this->request->session()->check('Auth.User')){ ?>
         <h3><?= __('Projects') ?></h3>
         <table cellpadding="0" cellspacing="0">
@@ -35,13 +36,15 @@
             </thead>
             <tbody>
                 <?php foreach ($projects as $project): ?>
-                    <tr>
-                        <td><?= h($project->project_name) ?></td>
-                        <td><?= h($project->description) ?></td>
-                        <td class="actions">
-                            <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>
-                        </td>
-                    </tr>
+                    <?php if(in_array($project->id, $this->request->session()->read('project_memberof_list'))){ ?>
+                        <tr>
+                            <td><?= h($project->project_name) ?></td>
+                            <td><?= h($project->description) ?></td>
+                            <td class="actions">
+                                <?= $this->Html->link(__('Select'), ['action' => 'view', $project->id]) ?>
+                            </td>
+                        </tr>       
+                    <?php } ?>
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -55,6 +58,7 @@
         </div>   
     <?php }?>
     
+    <!-- List of the public projects-->
     <div>
         <h3><?= __('Public projects') ?></h3>
         <table cellpadding="0" cellspacing="0">

@@ -14,7 +14,7 @@
             <?= $this->Form->end() ?>
     </ul>
 </nav>
-<div class="projects view large-9 medium-8 columns content float: left">
+<div class="projects view large-10 medium-8 columns content float: left">
     <h3><?= h('Public statistics') ?></h3>
     <table border="1">
         <h4><?= h('Weeklyreports') ?></h4>

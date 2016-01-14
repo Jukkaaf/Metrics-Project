@@ -6,7 +6,7 @@
 <div class="workinghours form large-4 medium-8 columns content float: left">
     <?= $this->Form->create($workinghour) ?>
     <fieldset>
-        <legend><?= __(Log time') ?></legend>
+        <legend><?= __('Log time') ?></legend>
         <?php
             echo $this->Form->input('date');
             echo $this->Form->input('description');

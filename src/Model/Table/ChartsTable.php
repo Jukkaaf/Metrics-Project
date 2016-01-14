@@ -11,12 +11,13 @@ class ChartsTable extends Table
     
     public function initialize(array $config) {
         parent::initialize($config);
-        //$this->loadComponent('Highcharts.Highcharts');
     }
     
+    // getting the weeklyreport numbers based on the project and limits
     public function reports($project_id, $weekmin, $weekmax, $yearmin, $yearmax){
         $weeklyreports = TableRegistry::get('Weeklyreports');
         $organize = array(); 
+        // when we are looking for reports from multiple years
         if($yearmin != $yearmax){
             $query = $weeklyreports
                 ->find()
@@ -35,7 +36,7 @@ class ChartsTable extends Table
                 ->Where(['project_id' => $project_id, 
                     'year >' => $yearmin, 'year <' => $yearmax]) // possible middle year, all weeks are good
                 ->toArray();
-
+            // add the middle year reports
             foreach($query2 as $temp){
                 $temparray = array();
                 $temparray['id'] = $temp->id;
@@ -45,6 +46,7 @@ class ChartsTable extends Table
                 $organize[] = $temparray ;
             }
         }
+        // when looking for reports from a single year
         else{
             // if min and max years are same then we just look at week limits
             $query = $weeklyreports
@@ -56,7 +58,7 @@ class ChartsTable extends Table
 
                 ->toArray();
         }
-         
+        // add all the reports 
         foreach($query as $temp){
             $temparray = array();
             $temparray['id'] = $temp->id;
@@ -66,24 +68,24 @@ class ChartsTable extends Table
             $organize[] = $temparray ;
         }
         
-        $id = array();
+        // get the weeks and years of the reports
         $week = array();
         $year = array();
-        foreach ($organize as $key => $row) {
-            $id[$key] = $row['id'];
+        foreach ($organize as $key => $row) { 
             $week[$key] = $row['week'];
             $year[$key] = $row['year'];
         }
-        
+        // multisort organizes the array of reports based on the year and week
         array_multisort($year, SORT_ASC, $week, SORT_ASC, $organize);
 
         $idlist = array();
         $weeklist = array();
+        // seperate the id and weeknumber
         foreach($organize as $temp){
             $idlist[] = $temp['id'];
             $weeklist[] = $temp['week'];
         }
-        
+        // save in the correct format and return
         $data = array();
         $data['id'] = $idlist;
         $data['weeks'] = $weeklist;
@@ -91,7 +93,10 @@ class ChartsTable extends Table
         return $data;
     }
     
-    public function testcaseAreaData($project_id, $idlist){
+    // the rest of the functions are for getting the actual data for the charts
+    // this is done with multiple querys, based on the project id and the weeklyreport id's
+    
+    public function testcaseAreaData($idlist){
         $metrics = TableRegistry::get('Metrics');
         
         $testsPassed = array();
@@ -102,7 +107,7 @@ class ChartsTable extends Table
             $query2 = $metrics
                     ->find()
                     ->select(['value'])
-                    ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 8]) // 7 is the id of commits
+                    ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 8])
                     ->toArray();
             
             $testsPassed[] = $query2[0]->value;
@@ -110,7 +115,7 @@ class ChartsTable extends Table
             $query3 = $metrics
                     ->find()
                     ->select(['value'])
-                    ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 9]) // 7 is the id of commits
+                    ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 9])
                     ->toArray();
             
             $testsTotal[] = $query3[0]->value;
@@ -124,7 +129,7 @@ class ChartsTable extends Table
         return $data;
     }
     
-    public function commitAreaData($project_id, $idlist){
+    public function commitAreaData($idlist){
         $metrics = TableRegistry::get('Metrics');
 
         $commits = array();
@@ -134,7 +139,7 @@ class ChartsTable extends Table
             $query2 = $metrics
                     ->find()
                     ->select(['value'])
-                    ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 7]) // 7 is the id of commits
+                    ->where(['weeklyreport_id =' => $temp, 'metrictype_id =' => 7])
                     ->toArray();
             
             $commits[] = $query2[0]->value;
@@ -148,7 +153,7 @@ class ChartsTable extends Table
     }
     
     
-    public function reqColumnData($project_id, $idlist){
+    public function reqColumnData($idlist){
         $metrics = TableRegistry::get('Metrics');
 
         $new = array();
@@ -202,7 +207,7 @@ class ChartsTable extends Table
         return $data;
     }
     
-    public function phaseAreaData($project_id, $idlist){
+    public function phaseAreaData($idlist){
         $metrics = TableRegistry::get('Metrics');
         
         $phase = array();
@@ -311,7 +316,7 @@ class ChartsTable extends Table
         return $data;
     }
     
-    public function weeklyhourAreaData($project_id, $idlist){
+    public function weeklyhourAreaData($idlist){
         $weeklyhours = TableRegistry::get('Weeklyhours');
         
         $weeklyhourData = array();

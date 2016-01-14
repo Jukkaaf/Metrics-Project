@@ -4,26 +4,18 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
-/**
- * Weeklyreports Controller
- *
- * @property \App\Model\Table\WeeklyreportsTable $Weeklyreports
- */
+
 class WeeklyreportsController extends AppController
 {
     public function initialize()
     {
-        parent::initialize();
-        $this->loadComponent('Upload');     
+        parent::initialize();    
     }
     
-    /**
-     * Index method
-     *
-     * @return void
-     */
     public function index()
     {
+        // only load weeklyreports from the current project
+        // they are in order by year and week
         $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Projects'],
@@ -34,27 +26,22 @@ class WeeklyreportsController extends AppController
         $this->set('_serialize', ['weeklyreports']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Weeklyreport id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function view($id = null)
     {
+        // only load if the report is from the current project
         $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreport = $this->Weeklyreports->get($id, [
             'contain' => ['Projects', 'Metrics', 'Weeklyhours'],
             'conditions' => array('Weeklyreports.project_id' => $project_id)
         ]);
         
-        // get weeklyhours because the weeklyhours table has a function we want to use
+        // get members because the weeklyhours table has a function we want to use
         $members = TableRegistry::get('Members');
         // list of members so we can display usernames instead of id's
         $memberlist = $members->getMembers($project_id);
         foreach($weeklyreport->weeklyhours as $weeklyhours){
             foreach($memberlist as $member){
+                // if the id's match add the correct name
                 if($weeklyhours->member_id == $member['id']){
                    $weeklyhours['member_name'] = $member['member_name'];
                 }
@@ -68,22 +55,16 @@ class WeeklyreportsController extends AppController
             ->toArray();
         foreach($weeklyreport->metrics as $metrics){
             foreach($query as $metrictypes){
+                // if the id's match add the correct description
                 if($metrics->metrictype_id == $metrictypes->id){
                    $metrics['metric_description'] = $metrictypes->description;
                 }
             }
         }
-        
-        
         $this->set('weeklyreport', $weeklyreport);
         $this->set('_serialize', ['weeklyreport']);
     }
 
-    /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $project_id = $this->request->session()->read('selected_project')['id'];
@@ -117,37 +98,9 @@ class WeeklyreportsController extends AppController
         $this->set('_serialize', ['weeklyreport']);    
     }
     
-    private function addUploaded(){
-        $report = $this->request->session()->read('report');
-        // save the report on the server harddrive
-        $project_name = "temp";
-        if($this->request->session()->check('selected_project')){
-            $selected_project = $this->request->session()->read('selected_project');
-            $project_name = $selected_project['project_name'];
-        }
-        $this->Weeklyreports->saveUploadedReport($report["file_content"], $project_name);
-
-        // if the report included workinghours
-        // we will move onwards to adding them
-        if(array_key_exists('actual_hours', $this->request->session()->read('report'))){
-            return $this->redirect(
-                ['controller' => 'Workinghours', 'action' => 'add']
-            );
-        }
-        else{
-            $this->request->session()->delete('report');
-        }
-    } 
-    
-    /**
-     * Edit method
-     *
-     * @param string|null $id Weeklyreport id.
-     * @return void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
+        // only allow editing id the weeklyreport is from the current project
         $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyreport = $this->Weeklyreports->get($id, [
             'contain' => [],
@@ -159,11 +112,14 @@ class WeeklyreportsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $weeklyreport = $this->Weeklyreports->patchEntity($weeklyreport, $this->request->data);
             
+            // project id cannot be changed, and its made sure it does not change
             $weeklyreport['project_id'] = $project_id;
+            // updated_on date is automatic
             $weeklyreport['updated_on'] = Time::now();
             
             // check that this week does not already have a weeklyreport.
             // but allow updating withouth changing the week number
+            // checkUnique is in "WeeklyreportsTable.php"
             if($this->Weeklyreports->checkUnique($weeklyreport) || $old_weeknumber == $weeklyreport['week']){
                 if ($this->Weeklyreports->save($weeklyreport)) {
                     $this->Flash->success(__('The weeklyreport has been saved.'));
@@ -180,13 +136,6 @@ class WeeklyreportsController extends AppController
         $this->set('_serialize', ['weeklyreport']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Weeklyreport id.
-     * @return void Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);

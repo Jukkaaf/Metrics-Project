@@ -4,21 +4,12 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
-/**
- * Weeklyhours Controller
- *
- * @property \App\Model\Table\WeeklyhoursTable $Weeklyhours
- */
+
 class WeeklyhoursController extends AppController
 {
-
-    /**
-     * Index method
-     *
-     * @return void
-     */
     public function index()
     {
+        // only get weeklyhours from the current project
         $project_id = $this->request->session()->read('selected_project')['id'];
         $this->paginate = [
             'contain' => ['Weeklyreports', 'Members'],
@@ -34,15 +25,9 @@ class WeeklyhoursController extends AppController
         $this->set('_serialize', ['weeklyhours']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Weeklyhour id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function view($id = null)
     {
+        // only allow viewing weeklyhours from the current project
         $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyhour = $this->Weeklyhours->get($id, [
             'contain' => ['Weeklyreports', 'Members'],
@@ -61,12 +46,6 @@ class WeeklyhoursController extends AppController
         $this->set('_serialize', ['weeklyhour']);
     }
 
-    /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
-     */
-    
     public function add()
     {
         $weeklyhour = $this->Weeklyhours->newEntity();
@@ -89,11 +68,12 @@ class WeeklyhoursController extends AppController
         $this->set('_serialize', ['weeklyhour']);
     }
     
+    // used in the weelkyreport form
     public function addmultiple()
     {   
         $project_id = $this->request->session()->read('selected_project')['id'];
         $current_weeklyreport = $this->request->session()->read('current_weeklyreport');
-        // create a list of key valuepairs where thevalue is their member id and key is the members email + role
+        // create a list of key valuepairs where the value is their member id and key is the members email + role
         $membersTable = TableRegistry::get('Members');
         // list of members so we can display usernames instead of id's
         $memberlist = $membersTable->getMembers($project_id);
@@ -165,15 +145,9 @@ class WeeklyhoursController extends AppController
         $this->set('_serialize', ['weeklyhour']);
     }
     
-    /**
-     * Edit method
-     *
-     * @param string|null $id Weeklyhour id.
-     * @return void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
+        // only allow editing if the weeklyreport is from the current project
         $project_id = $this->request->session()->read('selected_project')['id'];
         $weeklyhour = $this->Weeklyhours->get($id, [
             'contain' => ['Members'],
@@ -185,7 +159,7 @@ class WeeklyhoursController extends AppController
             // can edit without changing weeklyreport id
             if ($this->Weeklyhours->save($weeklyhour)) {
                 $this->Flash->success(__('The weeklyhour has been saved.'));
-                //return $this->redirect(['action' => 'index']);
+                // return the user back a page
                 echo "<script>
                         window.history.go(-2);
                 </script>";
@@ -202,14 +176,6 @@ class WeeklyhoursController extends AppController
         $this->set('_serialize', ['weeklyhour']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Weeklyhour id.
-     * @return void Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -221,7 +187,6 @@ class WeeklyhoursController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
-    
     
     public function isAuthorized($user)
     {   
