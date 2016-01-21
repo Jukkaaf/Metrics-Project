@@ -86,9 +86,10 @@ class AppController extends Controller
         }
         
         // if the user wants to add, edit or delete he has to be a manager or supervisor
-        // all operations that all managers and supervisors can do but developers cant should be here
+        // all operations that all managers and supervisors can do but developers cant should be here.
+        // addmultiple is used in the weeklyreport form
         if ($this->request->action === 'add' || $this->request->action === 'edit'
-            || $this->request->action === 'delete') 
+            || $this->request->action === 'delete' || $this->request->action === 'addmultiple') 
         {
             if($project_role == "supervisor" || $project_role == "manager"){
                 return True;
